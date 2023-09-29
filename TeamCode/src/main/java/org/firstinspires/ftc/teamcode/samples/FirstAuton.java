@@ -1,11 +1,13 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name = "FirstAuton")
+@Disabled
 public class FirstAuton extends LinearOpMode {
 
     private DcMotor backLeft;
@@ -90,26 +92,26 @@ public class FirstAuton extends LinearOpMode {
             frontLeft.setPower(0);
             backRight.setPower(0);
             frontRight.setPower(0);
-//            // move forward
-//            backLeft.setPower(0.5);
-//            frontLeft.setPower(0.5);
-//            backRight.setPower(0.5);
-//            frontRight.setPower(0.5);
-//            sleep(2000);
-//            backLeft.setPower(0);
-//            frontLeft.setPower(0);
-//            backRight.setPower(0);
-//            frontRight.setPower(0);
-//            // turn right
-//            backLeft.setPower(0.5);
-//            frontLeft.setPower(0.5);
-//            backRight.setPower(-0.5);
-//            frontRight.setPower(-0.5);
-//            sleep(700);
-//            backLeft.setPower(0);
-//            frontLeft.setPower(0);
-//            backRight.setPower(0);
-//            frontRight.setPower(0);
+            // move forward
+            backLeft.setPower(0.5);
+            frontLeft.setPower(0.5);
+            backRight.setPower(0.5);
+            frontRight.setPower(0.5);
+            sleep(2000);
+            backLeft.setPower(0);
+            frontLeft.setPower(0);
+            backRight.setPower(0);
+            frontRight.setPower(0);
+            // turn right
+            backLeft.setPower(0.5);
+            frontLeft.setPower(0.5);
+            backRight.setPower(-0.5);
+            frontRight.setPower(-0.5);
+            sleep(700);
+            backLeft.setPower(0);
+            frontLeft.setPower(0);
+            backRight.setPower(0);
+            frontRight.setPower(0);
         }
     }
 }

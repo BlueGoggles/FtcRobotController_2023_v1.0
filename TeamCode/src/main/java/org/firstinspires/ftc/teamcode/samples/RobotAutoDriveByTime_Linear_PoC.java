@@ -1,17 +1,21 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+
+
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
-public class RobotAutoDriveByTime_Linear_First extends LinearOpMode {
+@Disabled
+public class RobotAutoDriveByTime_Linear_PoC extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);
     private ElapsedTime  runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED = 0.3;
-    static final double     TURN_SPEED    = 0.2;
+    static final double     FORWARD_SPEED = 0.5;
+    static final double     TURN_SPEED    = 0.4;
 
     @Override
     public void runOpMode() {
@@ -27,7 +31,7 @@ public class RobotAutoDriveByTime_Linear_First extends LinearOpMode {
         robot.setMotorPowers(FORWARD_SPEED, FORWARD_SPEED, FORWARD_SPEED, FORWARD_SPEED);
         runtime.reset();
 
-        while (opModeIsActive() && runtime.milliseconds() < 4000) {
+        while (opModeIsActive() && runtime.milliseconds() < 2000) {
             telemetry.addData("Moving Forward", "");
             telemetry.update();
         }
@@ -47,7 +51,7 @@ public class RobotAutoDriveByTime_Linear_First extends LinearOpMode {
         robot.setMotorPowers(FORWARD_SPEED, FORWARD_SPEED, FORWARD_SPEED, FORWARD_SPEED);
         runtime.reset();
 
-        while (opModeIsActive() && runtime.milliseconds() < 4000) {
+        while (opModeIsActive() && runtime.milliseconds() < 2000) {
             telemetry.addData("Returning Back", "");
             telemetry.update();
         }
