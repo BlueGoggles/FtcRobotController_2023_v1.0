@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import org.firstinspires.ftc.teamcode.RobotHardware;
 
 @Autonomous(name="Robot: Auto Drive By Encoder", group="Robot")
 @Disabled
@@ -20,8 +22,8 @@ public class RobotAutoDriveByEncoder_Linear_PoC extends LinearOpMode {
         // Initialize the drive system variables.
         robot.initialize();
 
-        robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        robot.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Starting at ",  "%7d :%7d :%7d :%7d",
@@ -57,7 +59,7 @@ public class RobotAutoDriveByEncoder_Linear_PoC extends LinearOpMode {
             robot.setTargetPosition(leftFrontInches, rightFrontInches, leftBackInches, rightBackInches);
 
             // Turn On RUN_TO_POSITION
-            robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
             // Start the motion.
             robot.setMotorPowers(Math.abs(speed));
@@ -74,7 +76,7 @@ public class RobotAutoDriveByEncoder_Linear_PoC extends LinearOpMode {
             robot.setMotorPowers(0);
 
             // Turn off RUN_TO_POSITION
-            robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
     }
 }
