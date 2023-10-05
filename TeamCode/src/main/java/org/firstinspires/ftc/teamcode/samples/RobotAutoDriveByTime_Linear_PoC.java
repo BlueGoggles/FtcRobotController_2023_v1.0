@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-
+import org.firstinspires.ftc.teamcode.RobotHardware;
 
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
 @Disabled

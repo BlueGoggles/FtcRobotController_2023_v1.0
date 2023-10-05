@@ -1,17 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
 
 public class RobotHardware {
 
     private final LinearOpMode myOpMode;
 
-    private DcMotor leftFront   = null;
-    private DcMotor rightFront  = null;
-    private DcMotor leftBack   = null;
-    private DcMotor rightBack  = null;
+    private DcMotorEx leftFront   = null;
+    private DcMotorEx rightFront  = null;
+    private DcMotorEx leftBack   = null;
+    private DcMotorEx rightBack  = null;
 
+    private IMU imu = null;
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -36,17 +40,19 @@ public class RobotHardware {
      */
     public void initialize()    {
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
-        leftFront  = myOpMode.hardwareMap.get(DcMotor.class, "frontLeft");
-        rightFront = myOpMode.hardwareMap.get(DcMotor.class, "frontRight");
-        leftBack  = myOpMode.hardwareMap.get(DcMotor.class, "backLeft");
-        rightBack = myOpMode.hardwareMap.get(DcMotor.class, "backRight");
+        leftFront  = myOpMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
+        rightFront = myOpMode.hardwareMap.get(DcMotorEx.class, "frontRight");
+        leftBack  = myOpMode.hardwareMap.get(DcMotorEx.class, "backLeft");
+        rightBack = myOpMode.hardwareMap.get(DcMotorEx.class, "backRight");
 
-        getLeftFront().setDirection(DcMotor.Direction.REVERSE);
-        getRightFront().setDirection(DcMotor.Direction.FORWARD);
-        getLeftBack().setDirection(DcMotor.Direction.REVERSE);
-        getRightBack().setDirection(DcMotor.Direction.FORWARD);
+        getLeftFront().setDirection(DcMotorEx.Direction.REVERSE);
+        getRightFront().setDirection(DcMotorEx.Direction.FORWARD);
+        getLeftBack().setDirection(DcMotorEx.Direction.REVERSE);
+        getRightBack().setDirection(DcMotorEx.Direction.FORWARD);
 
-        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setZeroPowerBehavior();
+
+        setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         setMotorPowers(0);
 
@@ -65,11 +71,18 @@ public class RobotHardware {
         setMotorPowers(allWhealPower, allWhealPower, allWhealPower, allWhealPower);
     }
 
-    public void setMode(DcMotor.RunMode mode) {
+    public void setMode(DcMotorEx.RunMode mode) {
         getLeftFront().setMode(mode);
         getRightFront().setMode(mode);
         getLeftBack().setMode(mode);
         getRightBack().setMode(mode);
+    }
+
+    public void setZeroPowerBehavior() {
+        getLeftFront().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        getRightFront().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        getLeftBack().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        getRightBack().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
     public void setTargetPosition(double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
@@ -87,19 +100,30 @@ public class RobotHardware {
         getRightBack().setTargetPosition(rightBackTarget);
     }
 
-    public DcMotor getLeftFront() {
+    public void initializeIMU() {
+        RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoFacingDirection, usbFacingDirection);
+
+        IMU.Parameters parameters = new IMU.Parameters(orientationOnRobot);
+
+        imu = myOpMode.hardwareMap.get(IMU.class, "imu");
+        imu.initialize(parameters);
+    }
+
+    public DcMotorEx getLeftFront() {
         return this.leftFront;
     }
 
-    public DcMotor getRightFront() {
+    public DcMotorEx getRightFront() {
         return this.rightFront;
     }
 
-    public DcMotor getLeftBack() {
+    public DcMotorEx getLeftBack() {
         return this.leftBack;
     }
 
-    public DcMotor getRightBack() {
+    public DcMotorEx getRightBack() {
         return this.rightBack;
     }
 }
