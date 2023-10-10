@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
-@Disabled
 public class RobotAutoDriveByTime_Linear_PoC extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);

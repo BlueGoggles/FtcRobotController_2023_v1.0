@@ -7,8 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-@Autonomous(name="Robot: Auto Drive By Encoder", group="Robot")
-@Disabled
+@Autonomous(name="Robot: Auto Drive By Encoder PoC", group="Robot")
 public class RobotAutoDriveByEncoder_Linear_PoC extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);
