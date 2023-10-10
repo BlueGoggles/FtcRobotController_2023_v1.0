@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-@Autonomous(name = "Gyro PoC", group = "Robot")
+@Autonomous(name = "Gyro Linear PoC", group = "Robot")
 public class Gyro_Linear_PoC extends LinearOpMode {
 
     private RobotHardware robot = new RobotHardware(this);
