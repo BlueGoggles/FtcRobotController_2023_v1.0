@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+
 public class RobotHardware {
 
     private final LinearOpMode myOpMode;
@@ -49,8 +52,6 @@ public class RobotHardware {
         getRightFront().setDirection(DcMotorEx.Direction.FORWARD);
         getLeftBack().setDirection(DcMotorEx.Direction.REVERSE);
         getRightBack().setDirection(DcMotorEx.Direction.FORWARD);
-
-        setZeroPowerBehavior();
 
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -100,7 +101,15 @@ public class RobotHardware {
         getRightBack().setTargetPosition(rightBackTarget);
     }
 
+    public void setTargetPosition(double inches) {
+
+        setTargetPosition(inches, inches, inches, inches);
+    }
+
     public void initializeIMU() {
+
+        setZeroPowerBehavior();
+
         RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
         RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoFacingDirection, usbFacingDirection);
@@ -109,6 +118,11 @@ public class RobotHardware {
 
         imu = myOpMode.hardwareMap.get(IMU.class, "imu");
         imu.initialize(parameters);
+    }
+
+    public double getCurrentHeading() {
+        YawPitchRollAngles orientation = this.imu.getRobotYawPitchRollAngles();
+        return orientation.getYaw(AngleUnit.DEGREES);
     }
 
     public DcMotorEx getLeftFront() {
