@@ -100,7 +100,7 @@ public class RobotHardware {
         getLeftBack().setTargetPosition(leftBackTarget);
         getRightBack().setTargetPosition(rightBackTarget);
 
-        myOpMode.telemetry.addData("Starting at ",  "%7d :%7d :%7d :%7d",
+        myOpMode.telemetry.addData("New Encoder Target :  ",  "%7d :%7d :%7d :%7d",
                 leftFrontTarget, rightFrontTarget, leftBackTarget, rightBackTarget);
         myOpMode.telemetry.update();
     }
