@@ -59,7 +59,7 @@ public class Gyro_Linear_PoC extends LinearOpMode {
         telemetry.addData("Gyro getAngle() - ", deltaAngle);
         telemetry.update();
 
-        return deltaAngle;
+        return currentAngle;
     }
 
     public void turn(double degrees) {
@@ -67,7 +67,7 @@ public class Gyro_Linear_PoC extends LinearOpMode {
 
         resetAngle();
 
-        while (opModeIsActive() && Math.abs(error)>2) {
+        while (opModeIsActive() && Math.abs(error)>1) {
             double motorPower = error < 0 ? -TURN_SPEED : TURN_SPEED;
             robot.setMotorPowers(-motorPower, motorPower, -motorPower, motorPower);
 

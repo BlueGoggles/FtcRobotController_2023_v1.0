@@ -66,7 +66,7 @@ public class RobotAutoDriveByEncoder_WithGyro_Linear_PoC extends LinearOpMode {
             // Turn On RUN_TO_POSITION
             robot.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
-            PIDController pid = new PIDController(0.0, 0.01, 0.0, 0.0);
+            PIDController pid = new PIDController(0.0, 0.01, 0, 0.003);
             telemetry.setMsTransmissionInterval(50);
 
             // Start the motion.
