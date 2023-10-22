@@ -24,7 +24,7 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     private double objectWidthInRealWorldUnits = 0.0;  // The actual width of the object in real-world units
 
     private ColorDetectionPipeline.Color color = null;
-    private static final double focalLength = 819;
+    private static final double focalLength = 793.33;
 
     public enum Color {
         BLUE,
@@ -84,7 +84,7 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
         Scalar upperColor = null;
 
         if (this.color == Color.BLUE) {
-            lowerColor = new Scalar(0, 50,50);
+            lowerColor = new Scalar(0, 125,125);
             upperColor = new Scalar(60, 255, 255);
         } else if (this.color == Color.RED) {
             lowerColor = new Scalar(100, 50, 50);
