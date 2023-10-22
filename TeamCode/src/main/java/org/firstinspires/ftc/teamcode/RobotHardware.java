@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class RobotHardware {
 
@@ -19,6 +22,13 @@ public class RobotHardware {
     private DcMotorEx rightBack  = null;
 
     private IMU imu = null;
+
+    private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
+
+    private static final int CAMERA_WIDTH = 640; // width  of wanted camera resolution
+    private static final int CAMERA_HEIGHT = 360; // height of wanted camera resolution
+
+
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
@@ -125,10 +135,25 @@ public class RobotHardware {
     }
 
     public double getCurrentHeading() {
-        YawPitchRollAngles orientation = this.imu.getRobotYawPitchRollAngles();
+        YawPitchRollAngles orientation = getImu().getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
     }
 
+    public void initializeOpenCV(ColorDetectionPipeline colorDetectionPipeline) {
+
+        // Create an instance of the camera
+        int cameraMonitorViewId = myOpMode.hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", myOpMode.hardwareMap.appContext.getPackageName());
+
+        // Use OpenCvCameraFactory class from FTC SDK to create camera instance
+        this.controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(
+                myOpMode.hardwareMap.get(WebcamName.class, "Camera1"), cameraMonitorViewId);
+
+        this.controlHubCam.setPipeline(colorDetectionPipeline);
+
+        this.controlHubCam.openCameraDevice();
+        this.controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+    }
     public DcMotorEx getLeftFront() {
         return this.leftFront;
     }
@@ -146,6 +171,10 @@ public class RobotHardware {
     }
 
     public IMU getImu() {
-        return imu;
+        return this.imu;
+    }
+
+    public OpenCvCamera getControlHubCam() {
+        return this.controlHubCam;
     }
 }
