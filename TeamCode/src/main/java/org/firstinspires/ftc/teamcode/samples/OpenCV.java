@@ -34,8 +34,8 @@ public class OpenCV extends LinearOpMode {
     private static final int CAMERA_HEIGHT = 360; // height of wanted camera resolution
 
     // Calculate the distance using the formula
-    public static final double objectWidthInRealWorldUnits = 3.75;  // Replace with the actual width of the object in real-world units
-    public static final double focalLength = 728;  // Replace with the focal length of the camera in pixels
+    public static final double objectWidthInRealWorldUnits = 3;  // Replace with the actual width of the object in real-world units
+    public static final double focalLength = 819;  // Replace with the focal length of the camera in pixels
 
 
     @Override
@@ -69,7 +69,7 @@ public class OpenCV extends LinearOpMode {
 
         // Use OpenCvCameraFactory class from FTC SDK to create camera instance
         controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+                hardwareMap.get(WebcamName.class, "Camera1"), cameraMonitorViewId);
 
         controlHubCam.setPipeline(new YellowBlobDetectionPipeline());
 
@@ -121,8 +121,8 @@ public class OpenCV extends LinearOpMode {
             Mat hsvFrame = new Mat();
             Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
 
-            Scalar lowerYellow = new Scalar(100, 100, 100);
-            Scalar upperYellow = new Scalar(180, 255, 255);
+            Scalar lowerYellow = new Scalar(0, 100, 100);
+            Scalar upperYellow = new Scalar(60, 255, 255);
 
 
             Mat yellowMask = new Mat();
