@@ -19,12 +19,8 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     private double cX = 0;
     private double cY = 0;
     private double width = 0;
-
-    // Calculate the distance using the formula
-    private double objectWidthInRealWorldUnits = 0.0;  // The actual width of the object in real-world units
-
+    private double objectWidthInRealWorldUnits = 0.0;
     private ColorDetectionPipeline.Color color = null;
-    private static final double focalLength = 793.33;
 
     public enum Color {
         BLUE,
@@ -123,7 +119,7 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     }
 
     public double getDistance(double width){
-        return (this.objectWidthInRealWorldUnits * focalLength) / width;
+        return (this.objectWidthInRealWorldUnits * Constants.CAMERA_FOCAL_LENGTH) / width;
     }
 
     public double getcX() {

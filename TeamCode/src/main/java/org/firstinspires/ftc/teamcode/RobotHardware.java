@@ -25,20 +25,13 @@ public class RobotHardware {
 
     private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
 
-    private static final int CAMERA_WIDTH = 640; // width  of wanted camera resolution
-    private static final int CAMERA_HEIGHT = 360; // height of wanted camera resolution
-
-
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
     // For external drive gearing, set DRIVE_GEAR_REDUCTION as needed.
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: GoBILDA 312 RPM Yellow Jacket
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-    static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring out circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double     COUNTS_PER_INCH         = (Constants.COUNTS_PER_MOTOR_REV * Constants.DRIVE_GEAR_REDUCTION) / (Constants.WHEEL_DIAMETER_INCHES * 3.1415);
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware(LinearOpMode opMode) {
@@ -52,11 +45,12 @@ public class RobotHardware {
      * All of the hardware devices are accessed via the hardware map, and initialized.
      */
     public void initialize()    {
+
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
-        leftFront  = myOpMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
-        rightFront = myOpMode.hardwareMap.get(DcMotorEx.class, "frontRight");
-        leftBack  = myOpMode.hardwareMap.get(DcMotorEx.class, "backLeft");
-        rightBack = myOpMode.hardwareMap.get(DcMotorEx.class, "backRight");
+        leftFront  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_FRONT_LEFT);
+        rightFront = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_FRONT_RIGHT);
+        leftBack  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_LEFT);
+        rightBack = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_RIGHT);
 
         getLeftFront().setDirection(DcMotorEx.Direction.REVERSE);
         getRightFront().setDirection(DcMotorEx.Direction.FORWARD);
@@ -65,10 +59,7 @@ public class RobotHardware {
 
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        setMotorPowers(0);
-
-        myOpMode.telemetry.addData("Initialization", "Hardware Initialized");
-        myOpMode.telemetry.update();
+        setMotorPowers(Constants.ZERO_POWER);
     }
 
     public void setMotorPowers(double leftFront, double rightFront, double leftBack, double rightBack) {
@@ -109,10 +100,6 @@ public class RobotHardware {
         getRightFront().setTargetPosition(rightFrontTarget);
         getLeftBack().setTargetPosition(leftBackTarget);
         getRightBack().setTargetPosition(rightBackTarget);
-
-        myOpMode.telemetry.addData("New Encoder Target :  ",  "%7d :%7d :%7d :%7d",
-                leftFrontTarget, rightFrontTarget, leftBackTarget, rightBackTarget);
-        myOpMode.telemetry.update();
     }
 
     public void setTargetPosition(double inches) {
@@ -130,7 +117,7 @@ public class RobotHardware {
 
         IMU.Parameters parameters = new IMU.Parameters(orientationOnRobot);
 
-        imu = myOpMode.hardwareMap.get(IMU.class, "imu");
+        imu = myOpMode.hardwareMap.get(IMU.class, Constants.DEVICE_IMU);
         imu.initialize(parameters);
     }
 
@@ -147,13 +134,18 @@ public class RobotHardware {
 
         // Use OpenCvCameraFactory class from FTC SDK to create camera instance
         this.controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(
-                myOpMode.hardwareMap.get(WebcamName.class, "Camera1"), cameraMonitorViewId);
+                myOpMode.hardwareMap.get(WebcamName.class, Constants.DEVICE_CAMERA), cameraMonitorViewId);
 
         this.controlHubCam.setPipeline(colorDetectionPipeline);
 
         this.controlHubCam.openCameraDevice();
-        this.controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+        this.controlHubCam.startStreaming(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
     }
+
+    public LinearOpMode getMyOpMode() {
+        return this.myOpMode;
+    }
+
     public DcMotorEx getLeftFront() {
         return this.leftFront;
     }

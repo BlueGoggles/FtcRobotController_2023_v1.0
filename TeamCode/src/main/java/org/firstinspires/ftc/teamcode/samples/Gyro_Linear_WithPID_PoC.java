@@ -30,7 +30,7 @@ public class Gyro_Linear_WithPID_PoC extends LinearOpMode {
         robot.initialize();
         robot.initializeIMU();
 
-        telemetry.addData("Status", "Ready to run");    //
+        telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
         waitForStart();
