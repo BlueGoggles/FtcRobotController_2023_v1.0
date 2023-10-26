@@ -39,10 +39,4 @@ public class OpenCV_Linear_PoC extends LinearOpMode {
         // Release resources
         robot.getControlHubCam().stopStreaming();
     }
-
-
-
-
-
-
 }
