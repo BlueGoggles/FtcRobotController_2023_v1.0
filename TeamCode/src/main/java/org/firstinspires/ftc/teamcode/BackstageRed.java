@@ -27,6 +27,10 @@ public class BackstageRed extends LinearOpMode {
         // Initialize Gyro sensor
         robot.initializeIMU();
 
+        // Initialize the Apriltag Detection process
+        robot.initializeAprilTag();
+        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
+
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Starting at ",  "%7d :%7d :%7d :%7d",
                 robot.getLeftFront().getCurrentPosition(), robot.getRightFront().getCurrentPosition(), robot.getLeftFront().getCurrentPosition(), robot.getRightFront().getCurrentPosition());
@@ -48,5 +52,7 @@ public class BackstageRed extends LinearOpMode {
 
         // Turn to absolute 90 degrees clockwise
         Utility.turnToPID(robot, -90);
+
+        Utility.moveToAprilTag(robot, 5);
     }
 }

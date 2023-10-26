@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -16,14 +18,17 @@ public class RobotHardware {
 
     private final LinearOpMode myOpMode;
 
-    private DcMotorEx leftFront   = null;
-    private DcMotorEx rightFront  = null;
-    private DcMotorEx leftBack   = null;
-    private DcMotorEx rightBack  = null;
+    private DcMotorEx leftFront = null;
+    private DcMotorEx rightFront = null;
+    private DcMotorEx leftBack = null;
+    private DcMotorEx rightBack = null;
 
     private IMU imu = null;
 
-    private OpenCvCamera controlHubCam;  // Use OpenCvCamera class from FTC SDK
+    private OpenCvCamera controlHubCam = null; // Use OpenCvCamera class from FTC SDK
+
+    private AprilTagProcessor aprilTag = null; // Used for managing the AprilTag detection process.
+    private VisionPortal visionPortal = null; // Used to manage the video source.
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
     // Go to your motor vendor website to determine your motor's COUNTS_PER_MOTOR_REV
@@ -142,6 +147,27 @@ public class RobotHardware {
         this.controlHubCam.startStreaming(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
     }
 
+    public void initializeAprilTag() {
+
+        // Create the AprilTag processor by using a builder.
+        aprilTag = new AprilTagProcessor.Builder().build();
+
+        // Adjust Image Decimation to trade-off detection-range for detection-rate.
+        // eg: Some typical detection data using a Logitech C920 WebCam
+        // Decimation = 1 ..  Detect 2" Tag from 10 feet away at 10 Frames per second
+        // Decimation = 2 ..  Detect 2" Tag from 6  feet away at 22 Frames per second
+        // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second
+        // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second
+        // Note: Decimation can be changed on-the-fly to adapt during a match.
+        aprilTag.setDecimation(2);
+
+        // Create the vision portal by using a builder.
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(myOpMode.hardwareMap.get(WebcamName.class, Constants.DEVICE_CAMERA))
+                .addProcessor(aprilTag)
+                .build();
+    }
+
     public LinearOpMode getMyOpMode() {
         return this.myOpMode;
     }
@@ -168,5 +194,13 @@ public class RobotHardware {
 
     public OpenCvCamera getControlHubCam() {
         return this.controlHubCam;
+    }
+
+    public AprilTagProcessor getAprilTag() {
+        return this.aprilTag;
+    }
+
+    public VisionPortal getVisionPortal() {
+        return this.visionPortal;
     }
 }
