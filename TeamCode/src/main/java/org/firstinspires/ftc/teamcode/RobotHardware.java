@@ -147,6 +147,11 @@ public class RobotHardware {
         this.controlHubCam.startStreaming(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
     }
 
+    public void releaseResourcesForOpenCV() {
+        getControlHubCam().stopStreaming();
+        getControlHubCam().closeCameraDevice();
+    }
+
     public void initializeAprilTag() {
 
         // Create the AprilTag processor by using a builder.
