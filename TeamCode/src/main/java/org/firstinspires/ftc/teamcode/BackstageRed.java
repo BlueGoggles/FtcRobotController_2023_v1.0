@@ -53,6 +53,6 @@ public class BackstageRed extends LinearOpMode {
 
         // Move to desired AprilTag
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        Utility.moveToAprilTag(robot, 8);
+        Utility.moveToAprilTag(robot, 5);
     }
 }
