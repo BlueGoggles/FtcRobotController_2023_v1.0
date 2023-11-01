@@ -48,19 +48,16 @@ public class Utility {
         PIDController pid = new PIDController(targetAngle, Constants.Kp, Constants.Ki, Constants.Kd);
 
         // Checking lastSlope to make sure that it's not oscillating when it quits
-        while (robot.getMyOpMode().opModeIsActive() && (Math.abs(targetAngle - getAbsoluteAngle(robot)) > 1 || pid.getLastSlope() > 0.75)) {
+        while (robot.getMyOpMode().opModeIsActive() && (Math.abs(targetAngle - robot.getAbsoluteAngle()) > 1 || pid.getLastSlope() > 0.75)) {
 
-            double motorPower = pid.update(getAbsoluteAngle(robot));
+            double motorPower = pid.update(robot.getAbsoluteAngle());
             robot.setMotorPowers(-motorPower, motorPower, -motorPower, motorPower);
         }
 
         robot.setMotorPowers(Constants.ZERO_POWER);
     }
     public static void turnPID(RobotHardware robot, double degrees) {
-        turnToPID(robot,(degrees + getAbsoluteAngle(robot)));
-    }
-    public static double getAbsoluteAngle(RobotHardware robot) {
-        return robot.getImu().getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).firstAngle;
+        turnToPID(robot,(degrees + robot.getAbsoluteAngle()));
     }
 
     public static void moveToAprilTag(RobotHardware robot, int desiredTagId) {

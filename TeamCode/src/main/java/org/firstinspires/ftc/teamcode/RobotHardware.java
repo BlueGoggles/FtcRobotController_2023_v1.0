@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -36,7 +38,7 @@ public class RobotHardware {
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    static final double     COUNTS_PER_INCH         = (Constants.COUNTS_PER_MOTOR_REV * Constants.DRIVE_GEAR_REDUCTION) / (Constants.WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double COUNTS_PER_INCH = (Constants.COUNTS_PER_MOTOR_REV * Constants.DRIVE_GEAR_REDUCTION) / (Constants.WHEEL_DIAMETER_INCHES * 3.1415);
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware(LinearOpMode opMode) {
@@ -129,6 +131,10 @@ public class RobotHardware {
     public double getCurrentHeading() {
         YawPitchRollAngles orientation = getImu().getRobotYawPitchRollAngles();
         return orientation.getYaw(AngleUnit.DEGREES);
+    }
+
+    public double getAbsoluteAngle() {
+        return getImu().getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).firstAngle;
     }
 
     public void initializeOpenCV(ColorDetectionPipeline colorDetectionPipeline) {
