@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -24,6 +25,13 @@ public class RobotHardware {
     private DcMotorEx rightFront = null;
     private DcMotorEx leftBack = null;
     private DcMotorEx rightBack = null;
+    private DcMotorEx intakeWheel = null;
+    private DcMotorEx intakeBelt = null;
+    private DcMotorEx viperSlide = null;
+    private DcMotorEx leadScrew = null;
+    private Servo panServo = null;
+    private Servo panDoor = null;
+    private Servo droneLauncher = null;
 
     private IMU imu = null;
 
@@ -54,15 +62,30 @@ public class RobotHardware {
     public void initialize()    {
 
         // Define and Initialize Motors (note: need to use reference to actual OpMode).
+        // Drive motors
         leftFront  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_FRONT_LEFT);
         rightFront = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_FRONT_RIGHT);
         leftBack  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_LEFT);
         rightBack = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_RIGHT);
+        // Expansion hub motors
+        intakeWheel  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_WHEEL);
+        intakeBelt = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_BELT);
+        viperSlide  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_VIPER_SLIDE);
+        leadScrew = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_LEAD_SCREW);
+        // Servos
+//        panServo = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_SERVO);
+//        panDoor  = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_DOOR);
+//        droneLauncher = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_DRONE_LAUNCHER);
 
         getLeftFront().setDirection(DcMotorEx.Direction.REVERSE);
         getRightFront().setDirection(DcMotorEx.Direction.FORWARD);
         getLeftBack().setDirection(DcMotorEx.Direction.REVERSE);
         getRightBack().setDirection(DcMotorEx.Direction.FORWARD);
+
+        getIntakeWheel().setDirection(DcMotorEx.Direction.REVERSE);
+        getIntakeBelt().setDirection(DcMotorEx.Direction.FORWARD);
+        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
 
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -197,6 +220,34 @@ public class RobotHardware {
 
     public DcMotorEx getRightBack() {
         return this.rightBack;
+    }
+
+    public DcMotorEx getIntakeWheel() {
+        return this.intakeWheel;
+    }
+
+    public DcMotorEx getIntakeBelt() {
+        return this.intakeBelt;
+    }
+
+    public DcMotorEx getViperSlide() {
+        return this.viperSlide;
+    }
+
+    public DcMotorEx getLeadScrew() {
+        return this.leadScrew;
+    }
+
+    public Servo getPanServo() {
+        return this.panServo;
+    }
+
+    public Servo getPanDoor() {
+        return this.panDoor;
+    }
+
+    public Servo getDroneLauncher() {
+        return this.droneLauncher;
     }
 
     public IMU getImu() {

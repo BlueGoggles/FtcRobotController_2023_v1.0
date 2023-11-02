@@ -5,6 +5,13 @@ public interface Constants {
     String DEVICE_FRONT_RIGHT = "frontRight";
     String DEVICE_BACK_LEFT = "backLeft";
     String DEVICE_BACK_RIGHT = "backRight";
+    String DEVICE_INTAKE_WHEEL = "intakeWheel";
+    String DEVICE_INTAKE_BELT = "intakeBelt";
+    String DEVICE_VIPER_SLIDE = "viperSlide";
+    String DEVICE_LEAD_SCREW = "leadScrew";
+    String DEVICE_PAN_SERVO = "panServo";
+    String DEVICE_PAN_DOOR = "panDoor";
+    String DEVICE_DRONE_LAUNCHER = "droneLauncher";
     String DEVICE_IMU = "imu";
     String DEVICE_CAMERA = "Camera1";
     double ZERO_POWER = 0.0;
