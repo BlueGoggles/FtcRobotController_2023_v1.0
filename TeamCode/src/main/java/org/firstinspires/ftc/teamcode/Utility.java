@@ -5,9 +5,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -15,6 +12,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
+
+    public enum SpikeMark {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
 
     public static void encoderDrive(RobotHardware robot, double speed, double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
 

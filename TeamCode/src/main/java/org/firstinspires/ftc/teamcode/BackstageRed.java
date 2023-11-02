@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -22,6 +20,9 @@ public class BackstageRed extends LinearOpMode {
 
         // Get the distance of the object from camera. Reduce the distance by 5 inches to stop robot little earlier before reaching the object.
         double distanceToMove = (colorDetectionPipeline.getDistance(colorDetectionPipeline.getWidth()) - 5);
+
+        Utility.SpikeMark spikeMark = getSpikeMark();
+        int aprilTagId = getAprilTagId(spikeMark);
 
         telemetry.addData("Distance to move : ", distanceToMove);
         telemetry.update();
@@ -53,6 +54,22 @@ public class BackstageRed extends LinearOpMode {
 
         // Move to desired AprilTag
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        Utility.moveToAprilTag(robot, 5);
+        Utility.moveToAprilTag(robot, aprilTagId);
+    }
+
+    private int getAprilTagId(Utility.SpikeMark spikeMark) {
+        switch (spikeMark) {
+            case LEFT:
+                return 4;
+            case CENTER:
+                return 5;
+            case RIGHT:
+                return 6;
+        }
+        return 0;
+    }
+
+    private Utility.SpikeMark getSpikeMark() {
+        return Utility.SpikeMark.RIGHT;
     }
 }
