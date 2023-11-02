@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
+
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
@@ -152,7 +150,7 @@ public class MainTeleOp extends LinearOpMode {
                     BR_Power = BR_Power / (Max * 2);
                     BL_Power = BL_Power / (Max * 2);
                 }
-                robot.setMotorPowers(FL_Power, FR_Power, BL_Power, BR_Power);
+                robot.setMotorPowers(-FL_Power, FR_Power, -BL_Power, BR_Power);
 
                 if (gamepad1.right_bumper) {
                     robot.getIntakeWheel().setPower(1);
