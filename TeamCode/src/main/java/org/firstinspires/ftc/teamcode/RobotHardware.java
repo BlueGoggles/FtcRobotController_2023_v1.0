@@ -16,6 +16,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 public class RobotHardware {
 
@@ -160,7 +161,7 @@ public class RobotHardware {
         return getImu().getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).firstAngle;
     }
 
-    public void initializeOpenCV(ColorDetectionPipeline colorDetectionPipeline) {
+    public void initializeOpenCV(OpenCvPipeline colorDetectionPipeline) {
 
         // Create an instance of the camera
         int cameraMonitorViewId = myOpMode.hardwareMap.appContext.getResources().getIdentifier(
