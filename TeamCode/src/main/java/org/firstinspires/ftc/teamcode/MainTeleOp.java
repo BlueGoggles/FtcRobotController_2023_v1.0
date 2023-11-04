@@ -160,6 +160,33 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getIntakeBelt().setPower(0);
                 }
 
+                // Control the lead screw.
+                if (gamepad2.a) {
+                    robot.extendLeadScrew();
+                }
+
+                if (gamepad2.b) {
+                    robot.resetLeadScrew();
+                }
+
+                if (gamepad2.left_bumper) {
+                    robot.stopLeadScrew();
+                }
+
+                // Control the viper slide.
+                if( gamepad2.x ) {
+                   robot.extendViperSlide();
+                }
+
+                if( gamepad2.y ) {
+                    robot.retractViperSlide();
+                }
+
+                if( gamepad2.right_bumper ) {
+                    robot.resetViperSlide();
+                }
+
+                telemetry.addData("Lead Screw", robot.getLeadScrewPosition());
                 telemetry.addData("Z Prime", Z_);
                 telemetry.addData("Yaw", JavaUtil.formatNumber(Orientation2.getYaw(AngleUnit.DEGREES), 2));
                 telemetry.addData("Velocity", Theta_Velocity.zRotationRate);

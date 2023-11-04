@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -49,6 +51,13 @@ public class RobotHardware {
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
     static final double COUNTS_PER_INCH = (Constants.COUNTS_PER_MOTOR_REV * Constants.DRIVE_GEAR_REDUCTION) / (Constants.WHEEL_DIAMETER_INCHES * 3.1415);
 
+    // Tracking variables
+    // TODO: Enumerate the states for these so that we can print them out in telemetry.
+    // Viper slide states: STEP_0, STEP_1, STEP_2, FULL
+    // Lead screw states: RESET, EXTENDING, RETRACTING, EXTENDED
+    int currentViperSlideState = 0;
+    int currentLeadScrewState = 0;
+
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware(LinearOpMode opMode) {
         myOpMode = opMode;
@@ -88,7 +97,12 @@ public class RobotHardware {
         getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
         getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
 
+        getViperSlide().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        getLeadScrew().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        getViperSlide().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        getLeadScrew().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         setMotorPowers(Constants.ZERO_POWER);
     }
@@ -203,6 +217,91 @@ public class RobotHardware {
                 .setCamera(myOpMode.hardwareMap.get(WebcamName.class, Constants.DEVICE_CAMERA))
                 .addProcessor(aprilTag)
                 .build();
+    }
+
+    // TODO: Add a getter function to return the lead screw state for telemetry.
+    public void extendLeadScrew() {
+        final double     COUNTS_PER_MOTOR_REV    = 560 ;    // eg: GoBILDA 312 RPM Yellow Jacket
+        final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+        final double     WHEEL_DIAMETER_INCHES   = 1.5 ;     // For figuring circumference
+        final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
+        this.getLeadScrew().setPower(0.1);
+        // TODO: Find out the actual length of the lead screw.
+        int screwTarget = (int)( 12 * COUNTS_PER_INCH);
+        this.getLeadScrew().setTargetPosition(screwTarget);
+    }
+
+    public void resetLeadScrew() {
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.REVERSE);
+        this.getLeadScrew().setPower(0.1);
+        this.getLeadScrew().setTargetPosition(0);
+    }
+
+    public void stopLeadScrew() {
+        this.getLeadScrew().setPower(0);
+    }
+
+    public int getLeadScrewPosition() {
+        return this.getLeadScrew().getCurrentPosition();
+    }
+
+    // TODO: Add a getter function to return the viper slide state for telemetry.
+    public void extendViperSlide() {
+        this.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+
+        int slidePosition = this.getViperSlide().getCurrentPosition();
+        int slideTarget = 0;
+
+        // TODO: replace 62, 124, 186 with actual values.
+        if( slidePosition < 62 ) {
+            // Set the target position to the next position.
+            slideTarget = 62;
+            this.getViperSlide().setPower(0.5);
+            this.getLeadScrew().setTargetPosition(slideTarget);
+        } else if ( ( slidePosition >= 62 ) && ( slidePosition < 124 ) ) {
+            // In stage one. Go to stage 2.
+            slideTarget = 124;
+            this.getViperSlide().setPower(0.5);
+            this.getLeadScrew().setTargetPosition(slideTarget);
+        } else {
+            // In final stage. Full extension.
+            slideTarget = 186;
+            this.getViperSlide().setPower(0.5);
+            this.getLeadScrew().setTargetPosition(slideTarget);
+        }
+    }
+
+    public void retractViperSlide() {
+        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+
+        int slidePosition = this.getViperSlide().getCurrentPosition();
+        int slideTarget = 0;
+
+        // TODO: replace 62, 124, 186 with actual values.
+        if( slidePosition < 62 ) {
+            // Set the target position to the next position.
+            slideTarget = 0;
+            this.getViperSlide().setPower(0.5);
+            this.getLeadScrew().setTargetPosition(slideTarget);
+        } else if ( ( slidePosition >= 62 ) && ( slidePosition < 124 ) ) {
+            // In stage one. Go to stage 2.
+            slideTarget = 62;
+            this.getViperSlide().setPower(0.5);
+            this.getLeadScrew().setTargetPosition(slideTarget);
+        } else {
+            // In final stage. Full extension.
+            slideTarget = 124;
+            this.getViperSlide().setPower(0.5);
+            this.getLeadScrew().setTargetPosition(slideTarget);
+        }
+    }
+
+    public void resetViperSlide() {
+        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+        this.getViperSlide().setPower(0.5);
+        this.getViperSlide().setTargetPosition(0);
     }
 
     public LinearOpMode getMyOpMode() {
