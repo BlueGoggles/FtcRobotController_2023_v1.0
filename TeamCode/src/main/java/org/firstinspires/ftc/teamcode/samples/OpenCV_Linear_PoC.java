@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ColorDetectionPipeline;
 import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.Utility;
 
 @Autonomous(name = "OpenCV Linear PoC")
 public class OpenCV_Linear_PoC extends LinearOpMode {
@@ -14,7 +15,7 @@ public class OpenCV_Linear_PoC extends LinearOpMode {
     RobotHardware robot = new RobotHardware(this);
     private double objectWidthInRealWorldUnits = 3.0;  // The actual width of the object in real-world units
 
-    private ColorDetectionPipeline.Color color = ColorDetectionPipeline.Color.BLUE;
+    private Utility.Color color = Utility.Color.BLUE;
 
     @Override
     public void runOpMode() {

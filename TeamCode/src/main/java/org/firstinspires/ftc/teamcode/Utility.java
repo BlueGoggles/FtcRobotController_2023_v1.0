@@ -13,6 +13,21 @@ import java.util.concurrent.TimeUnit;
 
 public class Utility {
 
+    public enum Color {
+        RED(1),
+        BLUE(2);
+
+        private final int code;
+
+        Color(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return this.code;
+        }
+    }
+
     public enum SpikeMark {
         LEFT,
         CENTER,

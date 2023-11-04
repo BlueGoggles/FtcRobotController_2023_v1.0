@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 public class BackstageRed extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);
-    private ColorDetectionPipeline.Color color = ColorDetectionPipeline.Color.BLUE;
+    private Utility.Color color = Utility.Color.BLUE;
 
     @Override
     public void runOpMode() {

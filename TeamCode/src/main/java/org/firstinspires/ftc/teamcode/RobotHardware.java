@@ -161,7 +161,7 @@ public class RobotHardware {
         return getImu().getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).firstAngle;
     }
 
-    public void initializeOpenCV(OpenCvPipeline colorDetectionPipeline) {
+    public void initializeOpenCV(OpenCvPipeline pipeline) {
 
         // Create an instance of the camera
         int cameraMonitorViewId = myOpMode.hardwareMap.appContext.getResources().getIdentifier(
@@ -171,13 +171,15 @@ public class RobotHardware {
         this.controlHubCam = OpenCvCameraFactory.getInstance().createWebcam(
                 myOpMode.hardwareMap.get(WebcamName.class, Constants.DEVICE_CAMERA), cameraMonitorViewId);
 
-        this.controlHubCam.setPipeline(colorDetectionPipeline);
+        this.controlHubCam.setPipeline(pipeline);
 
         this.controlHubCam.openCameraDevice();
         this.controlHubCam.startStreaming(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
     }
 
     public void releaseResourcesForOpenCV() {
+
+        getControlHubCam().stopRecordingPipeline();
         getControlHubCam().stopStreaming();
         getControlHubCam().closeCameraDevice();
     }
