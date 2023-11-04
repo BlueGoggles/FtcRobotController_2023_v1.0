@@ -20,13 +20,9 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     private double cY = 0;
     private double width = 0;
     private double objectWidthInRealWorldUnits = 0.0;
-    private ColorDetectionPipeline.Color color = null;
+    private Utility.Color color = null;
 
-    public enum Color {
-        BLUE,
-        RED
-    }
-    public ColorDetectionPipeline(double objectWidthInRealWorldUnits, ColorDetectionPipeline.Color color) {
+    public ColorDetectionPipeline(double objectWidthInRealWorldUnits, Utility.Color color) {
 
         this.objectWidthInRealWorldUnits = objectWidthInRealWorldUnits;
         this.color = color;
@@ -79,10 +75,10 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
         Scalar lowerColor = null;
         Scalar upperColor = null;
 
-        if (this.color == Color.BLUE) {
+        if (this.color == Utility.Color.BLUE) {
             lowerColor = new Scalar(0, 125,125);
             upperColor = new Scalar(60, 255, 255);
-        } else if (this.color == Color.RED) {
+        } else if (this.color == Utility.Color.RED) {
             lowerColor = new Scalar(100, 50, 50);
             upperColor = new Scalar(180, 255, 255);
         } else {
