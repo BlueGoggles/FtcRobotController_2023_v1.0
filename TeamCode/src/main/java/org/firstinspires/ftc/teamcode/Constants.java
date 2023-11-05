@@ -41,5 +41,5 @@ public interface Constants {
     double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
 
-    double REGION_AVG_FINAL_DIFFERENCE_THRESHOLD = 6.0;
+    double REGION_AVG_FINAL_DIFFERENCE_THRESHOLD = 8.0;
 }

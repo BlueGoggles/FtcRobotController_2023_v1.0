@@ -9,6 +9,8 @@ public class BackstageRed extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);
     private Utility.Color color = Utility.Color.BLUE;
+    Utility.SpikeMark spikeMark;
+    int aprilTagId;
 
     @Override
     public void runOpMode() {
@@ -18,8 +20,8 @@ public class BackstageRed extends LinearOpMode {
         robot.initializeOpenCV(findRegionPipeline);
         sleep(2000);
 
-        Utility.SpikeMark spikeMark = getSpikeMark(findRegionPipeline);
-        int aprilTagId = getAprilTagId(spikeMark);
+        spikeMark = getSpikeMark(findRegionPipeline);
+        aprilTagId = getAprilTagId(spikeMark);
 
         telemetry.addData("Spike Mark : ", spikeMark);
         telemetry.addData("April Tag Id : ", aprilTagId);
@@ -43,17 +45,44 @@ public class BackstageRed extends LinearOpMode {
         waitForStart();
 
         // Drive towards object
-        double distanceToMove = 20;
-        Utility.encoderDrive(robot, Constants.AUTON_DRIVE_SPEED,  distanceToMove,  distanceToMove, distanceToMove,  distanceToMove);
+        moveToObject();
 
+        // Place Purple pixel on spike mark
         sleep(3000);
-
-        // Turn to absolute 90 degrees clockwise
-        Utility.turnToPID(robot, -90);
 
         // Move to desired AprilTag
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        Utility.moveToAprilTag(robot, aprilTagId);
+        moveToAprilTag();
+    }
+
+    private void moveToAprilTag() {
+        if (spikeMark == Utility.SpikeMark.LEFT) {
+            // Turn to absolute 90 degrees clockwise
+            Utility.turnToPID(robot, -90);
+            Utility.moveToAprilTag(robot, aprilTagId);
+        } else if (spikeMark == Utility.SpikeMark.CENTER) {
+            // Turn to absolute 90 degrees clockwise
+            Utility.turnToPID(robot, -90);
+            Utility.moveToAprilTag(robot, aprilTagId);
+        } else if (spikeMark == Utility.SpikeMark.RIGHT) {
+            // Turn to absolute 90 degrees clockwise
+            Utility.turnToPID(robot, -90);
+            Utility.moveToAprilTag(robot, aprilTagId);
+        }
+    }
+
+    private void moveToObject() {
+        if (spikeMark == Utility.SpikeMark.LEFT) {
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  5,  5, 5,  5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  20,  20, 20,  20);
+            // Turn to absolute 90 degrees clockwise
+            Utility.turnToPID(robot, 90);
+        } else if (spikeMark == Utility.SpikeMark.CENTER) {
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  25,  25, 25,  25);
+        } else if (spikeMark == Utility.SpikeMark.RIGHT) {
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10,  10, 10,  10);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  15,  15, 15,  15);
+        }
     }
 
     private int getAprilTagId(Utility.SpikeMark spikeMark) {

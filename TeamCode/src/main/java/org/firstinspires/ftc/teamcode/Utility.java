@@ -13,6 +13,13 @@ import java.util.concurrent.TimeUnit;
 
 public class Utility {
 
+    public enum Direction {
+        LEFT,
+        RIGHT,
+        FORWARD,
+        BACKWARD
+    }
+
     public enum Color {
         RED(1),
         BLUE(2);
@@ -34,13 +41,13 @@ public class Utility {
         RIGHT
     }
 
-    public static void encoderDrive(RobotHardware robot, double speed, double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
+    public static void encoderDrive(RobotHardware robot, Utility.Direction direction, double speed, double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
 
         // Ensure that the OpMode is still active
         if (robot.getMyOpMode().opModeIsActive()) {
 
             // Set Target Position
-            robot.setTargetPosition(leftFrontInches, rightFrontInches, leftBackInches, rightBackInches);
+            robot.setTargetPosition(direction, leftFrontInches, rightFrontInches, leftBackInches, rightBackInches);
 
             // Turn On RUN_TO_POSITION
             robot.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
