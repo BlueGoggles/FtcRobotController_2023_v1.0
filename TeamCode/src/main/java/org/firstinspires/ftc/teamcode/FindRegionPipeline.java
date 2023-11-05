@@ -26,8 +26,8 @@ public class FindRegionPipeline extends OpenCvPipeline {
 
         Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
 
-        Rect leftRect = new Rect(1, 1, 319, 359);
-        Rect rightRect = new Rect(320, 1, 319, 359);
+        Rect leftRect = new Rect(50, 50, 150, 200);
+        Rect rightRect = new Rect(370, 50, 150, 200);
 
         input.copyTo(output);
         Imgproc.rectangle(output, leftRect, rectColor, 2);

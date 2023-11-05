@@ -14,17 +14,15 @@ public class BackstageRed extends LinearOpMode {
     public void runOpMode() {
 
         // Initialize OpenCV
-        ColorDetectionPipeline colorDetectionPipeline = new ColorDetectionPipeline(Constants.OBJECT_WIDTH_IN_INCHES, color);
-        robot.initializeOpenCV(colorDetectionPipeline);
+        FindRegionPipeline findRegionPipeline = new FindRegionPipeline(Utility.Color.BLUE);
+        robot.initializeOpenCV(findRegionPipeline);
         sleep(2000);
 
-        // Get the distance of the object from camera. Reduce the distance by 5 inches to stop robot little earlier before reaching the object.
-        double distanceToMove = (colorDetectionPipeline.getDistance(colorDetectionPipeline.getWidth()) - 5);
-
-        Utility.SpikeMark spikeMark = getSpikeMark();
+        Utility.SpikeMark spikeMark = getSpikeMark(findRegionPipeline);
         int aprilTagId = getAprilTagId(spikeMark);
 
-        telemetry.addData("Distance to move : ", distanceToMove);
+        telemetry.addData("Spike Mark : ", spikeMark);
+        telemetry.addData("April Tag Id : ", aprilTagId);
         telemetry.update();
 
         // Release camera resources for OpenCV
@@ -45,6 +43,7 @@ public class BackstageRed extends LinearOpMode {
         waitForStart();
 
         // Drive towards object
+        double distanceToMove = 20;
         Utility.encoderDrive(robot, Constants.AUTON_DRIVE_SPEED,  distanceToMove,  distanceToMove, distanceToMove,  distanceToMove);
 
         sleep(3000);
@@ -69,7 +68,14 @@ public class BackstageRed extends LinearOpMode {
         return 0;
     }
 
-    private Utility.SpikeMark getSpikeMark() {
-        return Utility.SpikeMark.RIGHT;
+    private Utility.SpikeMark getSpikeMark(FindRegionPipeline findRegionPipeline) {
+
+        if ((findRegionPipeline.getLeftAvgFinal() - findRegionPipeline.getRightAvgFinal()) > Constants.REGION_AVG_FINAL_DIFFERENCE_THRESHOLD) {
+            return Utility.SpikeMark.LEFT;
+        } else if ((findRegionPipeline.getRightAvgFinal() - findRegionPipeline.getLeftAvgFinal()) > Constants.REGION_AVG_FINAL_DIFFERENCE_THRESHOLD) {
+            return Utility.SpikeMark.CENTER;
+        } else {
+            return Utility.SpikeMark.RIGHT;
+        }
     }
 }
