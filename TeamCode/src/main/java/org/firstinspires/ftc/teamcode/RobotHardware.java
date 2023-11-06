@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -55,8 +56,11 @@ public class RobotHardware {
     // TODO: Enumerate the states for these so that we can print them out in telemetry.
     // Viper slide states: STEP_0, STEP_1, STEP_2, FULL
     // Lead screw states: RESET, EXTENDING, RETRACTING, EXTENDED
-    int currentViperSlideState = 0;
-    int currentLeadScrewState = 0;
+    private int currentViperSlideState = 0;
+    private int currentLeadScrewState = 0;
+
+    private boolean stopLeadScrew = false;
+    private boolean stopViperSlide = false;
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware(LinearOpMode opMode) {
@@ -226,82 +230,153 @@ public class RobotHardware {
         final double     WHEEL_DIAMETER_INCHES   = 1.5 ;     // For figuring circumference
         final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
-        this.getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
-        this.getLeadScrew().setPower(0.1);
+        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
         // TODO: Find out the actual length of the lead screw.
-        int screwTarget = (int)( 12 * COUNTS_PER_INCH);
-        this.getLeadScrew().setTargetPosition(screwTarget);
+        int screwTarget = (int)( 2 * COUNTS_PER_INCH);
+        getLeadScrew().setTargetPosition(screwTarget);
+        getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        getLeadScrew().setPower(0.1);
+
+        while ( (getLeadScrew().isBusy()) && ( stopLeadScrew == false) ) {
+            // Run the program.
+        }
+
+        // Stop all motion;
+        getLeadScrew().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopLeadScrew = false;
     }
 
     public void resetLeadScrew() {
-        this.getLeadScrew().setDirection(DcMotorEx.Direction.REVERSE);
-        this.getLeadScrew().setPower(0.1);
-        this.getLeadScrew().setTargetPosition(0);
+        getLeadScrew().setDirection(DcMotorEx.Direction.REVERSE);
+        int screwTarget = (int)( 2 * COUNTS_PER_INCH);
+        getLeadScrew().setTargetPosition(screwTarget);
+        getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        getLeadScrew().setPower(0.1);
+
+        while ( (getLeadScrew().isBusy()) && ( stopLeadScrew == false) ) {
+            // Run the program.
+        }
+
+        // Stop all motion;
+        getLeadScrew().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopLeadScrew = false;
     }
 
     public void stopLeadScrew() {
-        this.getLeadScrew().setPower(0);
+        stopLeadScrew = true;
     }
 
     public int getLeadScrewPosition() {
-        return this.getLeadScrew().getCurrentPosition();
+        return getLeadScrew().getCurrentPosition();
     }
 
     // TODO: Add a getter function to return the viper slide state for telemetry.
     public void extendViperSlide() {
-        this.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 
-        int slidePosition = this.getViperSlide().getCurrentPosition();
+        int slidePosition = getViperSlide().getCurrentPosition();
         int slideTarget = 0;
 
         // TODO: replace 62, 124, 186 with actual values.
         if( slidePosition < 62 ) {
             // Set the target position to the next position.
             slideTarget = 62;
-            this.getViperSlide().setPower(0.5);
-            this.getLeadScrew().setTargetPosition(slideTarget);
         } else if ( ( slidePosition >= 62 ) && ( slidePosition < 124 ) ) {
             // In stage one. Go to stage 2.
             slideTarget = 124;
-            this.getViperSlide().setPower(0.5);
-            this.getLeadScrew().setTargetPosition(slideTarget);
         } else {
             // In final stage. Full extension.
             slideTarget = 186;
-            this.getViperSlide().setPower(0.5);
-            this.getLeadScrew().setTargetPosition(slideTarget);
         }
+
+        getViperSlide().setTargetPosition(slideTarget);
+        getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        getViperSlide().setPower(0.1);
+
+        while ( (getViperSlide().isBusy()) && ( stopViperSlide == false) ) {
+            // Run the program.
+        }
+
+        // Stop all motion;
+        getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopViperSlide = false;
     }
 
     public void retractViperSlide() {
-        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+        getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
 
-        int slidePosition = this.getViperSlide().getCurrentPosition();
+        int slidePosition = getViperSlide().getCurrentPosition();
         int slideTarget = 0;
 
         // TODO: replace 62, 124, 186 with actual values.
         if( slidePosition < 62 ) {
             // Set the target position to the next position.
             slideTarget = 0;
-            this.getViperSlide().setPower(0.5);
-            this.getLeadScrew().setTargetPosition(slideTarget);
         } else if ( ( slidePosition >= 62 ) && ( slidePosition < 124 ) ) {
             // In stage one. Go to stage 2.
             slideTarget = 62;
-            this.getViperSlide().setPower(0.5);
-            this.getLeadScrew().setTargetPosition(slideTarget);
         } else {
             // In final stage. Full extension.
             slideTarget = 124;
-            this.getViperSlide().setPower(0.5);
-            this.getLeadScrew().setTargetPosition(slideTarget);
         }
+
+        getViperSlide().setTargetPosition(slideTarget);
+        getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        getViperSlide().setPower(0.1);
+
+        while ( (getViperSlide().isBusy()) && ( stopViperSlide == false) ) {
+            // Run the program.
+        }
+
+        // Stop all motion;
+        getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopViperSlide = false;
     }
 
     public void resetViperSlide() {
-        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
-        this.getViperSlide().setPower(0.5);
-        this.getViperSlide().setTargetPosition(0);
+        getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+
+        int slideTarget = 0;
+
+        getViperSlide().setTargetPosition(slideTarget);
+        getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        getViperSlide().setPower(0.1);
+
+        while ( (getViperSlide().isBusy()) && ( stopViperSlide == false) ) {
+            // Run the program.
+        }
+
+        // Stop all motion;
+        getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        stopViperSlide = false;
+    }
+
+    public int getViperSlidePosition() {
+        return getViperSlide().getCurrentPosition();
+    }
+
+    public void stopViperSlide() {
+        stopViperSlide = true;
     }
 
     public LinearOpMode getMyOpMode() {

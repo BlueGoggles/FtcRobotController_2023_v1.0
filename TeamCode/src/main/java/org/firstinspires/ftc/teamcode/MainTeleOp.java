@@ -152,7 +152,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 robot.setMotorPowers(-FL_Power, FR_Power, -BL_Power, BR_Power);
 
-                if (gamepad1.right_bumper) {
+                if (gamepad2.right_bumper) {
                     robot.getIntakeWheel().setPower(1);
                     robot.getIntakeBelt().setPower(1);
                 } else {
@@ -171,8 +171,10 @@ public class MainTeleOp extends LinearOpMode {
 
                 if (gamepad2.left_bumper) {
                     robot.stopLeadScrew();
+                    robot.stopViperSlide();
                 }
 
+                /*
                 // Control the viper slide.
                 if( gamepad2.x ) {
                    robot.extendViperSlide();
@@ -185,8 +187,10 @@ public class MainTeleOp extends LinearOpMode {
                 if( gamepad2.right_bumper ) {
                     robot.resetViperSlide();
                 }
+                */
 
                 telemetry.addData("Lead Screw", robot.getLeadScrewPosition());
+                telemetry.addData("Viper Slide", robot.getViperSlidePosition());
                 telemetry.addData("Z Prime", Z_);
                 telemetry.addData("Yaw", JavaUtil.formatNumber(Orientation2.getYaw(AngleUnit.DEGREES), 2));
                 telemetry.addData("Velocity", Theta_Velocity.zRotationRate);
