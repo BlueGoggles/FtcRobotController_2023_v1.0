@@ -18,11 +18,13 @@ public class BackstageRed extends LinearOpMode {
         // Initialize OpenCV
         FindRegionPipeline findRegionPipeline = new FindRegionPipeline(Utility.Color.BLUE);
         robot.initializeOpenCV(findRegionPipeline);
-        sleep(2000);
+        sleep(5000);
 
         spikeMark = getSpikeMark(findRegionPipeline);
         aprilTagId = getAprilTagId(spikeMark);
 
+        telemetry.addData("Left Average Final : ", findRegionPipeline.getLeftAvgFinal());
+        telemetry.addData("Right Average Final : ", findRegionPipeline.getRightAvgFinal());
         telemetry.addData("Spike Mark : ", spikeMark);
         telemetry.addData("April Tag Id : ", aprilTagId);
         telemetry.update();

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -69,10 +70,10 @@ public class RobotHardware {
         leftBack  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_LEFT);
         rightBack = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_RIGHT);
         // Expansion hub motors
-        intakeWheel  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_WHEEL);
-        intakeBelt = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_BELT);
-        viperSlide  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_VIPER_SLIDE);
-        leadScrew = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_LEAD_SCREW);
+//        intakeWheel  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_WHEEL);
+//        intakeBelt = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_BELT);
+//        viperSlide  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_VIPER_SLIDE);
+//        leadScrew = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_LEAD_SCREW);
         // Servos
 //        panServo = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_SERVO);
 //        panDoor  = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_DOOR);
@@ -83,10 +84,10 @@ public class RobotHardware {
         getLeftBack().setDirection(DcMotorEx.Direction.REVERSE);
         getRightBack().setDirection(DcMotorEx.Direction.FORWARD);
 
-        getIntakeWheel().setDirection(DcMotorEx.Direction.REVERSE);
-        getIntakeBelt().setDirection(DcMotorEx.Direction.FORWARD);
-        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
-        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
+//        getIntakeWheel().setDirection(DcMotorEx.Direction.REVERSE);
+//        getIntakeBelt().setDirection(DcMotorEx.Direction.FORWARD);
+//        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+//        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
 
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -142,6 +143,11 @@ public class RobotHardware {
             leftBackTarget = leftBackTarget + (int) (leftBackInches * COUNTS_PER_INCH);
             rightBackTarget = rightBackTarget - (int) (rightBackInches * COUNTS_PER_INCH);
         } else if (direction == Utility.Direction.RIGHT) {
+            getLeftFront().setDirection(DcMotorEx.Direction.REVERSE);
+            getRightFront().setDirection(DcMotorEx.Direction.REVERSE);
+            getLeftBack().setDirection(DcMotorEx.Direction.FORWARD);
+            getRightBack().setDirection(DcMotorEx.Direction.FORWARD);
+
             leftFrontTarget = leftFrontTarget + (int) (leftFrontInches * COUNTS_PER_INCH);
             rightFrontTarget = rightFrontTarget - (int) (rightFrontInches * COUNTS_PER_INCH);
             leftBackTarget = leftBackTarget - (int) (leftBackInches * COUNTS_PER_INCH);

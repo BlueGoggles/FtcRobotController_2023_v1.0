@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.PIDController;
 import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.Utility;
 
 @Autonomous(name="Robot: Auto Drive By Encoder With Gyro PoC", group="Robot")
 public class RobotAutoDriveByEncoder_WithGyro_Linear_PoC extends LinearOpMode {
@@ -61,7 +62,7 @@ public class RobotAutoDriveByEncoder_WithGyro_Linear_PoC extends LinearOpMode {
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
-            robot.setTargetPosition(inches);
+            robot.setTargetPosition(Utility.Direction.FORWARD, inches);
 
             // Turn On RUN_TO_POSITION
             robot.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
