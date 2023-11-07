@@ -59,8 +59,9 @@ public class RobotHardware {
     private int currentViperSlideState = 0;
     private int currentLeadScrewState = 0;
 
-    private boolean stopLeadScrew = false;
-    private boolean stopViperSlide = false;
+    private final int leadScrewLengthCountUp = 13000;
+    private final int leadScrewLengthCountDown = 12500;
+    private final int leadScrewSafetyCount = 10000;
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware(LinearOpMode opMode) {
@@ -98,15 +99,16 @@ public class RobotHardware {
 
         getIntakeWheel().setDirection(DcMotorEx.Direction.REVERSE);
         getIntakeBelt().setDirection(DcMotorEx.Direction.FORWARD);
-        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
-        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
+        
+        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
 
-        getViperSlide().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        getLeadScrew().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.getViperSlide().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.getLeadScrew().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        getViperSlide().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        getLeadScrew().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        this.getViperSlide().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        this.getLeadScrew().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         setMotorPowers(Constants.ZERO_POWER);
     }
@@ -225,66 +227,79 @@ public class RobotHardware {
 
     // TODO: Add a getter function to return the lead screw state for telemetry.
     public void extendLeadScrew() {
-        final double     COUNTS_PER_MOTOR_REV    = 560 ;    // eg: GoBILDA 312 RPM Yellow Jacket
-        final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-        final double     WHEEL_DIAMETER_INCHES   = 1.5 ;     // For figuring circumference
-        final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
+        //if( this.getLeadScrew().getCurrentPosition() > leadScrewSafetyCount ) {
+            int screwTarget = this.getLeadScrew().getCurrentPosition() + leadScrewLengthCountUp;
+            this.getLeadScrew().setTargetPosition(screwTarget);
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
-        // TODO: Find out the actual length of the lead screw.
-        int screwTarget = (int)( 2 * COUNTS_PER_INCH);
-        getLeadScrew().setTargetPosition(screwTarget);
-        getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            this.getLeadScrew().setPower(1);
 
-        getLeadScrew().setPower(0.1);
+            while (this.getLeadScrew().isBusy()) {
+                // Run the program.
+                getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+                getMyOpMode().telemetry.update();
+                if (getMyOpMode().gamepad2.left_bumper) {
+                    break;
+                }
+            }
+            getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+            getMyOpMode().telemetry.update();
 
-        while ( (getLeadScrew().isBusy()) && ( stopLeadScrew == false) ) {
-            // Run the program.
-        }
+            // Stop all motion;
+            this.getLeadScrew().setPower(0);
 
-        // Stop all motion;
-        getLeadScrew().setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        stopLeadScrew = false;
+            // Turn off RUN_TO_POSITION
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        } else {
+//            // We are already extended. Don't extend again.
+//        }
     }
 
     public void resetLeadScrew() {
-        getLeadScrew().setDirection(DcMotorEx.Direction.REVERSE);
-        int screwTarget = (int)( 2 * COUNTS_PER_INCH);
-        getLeadScrew().setTargetPosition(screwTarget);
-        getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.REVERSE);
+        //if( this.getLeadScrew().getCurrentPosition() < -(leadScrewSafetyCount) ) {
+            int screwTarget = this.getLeadScrew().getCurrentPosition() + leadScrewLengthCountDown;
+            this.getLeadScrew().setTargetPosition(screwTarget);
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        getLeadScrew().setPower(0.1);
+            this.getLeadScrew().setPower(0.5);
 
-        while ( (getLeadScrew().isBusy()) && ( stopLeadScrew == false) ) {
-            // Run the program.
-        }
+            while (this.getLeadScrew().isBusy()) {
+                // Run the program.
+                getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+                getMyOpMode().telemetry.update();
+                if (getMyOpMode().gamepad2.left_bumper) {
+                    break;
+                }
+            }
 
-        // Stop all motion;
-        getLeadScrew().setPower(0);
+            getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+            getMyOpMode().telemetry.update();
 
-        // Turn off RUN_TO_POSITION
-        getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        stopLeadScrew = false;
-    }
+            // Stop all motion;
+            this.getLeadScrew().setPower(0);
 
-    public void stopLeadScrew() {
-        stopLeadScrew = true;
+            // Turn off RUN_TO_POSITION
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        } else {
+//            // We are already retracted. Don't retract again.
+//        }
     }
 
     public int getLeadScrewPosition() {
-        return getLeadScrew().getCurrentPosition();
+        return this.getLeadScrew().getCurrentPosition();
     }
 
     // TODO: Add a getter function to return the viper slide state for telemetry.
     public void extendViperSlide() {
-        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
 
-        int slidePosition = getViperSlide().getCurrentPosition();
-        int slideTarget = 0;
+        int slidePosition = this.getViperSlide().getCurrentPosition();
+        //int slideTarget = 0;
+        int slideTarget = this.getViperSlide().getCurrentPosition() + 100000;
 
+        /*
         // TODO: replace 62, 124, 186 with actual values.
         if( slidePosition < 62 ) {
             // Set the target position to the next position.
@@ -297,29 +312,41 @@ public class RobotHardware {
             slideTarget = 186;
         }
 
-        getViperSlide().setTargetPosition(slideTarget);
-        getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+         */
 
-        getViperSlide().setPower(0.1);
+        this.getViperSlide().setTargetPosition(slideTarget);
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while ( (getViperSlide().isBusy()) && ( stopViperSlide == false) ) {
+        // We ant this to be slow. A small amount of rotation results in a lot of viper sliding.
+        this.getViperSlide().setPower(0.1);
+
+        while (this.getViperSlide().isBusy()) {
             // Run the program.
+            getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+            getMyOpMode().telemetry.update();
+            if (getMyOpMode().gamepad2.left_bumper) {
+                break;
+            }
         }
 
+        getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+        getMyOpMode().telemetry.update();
+
         // Stop all motion;
-        getViperSlide().setPower(0);
+        this.getViperSlide().setPower(0);
 
         // Turn off RUN_TO_POSITION
-        getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        stopViperSlide = false;
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void retractViperSlide() {
-        getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+        this.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 
-        int slidePosition = getViperSlide().getCurrentPosition();
-        int slideTarget = 0;
+        int slidePosition = this.getViperSlide().getCurrentPosition();
+        //int slideTarget = 0;
+        int slideTarget = this.getViperSlide().getCurrentPosition() + 100000;
 
+        /*
         // TODO: replace 62, 124, 186 with actual values.
         if( slidePosition < 62 ) {
             // Set the target position to the next position.
@@ -332,51 +359,56 @@ public class RobotHardware {
             slideTarget = 124;
         }
 
-        getViperSlide().setTargetPosition(slideTarget);
-        getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+         */
 
-        getViperSlide().setPower(0.1);
+        this.getViperSlide().setTargetPosition(slideTarget);
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while ( (getViperSlide().isBusy()) && ( stopViperSlide == false) ) {
+        // We ant this to be slow. A small amount of rotation results in a lot of viper sliding.
+        this.getViperSlide().setPower(0.1);
+
+        while (this.getViperSlide().isBusy()) {
             // Run the program.
+            getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+            getMyOpMode().telemetry.update();
+            if (getMyOpMode().gamepad2.left_bumper) {
+                break;
+            }
         }
 
+        getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+        getMyOpMode().telemetry.update();
+
         // Stop all motion;
-        getViperSlide().setPower(0);
+        this.getViperSlide().setPower(0);
 
         // Turn off RUN_TO_POSITION
-        getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        stopViperSlide = false;
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void resetViperSlide() {
-        getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+        this.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 
         int slideTarget = 0;
 
-        getViperSlide().setTargetPosition(slideTarget);
-        getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.getViperSlide().setTargetPosition(slideTarget);
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        getViperSlide().setPower(0.1);
+        this.getViperSlide().setPower(0.1);
 
-        while ( (getViperSlide().isBusy()) && ( stopViperSlide == false) ) {
+        while ( this.getViperSlide().isBusy() ) {
             // Run the program.
         }
 
         // Stop all motion;
-        getViperSlide().setPower(0);
+        this.getViperSlide().setPower(0);
 
         // Turn off RUN_TO_POSITION
-        getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        stopViperSlide = false;
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public int getViperSlidePosition() {
-        return getViperSlide().getCurrentPosition();
-    }
-
-    public void stopViperSlide() {
-        stopViperSlide = true;
+        return this.getViperSlide().getCurrentPosition();
     }
 
     public LinearOpMode getMyOpMode() {

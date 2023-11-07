@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -160,6 +162,8 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getIntakeBelt().setPower(0);
                 }
 
+                // NOTE: This program is single threaded right now. So we can't do multiple operations at once.
+
                 // Control the lead screw.
                 if (gamepad2.a) {
                     robot.extendLeadScrew();
@@ -169,12 +173,6 @@ public class MainTeleOp extends LinearOpMode {
                     robot.resetLeadScrew();
                 }
 
-                if (gamepad2.left_bumper) {
-                    robot.stopLeadScrew();
-                    robot.stopViperSlide();
-                }
-
-                /*
                 // Control the viper slide.
                 if( gamepad2.x ) {
                    robot.extendViperSlide();
@@ -184,6 +182,7 @@ public class MainTeleOp extends LinearOpMode {
                     robot.retractViperSlide();
                 }
 
+                /*
                 if( gamepad2.right_bumper ) {
                     robot.resetViperSlide();
                 }
