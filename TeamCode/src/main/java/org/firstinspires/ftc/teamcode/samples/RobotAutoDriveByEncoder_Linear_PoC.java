@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.Utility;
 
 @Autonomous(name="Robot: Auto Drive By Encoder PoC", group="Robot")
 public class RobotAutoDriveByEncoder_Linear_PoC extends LinearOpMode {
@@ -55,7 +56,7 @@ public class RobotAutoDriveByEncoder_Linear_PoC extends LinearOpMode {
         // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
-            robot.setTargetPosition(leftFrontInches, rightFrontInches, leftBackInches, rightBackInches);
+            robot.setTargetPosition(Utility.Direction.FORWARD, leftFrontInches, rightFrontInches, leftBackInches, rightBackInches);
 
             // Turn On RUN_TO_POSITION
             robot.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);

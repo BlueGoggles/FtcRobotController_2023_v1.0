@@ -83,10 +83,10 @@ public class RobotHardware {
         leftBack  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_LEFT);
         rightBack = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_BACK_RIGHT);
         // Expansion hub motors
-        intakeWheel  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_WHEEL);
-        intakeBelt = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_BELT);
-        viperSlide  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_VIPER_SLIDE);
-        leadScrew = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_LEAD_SCREW);
+//        intakeWheel  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_WHEEL);
+//        intakeBelt = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_INTAKE_BELT);
+//        viperSlide  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_VIPER_SLIDE);
+//        leadScrew = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_LEAD_SCREW);
         // Servos
 //        panServo = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_SERVO);
 //        panDoor  = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_DOOR);
@@ -105,6 +105,11 @@ public class RobotHardware {
 
         this.getViperSlide().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.getLeadScrew().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+//        getIntakeWheel().setDirection(DcMotorEx.Direction.REVERSE);
+//        getIntakeBelt().setDirection(DcMotorEx.Direction.FORWARD);
+//        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+//        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
 
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         this.getViperSlide().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -138,13 +143,40 @@ public class RobotHardware {
         getRightBack().setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
-    public void setTargetPosition(double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
+    public void setTargetPosition(Utility.Direction direction, double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
+
+        int leftFrontTarget = getLeftFront().getCurrentPosition();
+        int rightFrontTarget= getRightFront().getCurrentPosition();
+        int leftBackTarget = getLeftBack().getCurrentPosition();
+        int rightBackTarget = getRightBack().getCurrentPosition();
 
         // Determine new target position, and pass to motor controller
-        int leftFrontTarget = getLeftFront().getCurrentPosition() + (int)(leftFrontInches * COUNTS_PER_INCH);
-        int rightFrontTarget = getRightFront().getCurrentPosition() + (int)(rightFrontInches * COUNTS_PER_INCH);
-        int leftBackTarget = getLeftBack().getCurrentPosition() + (int)(leftBackInches * COUNTS_PER_INCH);
-        int rightBackTarget = getRightBack().getCurrentPosition() + (int)(rightBackInches * COUNTS_PER_INCH);
+        if (direction == Utility.Direction.FORWARD) {
+            leftFrontTarget = leftFrontTarget + (int) (leftFrontInches * COUNTS_PER_INCH);
+            rightFrontTarget = rightFrontTarget + (int) (rightFrontInches * COUNTS_PER_INCH);
+            leftBackTarget = leftBackTarget + (int) (leftBackInches * COUNTS_PER_INCH);
+            rightBackTarget = rightBackTarget + (int) (rightBackInches * COUNTS_PER_INCH);
+        } else if (direction == Utility.Direction.BACKWARD) {
+            leftFrontTarget = leftFrontTarget - (int) (leftFrontInches * COUNTS_PER_INCH);
+            rightFrontTarget = rightFrontTarget - (int) (rightFrontInches * COUNTS_PER_INCH);
+            leftBackTarget = leftBackTarget - (int) (leftBackInches * COUNTS_PER_INCH);
+            rightBackTarget = rightBackTarget - (int) (rightBackInches * COUNTS_PER_INCH);
+        } else if (direction == Utility.Direction.LEFT) {
+            leftFrontTarget = leftFrontTarget - (int) (leftFrontInches * COUNTS_PER_INCH);
+            rightFrontTarget = rightFrontTarget + (int) (rightFrontInches * COUNTS_PER_INCH);
+            leftBackTarget = leftBackTarget + (int) (leftBackInches * COUNTS_PER_INCH);
+            rightBackTarget = rightBackTarget - (int) (rightBackInches * COUNTS_PER_INCH);
+        } else if (direction == Utility.Direction.RIGHT) {
+            getLeftFront().setDirection(DcMotorEx.Direction.REVERSE);
+            getRightFront().setDirection(DcMotorEx.Direction.REVERSE);
+            getLeftBack().setDirection(DcMotorEx.Direction.FORWARD);
+            getRightBack().setDirection(DcMotorEx.Direction.FORWARD);
+
+            leftFrontTarget = leftFrontTarget + (int) (leftFrontInches * COUNTS_PER_INCH);
+            rightFrontTarget = rightFrontTarget - (int) (rightFrontInches * COUNTS_PER_INCH);
+            leftBackTarget = leftBackTarget - (int) (leftBackInches * COUNTS_PER_INCH);
+            rightBackTarget = rightBackTarget + (int) (rightBackInches * COUNTS_PER_INCH);
+        }
 
         // Set the Target Position
         getLeftFront().setTargetPosition(leftFrontTarget);
@@ -153,9 +185,9 @@ public class RobotHardware {
         getRightBack().setTargetPosition(rightBackTarget);
     }
 
-    public void setTargetPosition(double inches) {
+    public void setTargetPosition(Utility.Direction direction, double inches) {
 
-        setTargetPosition(inches, inches, inches, inches);
+        setTargetPosition(direction, inches, inches, inches, inches);
     }
 
     public void initializeIMU() {

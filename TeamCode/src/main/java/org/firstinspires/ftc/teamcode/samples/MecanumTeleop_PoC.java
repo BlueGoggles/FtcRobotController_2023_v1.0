@@ -84,7 +84,7 @@ public class MecanumTeleop_PoC extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                Joystick_X = 1 * gamepad1.right_stick_x;
+                Joystick_X = -1 * gamepad1.right_stick_x;
                 Joystick_Y = -1 * gamepad1.right_stick_y;
                 Joystick_Z = gamepad1.left_stick_x;
                 M = 1 / (1 - Deadband);
