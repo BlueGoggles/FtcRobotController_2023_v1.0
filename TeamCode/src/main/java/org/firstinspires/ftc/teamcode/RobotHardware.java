@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -50,6 +52,17 @@ public class RobotHardware {
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
     static final double COUNTS_PER_INCH = (Constants.COUNTS_PER_MOTOR_REV * Constants.DRIVE_GEAR_REDUCTION) / (Constants.WHEEL_DIAMETER_INCHES * 3.1415);
 
+    // Tracking variables
+    // TODO: Enumerate the states for these so that we can print them out in telemetry.
+    // Viper slide states: STEP_0, STEP_1, STEP_2, FULL
+    // Lead screw states: RESET, EXTENDING, RETRACTING, EXTENDED
+    private int currentViperSlideState = 0;
+    private int currentLeadScrewState = 0;
+
+    private final int leadScrewLengthCountUp = 13000;
+    private final int leadScrewLengthCountDown = 12500;
+    private final int leadScrewSafetyCount = 10000;
+
     // Define a constructor that allows the OpMode to pass a reference to itself.
     public RobotHardware(LinearOpMode opMode) {
         myOpMode = opMode;
@@ -84,12 +97,23 @@ public class RobotHardware {
         getLeftBack().setDirection(DcMotorEx.Direction.REVERSE);
         getRightBack().setDirection(DcMotorEx.Direction.FORWARD);
 
+        getIntakeWheel().setDirection(DcMotorEx.Direction.REVERSE);
+        getIntakeBelt().setDirection(DcMotorEx.Direction.FORWARD);
+        
+        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
+
+        this.getViperSlide().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.getLeadScrew().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 //        getIntakeWheel().setDirection(DcMotorEx.Direction.REVERSE);
 //        getIntakeBelt().setDirection(DcMotorEx.Direction.FORWARD);
 //        getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 //        getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
 
         setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        this.getViperSlide().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        this.getLeadScrew().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         setMotorPowers(Constants.ZERO_POWER);
     }
@@ -231,6 +255,192 @@ public class RobotHardware {
                 .setCamera(myOpMode.hardwareMap.get(WebcamName.class, Constants.DEVICE_CAMERA))
                 .addProcessor(aprilTag)
                 .build();
+    }
+
+    // TODO: Add a getter function to return the lead screw state for telemetry.
+    public void extendLeadScrew() {
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.FORWARD);
+        //if( this.getLeadScrew().getCurrentPosition() > leadScrewSafetyCount ) {
+            int screwTarget = this.getLeadScrew().getCurrentPosition() + leadScrewLengthCountUp;
+            this.getLeadScrew().setTargetPosition(screwTarget);
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            this.getLeadScrew().setPower(1);
+
+            while (this.getLeadScrew().isBusy()) {
+                // Run the program.
+                getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+                getMyOpMode().telemetry.update();
+                if (getMyOpMode().gamepad2.left_bumper) {
+                    break;
+                }
+            }
+            getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+            getMyOpMode().telemetry.update();
+
+            // Stop all motion;
+            this.getLeadScrew().setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        } else {
+//            // We are already extended. Don't extend again.
+//        }
+    }
+
+    public void resetLeadScrew() {
+        this.getLeadScrew().setDirection(DcMotorEx.Direction.REVERSE);
+        //if( this.getLeadScrew().getCurrentPosition() < -(leadScrewSafetyCount) ) {
+            int screwTarget = this.getLeadScrew().getCurrentPosition() + leadScrewLengthCountDown;
+            this.getLeadScrew().setTargetPosition(screwTarget);
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            this.getLeadScrew().setPower(0.5);
+
+            while (this.getLeadScrew().isBusy()) {
+                // Run the program.
+                getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+                getMyOpMode().telemetry.update();
+                if (getMyOpMode().gamepad2.left_bumper) {
+                    break;
+                }
+            }
+
+            getMyOpMode().telemetry.addData("Lead Screw", this.getLeadScrew().getCurrentPosition());
+            getMyOpMode().telemetry.update();
+
+            // Stop all motion;
+            this.getLeadScrew().setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            this.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        } else {
+//            // We are already retracted. Don't retract again.
+//        }
+    }
+
+    public int getLeadScrewPosition() {
+        return this.getLeadScrew().getCurrentPosition();
+    }
+
+    // TODO: Add a getter function to return the viper slide state for telemetry.
+    public void extendViperSlide() {
+        this.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+
+        int slidePosition = this.getViperSlide().getCurrentPosition();
+        //int slideTarget = 0;
+        int slideTarget = this.getViperSlide().getCurrentPosition() + 100000;
+
+        /*
+        // TODO: replace 62, 124, 186 with actual values.
+        if( slidePosition < 62 ) {
+            // Set the target position to the next position.
+            slideTarget = 62;
+        } else if ( ( slidePosition >= 62 ) && ( slidePosition < 124 ) ) {
+            // In stage one. Go to stage 2.
+            slideTarget = 124;
+        } else {
+            // In final stage. Full extension.
+            slideTarget = 186;
+        }
+
+         */
+
+        this.getViperSlide().setTargetPosition(slideTarget);
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // We ant this to be slow. A small amount of rotation results in a lot of viper sliding.
+        this.getViperSlide().setPower(0.1);
+
+        while (this.getViperSlide().isBusy()) {
+            // Run the program.
+            getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+            getMyOpMode().telemetry.update();
+            if (getMyOpMode().gamepad2.left_bumper) {
+                break;
+            }
+        }
+
+        getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+        getMyOpMode().telemetry.update();
+
+        // Stop all motion;
+        this.getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void retractViperSlide() {
+        this.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+
+        int slidePosition = this.getViperSlide().getCurrentPosition();
+        //int slideTarget = 0;
+        int slideTarget = this.getViperSlide().getCurrentPosition() + 100000;
+
+        /*
+        // TODO: replace 62, 124, 186 with actual values.
+        if( slidePosition < 62 ) {
+            // Set the target position to the next position.
+            slideTarget = 0;
+        } else if ( ( slidePosition >= 62 ) && ( slidePosition < 124 ) ) {
+            // In stage one. Go to stage 2.
+            slideTarget = 62;
+        } else {
+            // In final stage. Full extension.
+            slideTarget = 124;
+        }
+
+         */
+
+        this.getViperSlide().setTargetPosition(slideTarget);
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // We ant this to be slow. A small amount of rotation results in a lot of viper sliding.
+        this.getViperSlide().setPower(0.1);
+
+        while (this.getViperSlide().isBusy()) {
+            // Run the program.
+            getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+            getMyOpMode().telemetry.update();
+            if (getMyOpMode().gamepad2.left_bumper) {
+                break;
+            }
+        }
+
+        getMyOpMode().telemetry.addData("Viper Slide", this.getViperSlide().getCurrentPosition());
+        getMyOpMode().telemetry.update();
+
+        // Stop all motion;
+        this.getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void resetViperSlide() {
+        this.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+
+        int slideTarget = 0;
+
+        this.getViperSlide().setTargetPosition(slideTarget);
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        this.getViperSlide().setPower(0.1);
+
+        while ( this.getViperSlide().isBusy() ) {
+            // Run the program.
+        }
+
+        // Stop all motion;
+        this.getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        this.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public int getViperSlidePosition() {
+        return this.getViperSlide().getCurrentPosition();
     }
 
     public LinearOpMode getMyOpMode() {
