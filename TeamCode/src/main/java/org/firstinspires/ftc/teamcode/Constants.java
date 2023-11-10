@@ -45,4 +45,12 @@ public interface Constants {
     double REGION_AVG_FINAL_DIFFERENCE_THRESHOLD = 8.0;
 
     double MID_SERVO   =  0.5 ;
+
+    int LEAD_SCREW_COUNT_UP = 13000;
+    int LEAD_SCREW_COUNT_DOWN = 0;
+    int VIPER_SLIDE_STAGE_1_COUNT = 1800;
+    int VIPER_SLIDE_STAGE_2_COUNT = 2300;
+    int VIPER_SLIDE_STAGE_3_COUNT = 2800;
+    int VIPER_SLIDE_REST_COUNT = 300;
+    int VIPER_SLIDE_VARIANCE = 100;
 }
