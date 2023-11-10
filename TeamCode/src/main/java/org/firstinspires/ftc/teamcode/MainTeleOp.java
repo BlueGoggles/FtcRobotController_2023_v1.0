@@ -73,7 +73,7 @@ public class MainTeleOp extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                Joystick_X = 1 * gamepad1.right_stick_x;
+                Joystick_X = -1 * gamepad1.right_stick_x;
                 Joystick_Y = -1 * gamepad1.right_stick_y;
                 Joystick_Z = gamepad1.left_stick_x;
                 M = 1 / (1 - Deadband);
@@ -182,11 +182,43 @@ public class MainTeleOp extends LinearOpMode {
                     robot.retractViperSlide();
                 }
 
-                /*
-                if( gamepad2.right_bumper ) {
-                    robot.resetViperSlide();
+                if( gamepad2.start ) {
+                    robot.getLeadScrewSwitch().setPosition(0.4);
+//                    robot.getPanDoor().setPower(1.0);
                 }
-                */
+
+//                if( gamepad2.dpad_down ) {
+//                    robot.getPanDoor().setPower(1.0);
+//                }
+
+                if( gamepad2.back ) {
+                    robot.getPanDoor().setPosition(0.5);
+                }
+
+
+                if( gamepad2.left_bumper ) {
+                    while (robot.getPanServo().getPosition() > 0.35) {
+//                    robot.getPanServo().setPosition(0.35);
+                        robot.getPanServo().setPosition(robot.getPanServo().getPosition() - 0.0025);
+                        sleep(25);
+                    }
+//                    robot.getPanServo().setPower(0.2);
+//                    sleep(3000);
+//                    robot.getPanServo().setPower(0.0);
+                }
+
+                if( gamepad1.start ) {
+                    while (robot.getPanServo().getPosition() < 0.6) {
+//                    robot.getPanServo().setPosition(0.35);
+                        robot.getPanServo().setPosition(robot.getPanServo().getPosition() + 0.0025);
+                        sleep(25);
+                    }
+                }
+
+//                if( gamepad2.dpad_down ) {
+//                    robot.getPanServo().setPosition(0.5);
+//                }
+
 
                 telemetry.addData("Lead Screw", robot.getLeadScrewPosition());
                 telemetry.addData("Viper Slide", robot.getViperSlidePosition());
@@ -197,6 +229,12 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Front Right Pow", robot.getRightFront().getPower());
                 telemetry.addData("Back Left Pow", robot.getLeftBack().getPower());
                 telemetry.addData("Back Right Pow", robot.getRightBack().getPower());
+                telemetry.addData("LeadScrewSwitch().getPosition()", robot.getLeadScrewSwitch().getPosition());
+                telemetry.addData("gamepad1.start", gamepad1.start);
+                telemetry.addData("gamepad2.start", gamepad2.start);
+                telemetry.addData("gamepad2.back", gamepad2.back);
+                telemetry.addData("gamepad2.left_bumper", gamepad2.left_bumper);
+
                 telemetry.update();
             }
         }
