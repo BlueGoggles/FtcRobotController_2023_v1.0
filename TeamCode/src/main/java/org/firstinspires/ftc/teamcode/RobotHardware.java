@@ -88,7 +88,7 @@ public class RobotHardware {
 //        droneLauncher = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_DRONE_LAUNCHER);
 
         getPanDoor().setDirection(Servo.Direction.FORWARD);
-        getPanDoor().setPosition(0.0);
+        getPanDoor().setPosition(Constants.MID_SERVO);
 
 
         getPanServo().setDirection(Servo.Direction.FORWARD);

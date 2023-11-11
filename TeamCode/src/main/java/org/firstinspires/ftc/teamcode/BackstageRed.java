@@ -15,23 +15,6 @@ public class BackstageRed extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        // Initialize OpenCV
-        FindRegionPipeline findRegionPipeline = new FindRegionPipeline(Utility.Color.BLUE);
-        robot.initializeOpenCV(findRegionPipeline);
-        sleep(5000);
-
-        spikeMark = getSpikeMark(findRegionPipeline);
-        aprilTagId = getAprilTagId(spikeMark);
-
-        telemetry.addData("Left Average Final : ", findRegionPipeline.getLeftAvgFinal());
-        telemetry.addData("Right Average Final : ", findRegionPipeline.getRightAvgFinal());
-        telemetry.addData("Spike Mark : ", spikeMark);
-        telemetry.addData("April Tag Id : ", aprilTagId);
-        telemetry.update();
-
-        // Release camera resources for OpenCV
-        robot.releaseResourcesForOpenCV();
-
         // Initialize Robot with Encoder
         robot.initialize();
         robot.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -40,11 +23,27 @@ public class BackstageRed extends LinearOpMode {
         // Initialize Gyro sensor
         robot.initializeIMU();
 
+        // Initialize OpenCV
+        FindRegionPipeline findRegionPipeline = new FindRegionPipeline(Utility.Color.BLUE);
+        robot.initializeOpenCV(findRegionPipeline);
+        sleep(5000);
+
+        while (opModeInInit()) {
+            spikeMark = getSpikeMark(findRegionPipeline);
+            aprilTagId = getAprilTagId(spikeMark);
+
+            telemetry.addData("Left Average Final : ", findRegionPipeline.getLeftAvgFinal());
+            telemetry.addData("Right Average Final : ", findRegionPipeline.getRightAvgFinal());
+            telemetry.addData("Spike Mark : ", spikeMark);
+            telemetry.addData("April Tag Id : ", aprilTagId);
+            telemetry.update();
+        }
+
+        // Release camera resources for OpenCV
+        robot.releaseResourcesForOpenCV();
+
         // Initialize the Apriltag Detection process
         robot.initializeAprilTag();
-
-        // Wait for PLAY button to press
-        waitForStart();
 
         // Drive towards object
         moveToObject();
@@ -53,8 +52,8 @@ public class BackstageRed extends LinearOpMode {
         sleep(3000);
 
         // Move to desired AprilTag
-        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        moveToAprilTag();
+//        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
+//        moveToAprilTag();
     }
 
     private void moveToAprilTag() {
@@ -75,10 +74,11 @@ public class BackstageRed extends LinearOpMode {
 
     private void moveToObject() {
         if (spikeMark == Utility.SpikeMark.LEFT) {
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  5,  5, 5,  5);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  20,  20, 20,  20);
-            // Turn to absolute 90 degrees clockwise
-            Utility.turnToPID(robot, 90);
+            double x = 1.1204;
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10 * x,  10 * x, 10 * x,  10 * x);
+//            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  20,  20, 20,  20);
+//            // Turn to absolute 90 degrees clockwise
+//            Utility.turnToPID(robot, 90);
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  25,  25, 25,  25);
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {

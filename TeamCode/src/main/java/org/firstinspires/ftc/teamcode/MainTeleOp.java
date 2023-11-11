@@ -154,93 +154,89 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 robot.setMotorPowers(-FL_Power, FR_Power, -BL_Power, BR_Power);
 
-                if (gamepad2.right_bumper) {
-                    robot.getIntakeWheel().setPower(1);
-                    robot.getIntakeBelt().setPower(1);
-                } else {
-                    robot.getIntakeWheel().setPower(0);
-                    robot.getIntakeBelt().setPower(0);
-                }
+                robot.getIntakeWheel().setPower(gamepad2.right_trigger);
+                robot.getIntakeBelt().setPower(gamepad2.right_trigger);
+                robot.getIntakeWheel().setPower(-gamepad2.left_trigger);
+                robot.getIntakeBelt().setPower(-gamepad2.left_trigger);
 
                 // NOTE: This program is single threaded right now. So we can't do multiple operations at once.
 
                 // Extend the lead screw.
-                if (gamepad2.a) {
+                if (gamepad1.left_bumper) {
                     robot.controlLeadScrew(DcMotorEx.Direction.FORWARD);
                 }
 
                 // Retract the lead screw.
-                if (gamepad2.b) {
+                if (gamepad1.right_bumper) {
                     robot.controlLeadScrew(DcMotorEx.Direction.REVERSE);
                 }
 
                 // Control the viper slide.
-                if (gamepad2.x) {
+                if (gamepad2.a) {
+                    panHome(robot);
+                    robot.resetViperSlide();
+                }
+
+                if (gamepad2.b) {
                     robot.extendViperSlide();
+                    panDelivery(robot);
                 }
 
                 if (gamepad2.y) {
                     robot.retractViperSlide();
+                    panDelivery(robot);
                 }
 
-                if (gamepad2.back) {
-                    robot.resetViperSlide();
-                    if (gamepad2.start) {
-                        robot.getLeadScrewSwitch().setPosition(0.4);
-//                    robot.getPanDoor().setPower(1.0);
-                    }
-
-//                if( gamepad2.dpad_down ) {
-//                    robot.getPanDoor().setPower(1.0);
-//                }
-
-                    if (gamepad2.back) {
-                        robot.getPanDoor().setPosition(0.5);
-                    }
-
-
-                    if (gamepad2.left_bumper) {
-                        while (robot.getPanServo().getPosition() > 0.35) {
-//                    robot.getPanServo().setPosition(0.35);
-                            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - 0.0025);
-                            sleep(25);
-                        }
-//                    robot.getPanServo().setPower(0.2);
-//                    sleep(3000);
-//                    robot.getPanServo().setPower(0.0);
-                    }
-
-                    if (gamepad1.start) {
-                        while (robot.getPanServo().getPosition() < 0.6) {
-//                    robot.getPanServo().setPosition(0.35);
-                            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + 0.0025);
-                            sleep(25);
-                        }
-                    }
-
-//                if( gamepad2.dpad_down ) {
-//                    robot.getPanServo().setPosition(0.5);
-//                }
-
-
-                    telemetry.addData("Lead Screw", robot.getLeadScrewPosition());
-                    telemetry.addData("Viper Slide", robot.getViperSlidePosition());
-                    telemetry.addData("Z Prime", Z_);
-                    telemetry.addData("Yaw", JavaUtil.formatNumber(Orientation2.getYaw(AngleUnit.DEGREES), 2));
-                    telemetry.addData("Velocity", Theta_Velocity.zRotationRate);
-                    telemetry.addData("Front Left Pow", robot.getLeftFront().getPower());
-                    telemetry.addData("Front Right Pow", robot.getRightFront().getPower());
-                    telemetry.addData("Back Left Pow", robot.getLeftBack().getPower());
-                    telemetry.addData("Back Right Pow", robot.getRightBack().getPower());
-                    telemetry.addData("LeadScrewSwitch().getPosition()", robot.getLeadScrewSwitch().getPosition());
-                    telemetry.addData("gamepad1.start", gamepad1.start);
-                    telemetry.addData("gamepad2.start", gamepad2.start);
-                    telemetry.addData("gamepad2.back", gamepad2.back);
-                    telemetry.addData("gamepad2.left_bumper", gamepad2.left_bumper);
-
-                    telemetry.update();
+                if (gamepad1.a) {
+                    robot.getLeadScrewSwitch().setPosition(0.4);
                 }
+
+                if (gamepad2.left_bumper) {
+                    robot.getPanDoor().setPosition(0.0);
+                } else {
+                    robot.getPanDoor().setPosition(0.5);
+                }
+
+                telemetry.addData("Z Prime", Z_);
+                telemetry.addData("Yaw", JavaUtil.formatNumber(Orientation2.getYaw(AngleUnit.DEGREES), 2));
+                telemetry.addData("Velocity", Theta_Velocity.zRotationRate);
+                telemetry.addData("Front Left Pow", robot.getLeftFront().getPower());
+                telemetry.addData("Front Right Pow", robot.getRightFront().getPower());
+                telemetry.addData("Back Left Pow", robot.getLeftBack().getPower());
+                telemetry.addData("Back Right Pow", robot.getRightBack().getPower());
+
+                telemetry.addData("Intake Wheel Power (gamepad2.rightTrigger[forward]/leftTrigger[backword])", robot.getIntakeWheel().getPower());
+                telemetry.addData("Intake Belt Power (gamepad2.rightTrigger[forward]/leftTrigger[backword])", robot.getIntakeBelt().getPower());
+
+                telemetry.addData("Lead Screw Position", robot.getLeadScrewPosition());
+                telemetry.addData("Viper Slide Position", robot.getViperSlidePosition());
+                telemetry.addData("Lead Screw Forward (gamepad1.left_bumper)", gamepad1.left_bumper);
+                telemetry.addData("Lead Screw Reverse (gamepad1.right_bumper)", gamepad1.right_bumper);
+
+                telemetry.addData("Pan Home & Reset Viper Slide (gamepad2.a)", gamepad2.a);
+                telemetry.addData("Extend Viper Slide & Pan Delivery (gamepad2.b)", gamepad2.b);
+                telemetry.addData("Retract Viper Slide & Pan Delivery (gamepad2.y)", gamepad2.y);
+
+                telemetry.addData("Lead Screw Switch release (gamepad1.a)", gamepad1.a);
+
+                telemetry.addData("Pan Door start/stop (gamepad2.left_bumper)", gamepad2.left_bumper);
+
+                telemetry.update();
             }
+        }
+    }
+
+    private void panHome(RobotHardware robot) {
+        while (robot.getPanServo().getPosition() < 0.6) {
+            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + 0.0025);
+            sleep(25);
+        }
+    }
+
+    private void panDelivery(RobotHardware robot) {
+        while (robot.getPanServo().getPosition() > 0.35) {
+            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - 0.0025);
+            sleep(25);
         }
     }
 }
