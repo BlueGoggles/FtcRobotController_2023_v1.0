@@ -51,6 +51,6 @@ public interface Constants {
     int VIPER_SLIDE_STAGE_1_COUNT = 1800;
     int VIPER_SLIDE_STAGE_2_COUNT = 2300;
     int VIPER_SLIDE_STAGE_3_COUNT = 2800;
-    int VIPER_SLIDE_REST_COUNT = 300;
+    int VIPER_SLIDE_REST_COUNT = 600;
     int VIPER_SLIDE_VARIANCE = 100;
 }

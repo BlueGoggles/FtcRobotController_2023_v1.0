@@ -154,10 +154,17 @@ public class MainTeleOp extends LinearOpMode {
                 }
                 robot.setMotorPowers(-FL_Power, FR_Power, -BL_Power, BR_Power);
 
-                robot.getIntakeWheel().setPower(gamepad2.right_trigger);
-                robot.getIntakeBelt().setPower(gamepad2.right_trigger);
-                robot.getIntakeWheel().setPower(-gamepad2.left_trigger);
-                robot.getIntakeBelt().setPower(-gamepad2.left_trigger);
+                int intakePower = 0;
+                if( gamepad2.x ) {
+                    intakePower = 1;
+                } else if(gamepad2.back) {
+                    intakePower = -1;
+                }
+
+                robot.getIntakeWheel().setPower(intakePower);
+                robot.getIntakeBelt().setPower(intakePower);
+                robot.getIntakeWheel().setPower(intakePower);
+                robot.getIntakeBelt().setPower(intakePower);
 
                 // NOTE: This program is single threaded right now. So we can't do multiple operations at once.
 
@@ -197,6 +204,11 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getPanDoor().setPosition(0.5);
                 }
 
+                // Press this button to reset the yaw during Teleop.
+                if (gamepad1.y) {
+                    robot.getImu().resetYaw();
+                }
+
                 telemetry.addData("Z Prime", Z_);
                 telemetry.addData("Yaw", JavaUtil.formatNumber(Orientation2.getYaw(AngleUnit.DEGREES), 2));
                 telemetry.addData("Velocity", Theta_Velocity.zRotationRate);
@@ -220,6 +232,8 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Lead Screw Switch release (gamepad1.a)", gamepad1.a);
 
                 telemetry.addData("Pan Door start/stop (gamepad2.left_bumper)", gamepad2.left_bumper);
+
+                telemetry.addData("Joystick Z (gamepage1.left_stick_x", Joystick_Z);
 
                 telemetry.update();
             }
