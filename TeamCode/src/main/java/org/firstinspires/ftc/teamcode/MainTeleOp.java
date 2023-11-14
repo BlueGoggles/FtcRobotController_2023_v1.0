@@ -163,27 +163,27 @@ public class MainTeleOp extends LinearOpMode {
 
                 // Extend the lead screw.
                 if (gamepad1.left_bumper) {
-                    robot.controlLeadScrew(DcMotorEx.Direction.FORWARD);
+                    Utility.controlLeadScrew(robot, DcMotorEx.Direction.FORWARD);
                 }
 
                 // Retract the lead screw.
                 if (gamepad1.right_bumper) {
-                    robot.controlLeadScrew(DcMotorEx.Direction.REVERSE);
+                    Utility.controlLeadScrew(robot, DcMotorEx.Direction.REVERSE);
                 }
 
                 // Control the viper slide.
                 if (gamepad2.a) {
                     panHome(robot);
-                    robot.resetViperSlide();
+                    Utility.resetViperSlide(robot);
                 }
 
                 if (gamepad2.b) {
-                    robot.extendViperSlide();
+                    Utility.extendViperSlide(robot);
                     panDelivery(robot);
                 }
 
                 if (gamepad2.y) {
-                    robot.retractViperSlide();
+                    Utility.retractViperSlide(robot);
                     panDelivery(robot);
                 }
 

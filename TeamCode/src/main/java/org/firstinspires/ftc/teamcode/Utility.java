@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -218,5 +220,135 @@ public class Utility {
             gainControl.setGain(gain);
             robot.getMyOpMode().sleep(20);
         }
+    }
+
+    public static void controlLeadScrew(RobotHardware robot, DcMotorSimple.Direction direction) {
+
+        // Determine what position we need to go to.
+        int leadScrewPosition = 0;
+        if( direction == DcMotorSimple.Direction.FORWARD ) {
+            leadScrewPosition = Constants.LEAD_SCREW_COUNT_UP;
+        } else {
+            leadScrewPosition = Constants.LEAD_SCREW_COUNT_DOWN;
+        }
+
+        robot.getLeadScrew().setDirection(direction);
+
+        robot.getLeadScrew().setTargetPosition(leadScrewPosition);
+        robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // Set the motor to full power for extend and retract.
+        robot.getLeadScrew().setPower(1);
+
+        while (robot.getMyOpMode().opModeIsActive() && robot.getLeadScrew().isBusy()) {
+            // Engage the program control until desired position is reached.
+        }
+
+        // Stop all motion;
+        robot.getLeadScrew().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public static void extendViperSlide(RobotHardware robot) {
+        robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+
+        int slidePosition = robot.getViperSlide().getCurrentPosition();
+        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+
+        // TODO: Implement the VIPER_SLIDE_VARIANCE
+        if( slidePosition < Constants.VIPER_SLIDE_STAGE_1_COUNT ) {
+            // In rest position. Go to stage 1.
+            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
+        } else if ( ( slidePosition >= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - 100 ) ) && ( slidePosition < ( Constants.VIPER_SLIDE_STAGE_2_COUNT - 100 ) ) ) {
+            // In stage 1. Go to stage 2.
+            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
+        } else {
+            // In stage 2. Go to final stage, full extension.
+            stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
+        }
+
+        robot.getViperSlide().setTargetPosition(stagePosition);
+        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
+        robot.getViperSlide().setPower(0.25);
+
+        while (robot.getMyOpMode().opModeIsActive() && robot.getViperSlide().isBusy()) {
+            // Engage the program control until desired position is reached.
+
+//            if (robot.getMyOpMode().gamepad2.left_bumper) {
+//                break;
+//            }
+        }
+
+        // Stop all motion;
+        robot.getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public static void retractViperSlide(RobotHardware robot) {
+        robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+
+        int slidePosition = robot.getViperSlide().getCurrentPosition();
+        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+
+        // TODO: Implement the VIPER_SLIDE_VARIANCE
+        if( slidePosition < -(Constants.VIPER_SLIDE_STAGE_2_COUNT) ) {
+            // We are in the final stage, full extension. Move to stage 2.
+            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
+        } else if ( ( slidePosition >= -( ( Constants.VIPER_SLIDE_STAGE_2_COUNT + 100 ) ) ) && ( slidePosition < -( ( Constants.VIPER_SLIDE_STAGE_1_COUNT + 100 ) ) ) ) {
+            // In stage 2. Go to stage 1.
+            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
+        } else {
+            // In stage 1. Return to rest position.
+            stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+        }
+
+        robot.getViperSlide().setTargetPosition(stagePosition);
+        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
+        robot.getViperSlide().setPower(0.25);
+
+        while (robot.getMyOpMode().opModeIsActive() && robot.getViperSlide().isBusy()) {
+            // Engage the program control until desired position is reached.
+
+//            if (robot.getMyOpMode().gamepad2.left_bumper) {
+//                break;
+//            }
+        }
+
+        // Stop all motion;
+        robot.getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public static void resetViperSlide(RobotHardware robot) {
+        robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+
+        // Always go back to resting position.
+        robot.getViperSlide().setTargetPosition(Constants.VIPER_SLIDE_REST_COUNT);
+        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.getViperSlide().setPower(0.25);
+
+        while ( robot.getViperSlide().isBusy() ) {
+            // Engage the program control until desired position is reached.
+//            if (robot.getMyOpMode().gamepad2.left_bumper) {
+//                break;
+//            }
+        }
+
+        // Stop all motion;
+        robot.getViperSlide().setPower(0);
+
+        // Turn off RUN_TO_POSITION
+        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }
