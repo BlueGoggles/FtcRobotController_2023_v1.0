@@ -257,37 +257,22 @@ public class Utility {
         int slidePosition = robot.getViperSlide().getCurrentPosition();
         int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
 
-        // TODO: Implement the VIPER_SLIDE_VARIANCE
-        if( slidePosition < Constants.VIPER_SLIDE_STAGE_1_COUNT ) {
+        // First, check to see if the current position is below the lower end of the first stage 1.
+        if( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE ) ) {
             // In rest position. Go to stage 1.
             stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
-        } else if ( ( slidePosition >= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - 100 ) ) && ( slidePosition < ( Constants.VIPER_SLIDE_STAGE_2_COUNT - 100 ) ) ) {
+            // Next, check to see if the current position is between the upper and lower bounds of the first stage. If so, we are in the first stage, extend to the second.
+        } else if ( ( slidePosition >= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) &&
+                ( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) ) {
             // In stage 1. Go to stage 2.
             stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
+            // We reach this case when the current position is greater than the upper limit of stage 2. We assume that we are in the second stage. So we extend to the third stage.
         } else {
             // In stage 2. Go to final stage, full extension.
             stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
         }
 
-        robot.getViperSlide().setTargetPosition(stagePosition);
-        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
-        robot.getViperSlide().setPower(0.25);
-
-        while (robot.getMyOpMode().opModeIsActive() && robot.getViperSlide().isBusy()) {
-            // Engage the program control until desired position is reached.
-
-//            if (robot.getMyOpMode().gamepad2.left_bumper) {
-//                break;
-//            }
-        }
-
-        // Stop all motion;
-        robot.getViperSlide().setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        executeViperSlide( stagePosition, robot );
     }
 
     public static void retractViperSlide(RobotHardware robot) {
@@ -296,53 +281,47 @@ public class Utility {
         int slidePosition = robot.getViperSlide().getCurrentPosition();
         int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
 
-        // TODO: Implement the VIPER_SLIDE_VARIANCE
-        if( slidePosition < -(Constants.VIPER_SLIDE_STAGE_2_COUNT) ) {
+        // First, check to see if the current position is less than the upper end of the last stage.
+        if( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE ) ) {
             // We are in the final stage, full extension. Move to stage 2.
             stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
-        } else if ( ( slidePosition >= -( ( Constants.VIPER_SLIDE_STAGE_2_COUNT + 100 ) ) ) && ( slidePosition < -( ( Constants.VIPER_SLIDE_STAGE_1_COUNT + 100 ) ) ) ) {
+            // Next, check to see if the current position is between the upper and lower bounds of the second stage. If so, we are in the second stage, retract to the first.
+        } else if ( ( slidePosition >= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) &&
+                ( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) ) {
             // In stage 2. Go to stage 1.
             stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
+            // We reach this case when the current position is less than the lower limit of stage 1. We assume that we are in the first stage. So we retract to the rest stage.
         } else {
             // In stage 1. Return to rest position.
             stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
         }
 
-        robot.getViperSlide().setTargetPosition(stagePosition);
-        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
-        robot.getViperSlide().setPower(0.25);
-
-        while (robot.getMyOpMode().opModeIsActive() && robot.getViperSlide().isBusy()) {
-            // Engage the program control until desired position is reached.
-
-//            if (robot.getMyOpMode().gamepad2.left_bumper) {
-//                break;
-//            }
-        }
-
-        // Stop all motion;
-        robot.getViperSlide().setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        executeViperSlide( stagePosition, robot );
     }
 
     public static void resetViperSlide(RobotHardware robot) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 
         // Always go back to resting position.
-        robot.getViperSlide().setTargetPosition(Constants.VIPER_SLIDE_REST_COUNT);
+        executeViperSlide( Constants.VIPER_SLIDE_REST_COUNT, robot );
+    }
+
+    public static void executeViperSlide( int stagePosition, RobotHardware robot ) {
+        robot.getViperSlide().setTargetPosition(stagePosition);
         robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
         robot.getViperSlide().setPower(0.25);
 
-        while ( robot.getViperSlide().isBusy() ) {
-            // Engage the program control until desired position is reached.
-//            if (robot.getMyOpMode().gamepad2.left_bumper) {
-//                break;
-//            }
+        while (robot.getViperSlide().isBusy()) {
+            // Run the program.
+            /*
+            robot.getMyOpMode().telemetry.addData("Viper Slide", robot.getViperSlide().getCurrentPosition());
+            robot.getMyOpMode().telemetry.update();
+            if (robot.getMyOpMode().gamepad2.left_bumper) {
+                break;
+            }
+            */
         }
 
         // Stop all motion;
