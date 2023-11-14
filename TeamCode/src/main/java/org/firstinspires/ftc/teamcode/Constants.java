@@ -17,7 +17,7 @@ public interface Constants {
     String DEVICE_CAMERA = "Camera1";
     double ZERO_POWER = 0.0;
     double MAX_POWER = 1.0;
-    double AUTON_DRIVE_SPEED = 0.3;
+    double AUTON_DRIVE_SPEED = 0.6;
     double AUTON_TURN_SPEED = 0.3;
     double OBJECT_WIDTH_IN_INCHES = 3.0;  // The actual width of the object in real-world units
     int CAMERA_WIDTH = 640; // width  of wanted camera resolution
@@ -51,6 +51,6 @@ public interface Constants {
     int VIPER_SLIDE_STAGE_1_COUNT = 1800;
     int VIPER_SLIDE_STAGE_2_COUNT = 2300;
     int VIPER_SLIDE_STAGE_3_COUNT = 2800;
-    int VIPER_SLIDE_REST_COUNT = 600;
+    int VIPER_SLIDE_REST_COUNT = 0;
     int VIPER_SLIDE_VARIANCE = 100;
 }

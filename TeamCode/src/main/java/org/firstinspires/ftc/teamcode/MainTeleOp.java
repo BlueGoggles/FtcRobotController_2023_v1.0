@@ -180,18 +180,18 @@ public class MainTeleOp extends LinearOpMode {
 
                 // Control the viper slide.
                 if (gamepad2.a) {
-                    panHome(robot);
+                    Utility.panHome(robot);
                     Utility.resetViperSlide(robot);
                 }
 
                 if (gamepad2.b) {
                     Utility.extendViperSlide(robot);
-                    panDelivery(robot);
+                    Utility.panDelivery(robot);
                 }
 
                 if (gamepad2.y) {
                     Utility.retractViperSlide(robot);
-                    panDelivery(robot);
+                    Utility.panDelivery(robot);
                 }
 
                 if (gamepad1.a) {
@@ -202,6 +202,11 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getPanDoor().setPosition(0.0);
                 } else {
                     robot.getPanDoor().setPosition(0.5);
+                }
+
+                if (gamepad2.start) {
+                    Utility.turnPID(robot,5);
+                    robot.getImu().resetYaw();
                 }
 
                 // Press this button to reset the yaw during Teleop.
@@ -237,20 +242,6 @@ public class MainTeleOp extends LinearOpMode {
 
                 telemetry.update();
             }
-        }
-    }
-
-    private void panHome(RobotHardware robot) {
-        while (robot.getPanServo().getPosition() < 0.6) {
-            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + 0.0025);
-            sleep(25);
-        }
-    }
-
-    private void panDelivery(RobotHardware robot) {
-        while (robot.getPanServo().getPosition() > 0.35) {
-            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - 0.0025);
-            sleep(25);
         }
     }
 }

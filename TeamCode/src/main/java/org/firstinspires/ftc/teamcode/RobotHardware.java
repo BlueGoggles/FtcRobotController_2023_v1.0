@@ -90,7 +90,7 @@ public class RobotHardware {
 
 
         getPanServo().setDirection(Servo.Direction.FORWARD);
-        getPanServo().setPosition(0.6);
+        getPanServo().setPosition(0.55);
 
         getLeadScrewSwitch().setDirection(Servo.Direction.FORWARD);
         getLeadScrewSwitch().setPosition(0.1);

@@ -146,7 +146,7 @@ public class Utility {
                 moveRobot(robot, drive, strafe, turn);
             }
 
-            robot.getMyOpMode().sleep(10);
+//            robot.getMyOpMode().sleep(10);
         }
     }
 
@@ -311,17 +311,17 @@ public class Utility {
         robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
-        robot.getViperSlide().setPower(0.25);
+        robot.getViperSlide().setPower(0.6);
 
         while (robot.getViperSlide().isBusy()) {
             // Run the program.
-            /*
+
             robot.getMyOpMode().telemetry.addData("Viper Slide", robot.getViperSlide().getCurrentPosition());
             robot.getMyOpMode().telemetry.update();
-            if (robot.getMyOpMode().gamepad2.left_bumper) {
-                break;
-            }
-            */
+//            if (robot.getMyOpMode().gamepad2.left_bumper) {
+//                break;
+//            }
+
         }
 
         // Stop all motion;
@@ -329,5 +329,19 @@ public class Utility {
 
         // Turn off RUN_TO_POSITION
         robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public static void panHome(RobotHardware robot) {
+        while (robot.getPanServo().getPosition() < 0.55) {
+            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + 0.0025);
+            robot.getMyOpMode().sleep(10);
+        }
+    }
+
+    public static void panDelivery(RobotHardware robot) {
+        while (robot.getPanServo().getPosition() > 0.2) {
+            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - 0.0025);
+            robot.getMyOpMode().sleep(10);
+        }
     }
 }
