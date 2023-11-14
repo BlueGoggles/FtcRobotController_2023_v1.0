@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 public class BackstageRed extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);
-    private Utility.Color color = Utility.Color.BLUE;
+    private Utility.Color color = Utility.Color.RED;
     Utility.SpikeMark spikeMark;
     int aprilTagId;
 
@@ -24,7 +24,7 @@ public class BackstageRed extends LinearOpMode {
         robot.initializeIMU();
 
         // Initialize OpenCV
-        FindRegionPipeline findRegionPipeline = new FindRegionPipeline(Utility.Color.BLUE);
+        FindRegionPipeline findRegionPipeline = new FindRegionPipeline(color);
         robot.initializeOpenCV(findRegionPipeline);
         sleep(5000);
 
@@ -49,41 +49,137 @@ public class BackstageRed extends LinearOpMode {
         moveToObject();
 
         // Place Purple pixel on spike mark
-        sleep(3000);
+//        sleep(3000);
 
         // Move to desired AprilTag
-//        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-//        moveToAprilTag();
+        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
+        moveToAprilTag();
+
+        placeSecondPixel();
+
+        parkRobot();
+    }
+
+    private void parkRobot() {
+        if (spikeMark == Utility.SpikeMark.LEFT) {
+            Utility.turnToPID(robot, 0);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  32,  32, 32,  32);
+        } else if (spikeMark == Utility.SpikeMark.CENTER) {
+            Utility.turnToPID(robot, 0);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  18,  18, 18,  18);
+        } else if (spikeMark == Utility.SpikeMark.RIGHT) {
+            Utility.turnToPID(robot, 0);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  14,  14, 14,  14);
+        }
+    }
+
+    private void placeSecondPixel() {
+        if (spikeMark == Utility.SpikeMark.LEFT) {
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5,  8.5, 8.5,  8.5);
+            double x = 1.1764;
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  8 * x,  8 * x, 8 * x,  8 * x);
+
+            Utility.extendViperSlide(robot);
+            Utility.panDelivery(robot);
+
+            robot.getPanDoor().setPosition(0.0);
+            sleep(2500);
+            robot.getPanDoor().setPosition(0.5);
+
+            Utility.panHome(robot);
+            Utility.resetViperSlide(robot);
+//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  4,  4, 4,  4);
+
+        } else if (spikeMark == Utility.SpikeMark.CENTER) {
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5,  8.5, 8.5,  8.5);
+            double x = 1.1764;
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * x,  5 * x, 5 * x,  5 * x);
+
+            Utility.extendViperSlide(robot);
+            Utility.panDelivery(robot);
+
+            robot.getPanDoor().setPosition(0.0);
+            sleep(2500);
+            robot.getPanDoor().setPosition(0.5);
+
+            Utility.panHome(robot);
+            Utility.resetViperSlide(robot);
+//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  4,  4, 4,  4);
+
+        } else if (spikeMark == Utility.SpikeMark.RIGHT) {
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5,  8.5, 8.5,  8.5);
+            double x = 1.1764;
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * x,  5 * x, 5 * x,  5 * x);
+
+            Utility.extendViperSlide(robot);
+            Utility.panDelivery(robot);
+
+            robot.getPanDoor().setPosition(0.0);
+            sleep(2500);
+            robot.getPanDoor().setPosition(0.5);
+
+            Utility.panHome(robot);
+            Utility.resetViperSlide(robot);
+//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  4,  4, 4,  4);
+
+        }
     }
 
     private void moveToAprilTag() {
         if (spikeMark == Utility.SpikeMark.LEFT) {
             // Turn to absolute 90 degrees clockwise
-            Utility.turnToPID(robot, -90);
+//            Utility.turnToPID(robot, -90);
             Utility.moveToAprilTag(robot, aprilTagId);
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
             // Turn to absolute 90 degrees clockwise
-            Utility.turnToPID(robot, -90);
+//            Utility.turnToPID(robot, -90);
             Utility.moveToAprilTag(robot, aprilTagId);
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
             // Turn to absolute 90 degrees clockwise
-            Utility.turnToPID(robot, -90);
+//            Utility.turnToPID(robot, -90);
             Utility.moveToAprilTag(robot, aprilTagId);
         }
     }
 
     private void moveToObject() {
+        double x = 1.1764;
         if (spikeMark == Utility.SpikeMark.LEFT) {
-            double x = 1.1204;
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10 * x,  10 * x, 10 * x,  10 * x);
-//            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  20,  20, 20,  20);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  26,  26, 26,  26);
+//            // Turn to absolute 90 degrees clockwise
+            Utility.turnToPID(robot, 90);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  12,  12, 12,  12);
+            robot.getPanDoor().setPosition(0.0);
+            sleep(1200);
+            robot.getPanDoor().setPosition(0.5);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  12,  12, 12,  12);
+            Utility.turnToPID(robot, -90);
+        } else if (spikeMark == Utility.SpikeMark.CENTER) {
+
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  2 * x,  2 * x, 2 * x,  2 * x);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  28,  28, 28,  28);
 //            // Turn to absolute 90 degrees clockwise
 //            Utility.turnToPID(robot, 90);
-        } else if (spikeMark == Utility.SpikeMark.CENTER) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  25,  25, 25,  25);
+//            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  3,  3, 3,  3);
+            robot.getPanDoor().setPosition(0.0);
+            sleep(1200);
+            robot.getPanDoor().setPosition(0.5);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  10,  10, 10,  10);
+            Utility.turnToPID(robot, -90);
+//            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  12 * x,  12 * x, 12 * x,  12 * x);
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10,  10, 10,  10);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  15,  15, 15,  15);
+
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10 * x,  10 * x, 10 * x,  10 * x);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  22,  22, 22,  22);
+//            // Turn to absolute 90 degrees clockwise
+//            Utility.turnToPID(robot, 90);
+//            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  3,  3, 3,  3);
+            robot.getPanDoor().setPosition(0.0);
+            sleep(1200);
+            robot.getPanDoor().setPosition(0.5);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  10,  10, 10,  10);
+            Utility.turnToPID(robot, -90);
+//            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  12 * x,  12 * x, 12 * x,  12 * x);
         }
     }
 
