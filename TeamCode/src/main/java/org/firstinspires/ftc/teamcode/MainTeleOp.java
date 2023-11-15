@@ -44,6 +44,7 @@ public class MainTeleOp extends LinearOpMode {
         double Theta_Request;
         double Theta_Command;
         double Error2;
+        boolean enableManualOverride;
 
         RobotHardware robot = new RobotHardware(this);
         robot.initialize();
@@ -66,6 +67,7 @@ public class MainTeleOp extends LinearOpMode {
         Kp = 0.024;
         Target_Angle = 0;
         Z__Max = 0.75;
+        enableManualOverride = false;
 
         robot.getImu().resetYaw();
 
@@ -128,7 +130,13 @@ public class MainTeleOp extends LinearOpMode {
                 if (Math.abs(Z_) > Z__Max) {
                     Z_ = (Z__Max * (Z_ / Math.abs(Z_)));
                 }
-                Joystick_Z = -Z_;
+
+                if( enableManualOverride ) {
+                    // Leave Joystick_Z alone.
+                } else {
+                    Joystick_Z = -Z_;
+                }
+
                 Joystick_X = (Math.sin(Theta_Command / 180 * Math.PI) * Speed);
                 Joystick_Y = (Math.cos(Theta_Command / 180 * Math.PI) * Speed);
                 FL_Power = (-Gain_X * Joystick_X - (Gain_Y * Joystick_Y + Gain_Z * Joystick_Z));
@@ -167,6 +175,13 @@ public class MainTeleOp extends LinearOpMode {
                 robot.getIntakeBelt().setPower(intakePower);
 
                 // NOTE: This program is single threaded right now. So we can't do multiple operations at once.
+                // Use this function to check and see if the viper slide or lead screw need to be stopped.
+                Utility.checkSlideAndScrewMotors(robot);
+
+                // This variable controls whether we are manually steering or auto steering.
+                if( gamepad1.back ) {
+                    enableManualOverride = !enableManualOverride;
+                }
 
                 // Extend the lead screw.
                 if (gamepad1.left_bumper) {
@@ -204,10 +219,10 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getPanDoor().setPosition(0.5);
                 }
 
-                if (gamepad2.start) {
-                    Utility.turnPID(robot,5);
-                    robot.getImu().resetYaw();
-                }
+//                if (gamepad2.start) {
+//                    Utility.turnPID(robot,5);
+//                    robot.getImu().resetYaw();
+//                }
 
                 // Press this button to reset the yaw during Teleop.
                 if (gamepad1.y) {

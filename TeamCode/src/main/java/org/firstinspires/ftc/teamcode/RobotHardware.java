@@ -187,13 +187,19 @@ public class RobotHardware {
 
         setZeroPowerBehavior();
 
-        RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+        // Control Hub IMU Parameters
+//        RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
+//        RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+//        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoFacingDirection, usbFacingDirection);
+
+        // Expansion Hub IMU Parameters
+        RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoFacingDirection, usbFacingDirection);
 
         IMU.Parameters parameters = new IMU.Parameters(orientationOnRobot);
 
-        imu = myOpMode.hardwareMap.get(IMU.class, Constants.DEVICE_IMU);
+        imu = myOpMode.hardwareMap.get(IMU.class, Constants.EXPANSION_IMU);
         imu.initialize(parameters);
     }
 

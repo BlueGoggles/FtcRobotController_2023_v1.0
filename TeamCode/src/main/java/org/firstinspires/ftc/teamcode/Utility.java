@@ -240,15 +240,15 @@ public class Utility {
         // Set the motor to full power for extend and retract.
         robot.getLeadScrew().setPower(1);
 
-        while (robot.getMyOpMode().opModeIsActive() && robot.getLeadScrew().isBusy()) {
-            // Engage the program control until desired position is reached.
-        }
-
-        // Stop all motion;
-        robot.getLeadScrew().setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        while (robot.getMyOpMode().opModeIsActive() && robot.getLeadScrew().isBusy()) {
+//            // Engage the program control until desired position is reached.
+//        }
+//
+//        // Stop all motion;
+//        robot.getLeadScrew().setPower(0);
+//
+//        // Turn off RUN_TO_POSITION
+//        robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public static void extendViperSlide(RobotHardware robot) {
@@ -313,11 +313,12 @@ public class Utility {
         // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
         robot.getViperSlide().setPower(0.6);
 
+        /*
         while (robot.getViperSlide().isBusy()) {
             // Run the program.
 
-            robot.getMyOpMode().telemetry.addData("Viper Slide", robot.getViperSlide().getCurrentPosition());
-            robot.getMyOpMode().telemetry.update();
+//            robot.getMyOpMode().telemetry.addData("Viper Slide", robot.getViperSlide().getCurrentPosition());
+//            robot.getMyOpMode().telemetry.update();
 //            if (robot.getMyOpMode().gamepad2.left_bumper) {
 //                break;
 //            }
@@ -329,8 +330,32 @@ public class Utility {
 
         // Turn off RUN_TO_POSITION
         robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        */
     }
 
+    public static void checkSlideAndScrewMotors(RobotHardware robot) {
+        // Check to see if the viper slide is moving. If not, stop it.
+        if( robot.getViperSlide().isBusy() ) {
+            // Viper slide is moving! Don't do anything.
+        } else {
+            // Stop all motion;
+            robot.getViperSlide().setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+
+        // Check to see if the lead screw is moving. If not, stop it.
+        if( robot.getMyOpMode().opModeIsActive() && robot.getLeadScrew().isBusy() ) {
+            // Lead screw is moving! Don't do anything.
+        } else {
+            // Stop all motion;
+            robot.getLeadScrew().setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
     public static void panHome(RobotHardware robot) {
         while (robot.getPanServo().getPosition() < 0.55) {
             robot.getPanServo().setPosition(robot.getPanServo().getPosition() + 0.0025);
@@ -339,7 +364,7 @@ public class Utility {
     }
 
     public static void panDelivery(RobotHardware robot) {
-        while (robot.getPanServo().getPosition() > 0.2) {
+        while (robot.getPanServo().getPosition() > 0.25) {
             robot.getPanServo().setPosition(robot.getPanServo().getPosition() - 0.0025);
             robot.getMyOpMode().sleep(10);
         }
