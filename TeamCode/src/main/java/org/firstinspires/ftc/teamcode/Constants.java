@@ -14,6 +14,7 @@ public interface Constants {
     String DEVICE_LEAD_SCREW_SWITCH = "leadScrewSwitch";
     String DEVICE_DRONE_LAUNCHER = "droneLauncher";
     String DEVICE_IMU = "imu";
+    String EXPANSION_IMU = "imu2";
     String DEVICE_CAMERA = "Camera1";
     double ZERO_POWER = 0.0;
     double MAX_POWER = 1.0;
