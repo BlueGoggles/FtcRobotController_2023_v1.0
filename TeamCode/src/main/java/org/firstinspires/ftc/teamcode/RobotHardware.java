@@ -2,13 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -34,7 +31,6 @@ public class RobotHardware {
     private DcMotorEx intakeBelt = null;
     private DcMotorEx viperSlide = null;
     private DcMotorEx leadScrew = null;
-//    private CRServo panServo = null;
     private Servo panServo = null;
     private Servo panDoor = null;
     private Servo leadScrewSwitch = null;
@@ -81,19 +77,21 @@ public class RobotHardware {
         leadScrew = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_LEAD_SCREW);
         // Servos
         panServo = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_SERVO);
-        leadScrewSwitch = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_LEAD_SCREW_SWITCH);
         panDoor  = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_DOOR);
-//        droneLauncher = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_DRONE_LAUNCHER);
-
-        getPanDoor().setDirection(Servo.Direction.FORWARD);
-        getPanDoor().setPosition(Constants.MID_SERVO);
-
+        leadScrewSwitch = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_LEAD_SCREW_SWITCH);
+        droneLauncher = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_DRONE_LAUNCHER);
 
         getPanServo().setDirection(Servo.Direction.FORWARD);
         getPanServo().setPosition(0.55);
 
+        getPanDoor().setDirection(Servo.Direction.FORWARD);
+        getPanDoor().setPosition(Constants.MID_SERVO);
+
         getLeadScrewSwitch().setDirection(Servo.Direction.FORWARD);
         getLeadScrewSwitch().setPosition(0.1);
+
+        getDroneLauncher().setDirection(Servo.Direction.FORWARD);
+        getDroneLauncher().setPosition(0.5);
 
         getLeftFront().setDirection(DcMotorEx.Direction.REVERSE);
         getRightFront().setDirection(DcMotorEx.Direction.FORWARD);
