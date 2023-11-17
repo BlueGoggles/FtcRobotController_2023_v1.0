@@ -156,7 +156,7 @@ public class MainTeleOp extends LinearOpMode {
                     Max = Math.abs(BR_Power);
                 }
 
-                if (gamepad1.x) {
+                if (gamepad1.left_trigger > 0.0) {
                     teleOpSpeed = Constants.TELEOP_MODIFIED_SPEED;
                 } else {
                     teleOpSpeed = Constants.TELEOP_DEFAULT_SPEED;

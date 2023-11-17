@@ -162,7 +162,7 @@ public class FrontstageRed extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  13 * x);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  24);
             Utility.turnToPID(robot, -90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, 1.0,  90);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  90);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  28 * x);
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
 

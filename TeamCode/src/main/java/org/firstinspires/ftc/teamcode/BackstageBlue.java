@@ -48,9 +48,6 @@ public class BackstageBlue extends LinearOpMode {
         // Drive towards object
         moveToObject();
 
-        // Place Purple pixel on spike mark
-//        sleep(3000);
-
         // Move to desired AprilTag
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
         moveToAprilTag();
@@ -86,12 +83,9 @@ public class BackstageBlue extends LinearOpMode {
             sleep(4000);
             robot.getPanDoor().setPosition(0.5);
 
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
             Utility.panHome(robot);
             Utility.resetViperSlide(robot);
-            while( robot.getViperSlide().isBusy() ) {
-                // Wait for the Viper Slide to retract.
-            }
-//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  4,  4, 4,  4);
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5,  8.5, 8.5,  8.5);
@@ -105,12 +99,9 @@ public class BackstageBlue extends LinearOpMode {
             sleep(4000);
             robot.getPanDoor().setPosition(0.5);
 
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
             Utility.panHome(robot);
             Utility.resetViperSlide(robot);
-            while( robot.getViperSlide().isBusy() ) {
-                // Wait for the Viper Slide to retract.
-            }
-//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  4,  4, 4,  4);
 
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5,  8.5, 8.5,  8.5);
@@ -124,13 +115,9 @@ public class BackstageBlue extends LinearOpMode {
             sleep(4000);
             robot.getPanDoor().setPosition(0.5);
 
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
             Utility.panHome(robot);
             Utility.resetViperSlide(robot);
-            while( robot.getViperSlide().isBusy() ) {
-                // Wait for the Viper Slide to retract.
-            }
-//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  4,  4, 4,  4);
-
         }
     }
 
