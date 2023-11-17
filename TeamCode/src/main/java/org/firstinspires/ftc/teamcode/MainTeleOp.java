@@ -228,10 +228,9 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getPanDoor().setPosition(0.5);
                 }
 
-//                if (gamepad2.start) {
-//                    Utility.turnPID(robot,5);
-//                    robot.getImu().resetYaw();
-//                }
+                if (gamepad1.start) {
+                    robot.getDroneLauncher().setPosition(0.0);
+                }
 
                 // Press this button to reset the yaw during Teleop.
                 if (gamepad1.y) {
@@ -261,6 +260,8 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Lead Screw Switch release (gamepad1.a)", gamepad1.a);
 
                 telemetry.addData("Pan Door start/stop (gamepad2.left_bumper)", gamepad2.left_bumper);
+
+                telemetry.addData("Drone Launcher Position", robot.getDroneLauncher().getPosition());
 
                 telemetry.addData("Joystick Z (gamepage1.left_stick_x", Joystick_Z);
 
