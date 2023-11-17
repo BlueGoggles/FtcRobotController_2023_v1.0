@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @TeleOp(name = "MecanumTeleop Testing")
+@Disabled
 public class MecanumTeleop extends LinearOpMode {
 
     private IMU imu;

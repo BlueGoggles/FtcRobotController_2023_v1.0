@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,7 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-@Autonomous(name = "Gyro Linear PoC", group = "Robot")
+@Autonomous(name = "Gyro Linear PoC", group = "Samples")
+@Disabled
 public class Gyro_Linear_PoC extends LinearOpMode {
 
     private RobotHardware robot = new RobotHardware(this);

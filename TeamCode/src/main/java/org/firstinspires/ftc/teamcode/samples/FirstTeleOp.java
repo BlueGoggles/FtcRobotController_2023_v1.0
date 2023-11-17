@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name = "FirstTeleOp")
+@TeleOp(name = "FirstTeleOp", group = "Samples")
+@Disabled
 public class FirstTeleOp extends LinearOpMode {
 
     private DcMotor backLeft;

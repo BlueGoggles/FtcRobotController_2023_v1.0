@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name = "FirstAuton")
+@Autonomous(name = "FirstAuton", group = "Samples")
+@Disabled
 public class FirstAuton extends LinearOpMode {
 
     private DcMotor backLeft;

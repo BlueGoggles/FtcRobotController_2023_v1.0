@@ -45,6 +45,7 @@ public class MainTeleOp extends LinearOpMode {
         double Theta_Command;
         double Error2;
         boolean enableManualOverride;
+        double teleOpSpeed;
 
         RobotHardware robot = new RobotHardware(this);
         robot.initialize();
@@ -68,7 +69,7 @@ public class MainTeleOp extends LinearOpMode {
         Target_Angle = 0;
         Z__Max = 0.75;
         enableManualOverride = false;
-
+        teleOpSpeed = 0.0;
         robot.getImu().resetYaw();
 
         waitForStart();
@@ -154,12 +155,20 @@ public class MainTeleOp extends LinearOpMode {
                 if (Math.abs(BR_Power) > Max) {
                     Max = Math.abs(BR_Power);
                 }
-                if (Max > 0.5) {
-                    FR_Power = FR_Power / (Max * 2);
-                    FL_Power = FL_Power / (Max * 2);
-                    BR_Power = BR_Power / (Max * 2);
-                    BL_Power = BL_Power / (Max * 2);
+
+                if (gamepad1.x) {
+                    teleOpSpeed = Constants.TELEOP_MODIFIED_SPEED;
+                } else {
+                    teleOpSpeed = Constants.TELEOP_DEFAULT_SPEED;
                 }
+
+                if (Max > teleOpSpeed) {
+                    FR_Power = (FR_Power * teleOpSpeed) / Max;
+                    FL_Power = (FL_Power * teleOpSpeed) / Max;
+                    BR_Power = (BR_Power * teleOpSpeed) / Max;
+                    BL_Power = (BL_Power * teleOpSpeed) / Max;
+                }
+
                 robot.setMotorPowers(-FL_Power, FR_Power, -BL_Power, BR_Power);
 
                 int intakePower = 0;
