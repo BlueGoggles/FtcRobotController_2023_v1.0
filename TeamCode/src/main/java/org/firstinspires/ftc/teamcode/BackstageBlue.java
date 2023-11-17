@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@Autonomous(name = "BackstageBlue")
+@Autonomous(name = "BackstageBlue", group = "BlueAuton")
 public class BackstageBlue extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);

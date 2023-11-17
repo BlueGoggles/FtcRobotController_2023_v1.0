@@ -54,4 +54,7 @@ public interface Constants {
     int VIPER_SLIDE_STAGE_3_COUNT = 2800;
     int VIPER_SLIDE_REST_COUNT = 0;
     int VIPER_SLIDE_VARIANCE = 100;
+
+    double TELEOP_DEFAULT_SPEED = 0.5;
+    double TELEOP_MODIFIED_SPEED = 0.8;
 }

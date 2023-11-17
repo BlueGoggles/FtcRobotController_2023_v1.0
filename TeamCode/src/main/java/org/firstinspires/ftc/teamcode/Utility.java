@@ -70,6 +70,10 @@ public class Utility {
         }
     }
 
+    public static void encoderDrive(RobotHardware robot, Utility.Direction direction, double speed, double inches) {
+        encoderDrive(robot, direction, speed,  inches,  inches, inches,  inches);
+    }
+
     public static void turnToPID(RobotHardware robot, double targetAngle) {
 
         PIDController pid = new PIDController(targetAngle, Constants.Kp, Constants.Ki, Constants.Kd);

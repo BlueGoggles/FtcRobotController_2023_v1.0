@@ -3,13 +3,15 @@ package org.firstinspires.ftc.teamcode.samples;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ColorDetectionPipeline;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.Utility;
 
-@Autonomous(name = "OpenCV Linear PoC")
+@Autonomous(name = "OpenCV Linear PoC", group = "Samples")
+@Disabled
 public class OpenCV_Linear_PoC extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);

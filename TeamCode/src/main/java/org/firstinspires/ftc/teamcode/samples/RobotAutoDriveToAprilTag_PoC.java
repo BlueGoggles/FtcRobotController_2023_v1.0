@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
@@ -17,7 +18,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Autonomous(name="Robot: Auto Drive To AprilTag PoC", group = "Robot")
+@Autonomous(name="Robot: Auto Drive To AprilTag PoC", group = "Samples")
+@Disabled
 public class RobotAutoDriveToAprilTag_PoC extends LinearOpMode
 {
     RobotHardware robot = new RobotHardware(this);
