@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@Autonomous(name = "Frontstage Red - Corner", group = "FrontstageRedAuton")
-public class FrontstageRed extends LinearOpMode {
+@Autonomous(name = "Frontstage Red - Non Corner", group = "FrontstageRedAuton")
+public class FrontstageRedNonCorner extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);
     private Utility.Color color = Utility.Color.RED;
@@ -85,13 +85,13 @@ public class FrontstageRed extends LinearOpMode {
         if (spikeMark == Utility.SpikeMark.LEFT) {
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  1);
             Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  30);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  14);
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
             Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  22);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  20);
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
             Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  14);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  26);
         }
     }
 

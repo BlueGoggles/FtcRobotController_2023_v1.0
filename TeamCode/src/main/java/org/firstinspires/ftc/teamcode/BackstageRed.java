@@ -62,14 +62,22 @@ public class BackstageRed extends LinearOpMode {
 
     private void targetNotFoundParkRobot() {
         if (spikeMark == Utility.SpikeMark.LEFT) {
-//            Utility.turnToPID(robot, 0);
-//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  32);
+
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  20);
+            Utility.turnToPID(robot, 0);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  24);
+
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
-//            Utility.turnToPID(robot, 0);
-//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  18);
+
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  27);
+            Utility.turnToPID(robot, 0);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  22);
+
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
-//            Utility.turnToPID(robot, 0);
-//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  14);
+
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  21);
+            Utility.turnToPID(robot, 0);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  6);
         }
     }
 
@@ -163,6 +171,7 @@ public class BackstageRed extends LinearOpMode {
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  10);
             Utility.turnToPID(robot, -90);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  6);
 
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
 
