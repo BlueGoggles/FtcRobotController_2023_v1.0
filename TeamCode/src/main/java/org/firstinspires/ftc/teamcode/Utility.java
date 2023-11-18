@@ -91,7 +91,7 @@ public class Utility {
         turnToPID(robot,(degrees + robot.getAbsoluteAngle()));
     }
 
-    public static void moveToAprilTag(RobotHardware robot, int desiredTagId) {
+    public static boolean moveToAprilTag(RobotHardware robot, int desiredTagId) {
 
         AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
@@ -149,9 +149,8 @@ public class Utility {
                 // Apply desired axes motions to the drivetrain.
                 moveRobot(robot, drive, strafe, turn);
             }
-
-//            robot.getMyOpMode().sleep(10);
         }
+        return targetFound;
     }
 
     /**

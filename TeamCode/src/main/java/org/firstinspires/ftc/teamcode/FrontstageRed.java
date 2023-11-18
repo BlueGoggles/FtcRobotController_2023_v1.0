@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@Autonomous(name = "FrontstageRed", group = "RedAuton")
+@Autonomous(name = "Frontstage Red - Corner", group = "FrontstageRedAuton")
 public class FrontstageRed extends LinearOpMode {
 
     RobotHardware robot = new RobotHardware(this);
@@ -50,11 +50,27 @@ public class FrontstageRed extends LinearOpMode {
 
         // Move to desired AprilTag
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        Utility.moveToAprilTag(robot, aprilTagId);
+        boolean targetFound = Utility.moveToAprilTag(robot, aprilTagId);
 
-        placeSecondPixel();
+        if (targetFound) {
+            placeSecondPixel();
+            parkRobot();
+        } else {
+            targetNotFoundParkRobot();
+        }
+    }
 
-        parkRobot();
+    private void targetNotFoundParkRobot() {
+        if (spikeMark == Utility.SpikeMark.LEFT) {
+//            Utility.turnToPID(robot, 0);
+//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  32);
+        } else if (spikeMark == Utility.SpikeMark.CENTER) {
+//            Utility.turnToPID(robot, 0);
+//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  18);
+        } else if (spikeMark == Utility.SpikeMark.RIGHT) {
+//            Utility.turnToPID(robot, 0);
+//            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  14);
+        }
     }
 
     private void parkRobot() {
@@ -123,16 +139,6 @@ public class FrontstageRed extends LinearOpMode {
         }
     }
 
-//    private void moveToAprilTag() {
-//        if (spikeMark == Utility.SpikeMark.LEFT) {
-//            Utility.moveToAprilTag(robot, aprilTagId);
-//        } else if (spikeMark == Utility.SpikeMark.CENTER) {
-//            Utility.moveToAprilTag(robot, aprilTagId);
-//        } else if (spikeMark == Utility.SpikeMark.RIGHT) {
-//            Utility.moveToAprilTag(robot, aprilTagId);
-//        }
-//    }
-
     private void moveToObject() {
         double x = 1.1764;
         if (spikeMark == Utility.SpikeMark.LEFT) {
@@ -149,6 +155,7 @@ public class FrontstageRed extends LinearOpMode {
             Utility.turnToPID(robot, -90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  70);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  29 * x);
+
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
 
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  3 * x);
@@ -164,6 +171,7 @@ public class FrontstageRed extends LinearOpMode {
             Utility.turnToPID(robot, -90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  90);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  33 * x);
+
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
 
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  2 * x);
