@@ -56,5 +56,17 @@ public interface Constants {
     int VIPER_SLIDE_VARIANCE = 100;
 
     double TELEOP_DEFAULT_SPEED = 0.5;
-    double TELEOP_MODIFIED_SPEED = 0.8;
+    double TELEOP_MODIFIED_SPEED = 1.0;
+
+    double PAN_DOOR_START_POSITION = 0.0;
+    double PAN_DOOR_STOP_POSITION = 0.5;
+
+    int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 1500;
+    int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 4000;
+
+    int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000;
+
+    // "10 / 8.5 = 1.1764".
+    // Need to multiply by this ratio, because 10 inches of instructed strafe movement causes 8.5 inches of actual strafe movement.
+    double STRAFE_MOVEMENT_RATIO = 1.1764;
 }

@@ -372,4 +372,10 @@ public class Utility {
             robot.getMyOpMode().sleep(10);
         }
     }
+
+    public static void scrollPanDoor(RobotHardware robot, int milliSeconds) {
+        robot.getPanDoor().setPosition(Constants.PAN_DOOR_START_POSITION);
+        robot.getMyOpMode().sleep(milliSeconds);
+        robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);
+    }
 }

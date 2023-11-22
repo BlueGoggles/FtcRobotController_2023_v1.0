@@ -64,7 +64,6 @@ public class RobotHardware {
      */
     public void initialize()    {
 
-        // Define and Initialize Motors (note: need to use reference to actual OpMode).
         // Drive motors
         leftFront  = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_FRONT_LEFT);
         rightFront = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_FRONT_RIGHT);
@@ -79,7 +78,6 @@ public class RobotHardware {
         panServo = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_SERVO);
         panDoor  = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_DOOR);
         leadScrewSwitch = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_LEAD_SCREW_SWITCH);
-        droneLauncher = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_DRONE_LAUNCHER);
 
         getPanServo().setDirection(Servo.Direction.FORWARD);
         getPanServo().setPosition(0.55);
@@ -89,9 +87,6 @@ public class RobotHardware {
 
         getLeadScrewSwitch().setDirection(Servo.Direction.FORWARD);
         getLeadScrewSwitch().setPosition(0.1);
-
-        getDroneLauncher().setDirection(Servo.Direction.FORWARD);
-        getDroneLauncher().setPosition(0.5);
 
         getLeftFront().setDirection(DcMotorEx.Direction.REVERSE);
         getRightFront().setDirection(DcMotorEx.Direction.FORWARD);
@@ -112,6 +107,14 @@ public class RobotHardware {
         this.getLeadScrew().setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         setMotorPowers(Constants.ZERO_POWER);
+    }
+
+    public void initializeDroneLauncher()    {
+
+        droneLauncher = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_DRONE_LAUNCHER);
+
+        getDroneLauncher().setDirection(Servo.Direction.FORWARD);
+        getDroneLauncher().setPosition(0.5);
     }
 
     public void setMotorPowers(double leftFront, double rightFront, double leftBack, double rightBack) {
