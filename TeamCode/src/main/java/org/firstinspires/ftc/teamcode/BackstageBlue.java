@@ -96,14 +96,11 @@ public class BackstageBlue extends LinearOpMode {
     private void placeSecondPixel() {
         if (spikeMark == Utility.SpikeMark.LEFT) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
-            double x = 1.1764;
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  6.5 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  6.5 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.extendViperSlide(robot);
             Utility.panDelivery(robot);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(4000);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
             Utility.panHome(robot);
@@ -111,14 +108,11 @@ public class BackstageBlue extends LinearOpMode {
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
-            double x = 1.1764;
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.extendViperSlide(robot);
             Utility.panDelivery(robot);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(4000);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
             Utility.panHome(robot);
@@ -126,14 +120,11 @@ public class BackstageBlue extends LinearOpMode {
 
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
-            double x = 1.1764;
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.extendViperSlide(robot);
             Utility.panDelivery(robot);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(4000);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
             Utility.panHome(robot);
@@ -141,28 +132,24 @@ public class BackstageBlue extends LinearOpMode {
         }    }
 
     private void moveToObject() {
-        double x = 1.1764;
+
         if (spikeMark == Utility.SpikeMark.RIGHT) {
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  26);
             Utility.turnToPID(robot, -90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  12);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(1500);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  12);
             Utility.turnToPID(robot, 90);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10);
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  2 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  2 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  28);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(1500);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  4);
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  15);
@@ -171,13 +158,11 @@ public class BackstageBlue extends LinearOpMode {
 
         } else if (spikeMark == Utility.SpikeMark.LEFT) {
 
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  22);
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(1500);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
             Utility.turnToPID(robot, 90);

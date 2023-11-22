@@ -50,6 +50,7 @@ public class MainTeleOp extends LinearOpMode {
         RobotHardware robot = new RobotHardware(this);
         robot.initialize();
         robot.initializeIMU();
+        robot.initializeDroneLauncher();
         sleep(100);
 
         FL_Power = 0;
@@ -156,7 +157,7 @@ public class MainTeleOp extends LinearOpMode {
                     Max = Math.abs(BR_Power);
                 }
 
-                if (gamepad1.left_trigger > 0.0) {
+                if (gamepad1.left_trigger > Constants.ZERO_POWER) {
                     teleOpSpeed = Constants.TELEOP_MODIFIED_SPEED;
                 } else {
                     teleOpSpeed = Constants.TELEOP_DEFAULT_SPEED;
@@ -223,9 +224,9 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if (gamepad2.left_bumper) {
-                    robot.getPanDoor().setPosition(0.0);
+                    robot.getPanDoor().setPosition(Constants.PAN_DOOR_START_POSITION);
                 } else {
-                    robot.getPanDoor().setPosition(0.5);
+                    robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);
                 }
 
                 if (gamepad1.start) {

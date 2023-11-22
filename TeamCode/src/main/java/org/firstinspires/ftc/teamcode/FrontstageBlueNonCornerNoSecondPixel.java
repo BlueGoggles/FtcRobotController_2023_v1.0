@@ -51,140 +51,49 @@ public class FrontstageBlueNonCornerNoSecondPixel extends LinearOpMode {
         moveToObject();
     }
 
-    private void targetNotFoundParkRobot() {
-        if (spikeMark == Utility.SpikeMark.LEFT) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  10);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  22);
-
-        } else if (spikeMark == Utility.SpikeMark.CENTER) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  5);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  26);
-
-        } else if (spikeMark == Utility.SpikeMark.RIGHT) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  9);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  35);
-        }
-    }
-
-    private void parkRobot() {
-        if (spikeMark == Utility.SpikeMark.RIGHT) {
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  1);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  14);
-        } else if (spikeMark == Utility.SpikeMark.CENTER) {
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  20);
-        } else if (spikeMark == Utility.SpikeMark.LEFT) {
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  26);
-        }
-    }
-
-    private void placeSecondPixel() {
-        if (spikeMark == Utility.SpikeMark.RIGHT) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
-            double x = 1.1764;
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * x);
-
-            Utility.extendViperSlide(robot);
-            Utility.panDelivery(robot);
-
-            robot.getPanDoor().setPosition(0.0);
-            sleep(4000);
-            robot.getPanDoor().setPosition(0.5);
-
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.panHome(robot);
-            Utility.resetViperSlide(robot);
-
-        } else if (spikeMark == Utility.SpikeMark.CENTER) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
-            double x = 1.1764;
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * x);
-
-            Utility.extendViperSlide(robot);
-            Utility.panDelivery(robot);
-
-            robot.getPanDoor().setPosition(0.0);
-            sleep(4000);
-            robot.getPanDoor().setPosition(0.5);
-
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.panHome(robot);
-            Utility.resetViperSlide(robot);
-
-        } else if (spikeMark == Utility.SpikeMark.LEFT) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
-            double x = 1.1764;
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  6.5 * x);
-
-            Utility.extendViperSlide(robot);
-            Utility.panDelivery(robot);
-
-            robot.getPanDoor().setPosition(0.0);
-            sleep(4000);
-            robot.getPanDoor().setPosition(0.5);
-
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.panHome(robot);
-            Utility.resetViperSlide(robot);
-        }
-    }
-
     private void moveToObject() {
-        double x = 1.1764;
+
+        sleep(Constants.INITIAL_WAIT_TIME_FOR_FRONT_STAGE);
         if (spikeMark == Utility.SpikeMark.RIGHT) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  23);
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10.5 * x);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10.5 * Constants.STRAFE_MOVEMENT_RATIO);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(1200);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  11 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  11 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  27);
             Utility.turnToPID(robot, 90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  70);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  13 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
 
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  3 * x);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  3 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  26.5);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(1200);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  13 * x);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  25);
             Utility.turnToPID(robot, 90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  90);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  21 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  21 * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (spikeMark == Utility.SpikeMark.LEFT) {
 
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  2 * x);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  2 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  26);
             Utility.turnToPID(robot, 90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  5);
 
-            robot.getPanDoor().setPosition(0.0);
-            sleep(1200);
-            robot.getPanDoor().setPosition(0.5);
+            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  5);
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  23 * x);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  23 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  73);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  27 * x);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  27 * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }
 
