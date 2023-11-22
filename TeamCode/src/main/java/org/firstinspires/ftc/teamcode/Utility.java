@@ -43,6 +43,14 @@ public class Utility {
         RIGHT
     }
 
+    public enum PanStates {
+        HOME,
+        DEPLOYED
+    }
+
+    // By default we want the position to be the HOME position.
+    private static PanStates requestedPanState = PanStates.HOME;
+
     public static void encoderDrive(RobotHardware robot, Utility.Direction direction, double speed, double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
 
         // Ensure that the OpMode is still active
@@ -241,17 +249,7 @@ public class Utility {
         robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Set the motor to full power for extend and retract.
-        robot.getLeadScrew().setPower(1);
-
-//        while (robot.getMyOpMode().opModeIsActive() && robot.getLeadScrew().isBusy()) {
-//            // Engage the program control until desired position is reached.
-//        }
-//
-//        // Stop all motion;
-//        robot.getLeadScrew().setPower(0);
-//
-//        // Turn off RUN_TO_POSITION
-//        robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.getLeadScrew().setPower(Constants.MAX_POWER);
     }
 
     public static void extendViperSlide(RobotHardware robot) {
@@ -313,64 +311,72 @@ public class Utility {
         robot.getViperSlide().setTargetPosition(stagePosition);
         robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        // We want this to be slow. A small amount of rotation results in a lot of viper sliding.
-        robot.getViperSlide().setPower(0.6);
-
-        /*
-        while (robot.getViperSlide().isBusy()) {
-            // Run the program.
-
-//            robot.getMyOpMode().telemetry.addData("Viper Slide", robot.getViperSlide().getCurrentPosition());
-//            robot.getMyOpMode().telemetry.update();
-//            if (robot.getMyOpMode().gamepad2.left_bumper) {
-//                break;
-//            }
-
-        }
-
-        // Stop all motion;
-        robot.getViperSlide().setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        */
+        robot.getViperSlide().setPower(Constants.MAX_POWER);
     }
 
     public static void checkSlideAndScrewMotors(RobotHardware robot) {
-        // Check to see if the viper slide is moving. If not, stop it.
-        if( robot.getViperSlide().isBusy() ) {
-            // Viper slide is moving! Don't do anything.
-        } else {
-            // Stop all motion;
-            robot.getViperSlide().setPower(0);
+        if( robot.getMyOpMode().opModeIsActive() ) {
+            // Check to see if the viper slide is moving. If not, stop it.
+            if (robot.getViperSlide().isBusy()) {
+                // Viper slide is moving! Don't do anything.
+            } else {
+                // Stop all motion;
+                robot.getViperSlide().setPower(Constants.ZERO_POWER);
 
-            // Turn off RUN_TO_POSITION
-            robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                // Turn off RUN_TO_POSITION
+                robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+
+            // Check to see if the lead screw is moving. If not, stop it.
+            if (robot.getLeadScrew().isBusy()) {
+                // Lead screw is moving! Don't do anything.
+            } else {
+                // Stop all motion;
+                robot.getLeadScrew().setPower(Constants.ZERO_POWER);
+
+                // Turn off RUN_TO_POSITION
+                robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+        } else {
+            // Opmode is not running. Don't do anything.
         }
+    }
 
-        // Check to see if the lead screw is moving. If not, stop it.
-        if( robot.getMyOpMode().opModeIsActive() && robot.getLeadScrew().isBusy() ) {
-            // Lead screw is moving! Don't do anything.
-        } else {
-            // Stop all motion;
-            robot.getLeadScrew().setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.getLeadScrew().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    public static void checkPanPosition(RobotHardware robot ) {
+        switch( requestedPanState ) {
+            case HOME:
+                if (robot.getPanServo().getPosition() < Constants.PAN_HOME_POSITION) {
+                    robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
+                    // If this causes problems during run time we can remove this to avoid blocking the program for this period of time.
+                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+                }
+                break;
+            case DEPLOYED:
+                if (robot.getPanServo().getPosition() > Constants.PAN_DEPLOYED_POSITION) {
+                    robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
+                    // If this causes problems during run time we can remove this to avoid blocking the program for this period of time.
+                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+                }
+                break;
+            default:
+                // Unhandled pan state. Don't do anything.
+                break;
         }
     }
     public static void panHome(RobotHardware robot) {
-        while (robot.getPanServo().getPosition() < 0.55) {
-            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + 0.0025);
-            robot.getMyOpMode().sleep(10);
-        }
+        requestedPanState = PanStates.HOME;
+//        while (robot.getPanServo().getPosition() < Constants.PAN_HOME_POSITION) {
+//            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
+//            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+//        }
     }
 
     public static void panDelivery(RobotHardware robot) {
-        while (robot.getPanServo().getPosition() > 0.25) {
-            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - 0.0025);
-            robot.getMyOpMode().sleep(10);
-        }
+        requestedPanState = PanStates.DEPLOYED;
+//        while (robot.getPanServo().getPosition() > Constants.PAN_DEPLOYED_POSITION) {
+//            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
+//            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+//        }
     }
 
     public static void scrollPanDoor(RobotHardware robot, int milliSeconds) {
