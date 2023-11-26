@@ -187,6 +187,8 @@ public class MainTeleOp extends LinearOpMode {
                 // NOTE: This program is single threaded right now. So we can't do multiple operations at once.
                 // Use this function to check and see if the viper slide or lead screw need to be stopped.
                 Utility.checkSlideAndScrewMotors(robot);
+                // Use this function to ensure that pan is moved to the correct position without a blocking while loop.
+                Utility.checkPanPosition(robot);
 
                 // This variable controls whether we are manually steering or auto steering.
                 if( gamepad1.back ) {

@@ -49,9 +49,12 @@ public interface Constants {
 
     int LEAD_SCREW_COUNT_UP = 13000;
     int LEAD_SCREW_COUNT_DOWN = 0;
-    int VIPER_SLIDE_STAGE_1_COUNT = 1800;
-    int VIPER_SLIDE_STAGE_2_COUNT = 2300;
-    int VIPER_SLIDE_STAGE_3_COUNT = 2800;
+    // TODO: Determine the number of encoder rotations per inch of viper slide movement.
+    // Eventually I would like to be able to map the Viper Slide extension to a set number of revolutions of the encoder to inches travelled by the Viper Slide. We would need to measure this.
+    int VIPER_SLIDE_COUNTS_PER_INCH = 1;
+    int VIPER_SLIDE_STAGE_1_COUNT = ( 1800 * VIPER_SLIDE_COUNTS_PER_INCH );
+    int VIPER_SLIDE_STAGE_2_COUNT = ( 2300 * VIPER_SLIDE_COUNTS_PER_INCH );
+    int VIPER_SLIDE_STAGE_3_COUNT = ( 2800 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_REST_COUNT = 0;
     int VIPER_SLIDE_VARIANCE = 100;
 
@@ -60,9 +63,12 @@ public interface Constants {
 
     double PAN_DOOR_START_POSITION = 0.0;
     double PAN_DOOR_STOP_POSITION = 0.5;
-
     int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 1500;
     int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 4000;
+    double PAN_TILT_ANGLE = 0.0025;
+    long PAN_TILT_TIME_MS = 10;
+    double PAN_HOME_POSITION = 0.55;
+    double PAN_DEPLOYED_POSITION = 0.25;
 
     int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000;
 
