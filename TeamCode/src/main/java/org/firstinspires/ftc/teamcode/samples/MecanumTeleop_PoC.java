@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Constants;
 
 @TeleOp(name = "MecanumTeleop PoC", group = "Samples")
 @Disabled
@@ -52,6 +53,7 @@ public class MecanumTeleop_PoC extends LinearOpMode {
         double Theta_Request;
         double Theta_Command;
         double Error2;
+        double teleOpSpeed;
 
         imu = hardwareMap.get(IMU.class, "imu");
         FLAsDcMotor = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -159,12 +161,20 @@ public class MecanumTeleop_PoC extends LinearOpMode {
                 if (Math.abs(BR_Power) > Max) {
                     Max = Math.abs(BR_Power);
                 }
-                if (Max > 0.5) {
-                    FR_Power = FR_Power / (Max * 2);
-                    FL_Power = FL_Power / (Max * 2);
-                    BR_Power = BR_Power / (Max * 2);
-                    BL_Power = BL_Power / (Max * 2);
+
+                if (gamepad1.left_trigger > Constants.ZERO_POWER) {
+                    teleOpSpeed = Constants.TELEOP_MODIFIED_SPEED;
+                } else {
+                    teleOpSpeed = Constants.TELEOP_DEFAULT_SPEED;
                 }
+
+                if (Max > teleOpSpeed) {
+                    FR_Power = (FR_Power * teleOpSpeed) / Max;
+                    FL_Power = (FL_Power * teleOpSpeed) / Max;
+                    BR_Power = (BR_Power * teleOpSpeed) / Max;
+                    BL_Power = (BL_Power * teleOpSpeed) / Max;
+                }
+
                 // The Y axis of a joystick ranges from -1 in its topmost position to +1 in its bottommost position.
                 // We negate this value so that the topmost position corresponds to maximum forward power.
                 FLAsDcMotor.setPower(FL_Power);

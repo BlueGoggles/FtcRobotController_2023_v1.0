@@ -18,7 +18,7 @@ public interface Constants {
     String DEVICE_CAMERA = "Camera1";
     double ZERO_POWER = 0.0;
     double MAX_POWER = 1.0;
-    double AUTON_DRIVE_SPEED = 0.6;
+    double AUTON_DRIVE_SPEED = 1.0;
     double AUTON_TURN_SPEED = 0.3;
     double OBJECT_WIDTH_IN_INCHES = 3.0;  // The actual width of the object in real-world units
     int CAMERA_WIDTH = 640; // width  of wanted camera resolution
@@ -47,7 +47,7 @@ public interface Constants {
 
     double MID_SERVO   =  0.5 ;
 
-    int LEAD_SCREW_COUNT_UP = 13000;
+    int LEAD_SCREW_COUNT_UP = 8000;
     int LEAD_SCREW_COUNT_DOWN = 0;
     // TODO: Determine the number of encoder rotations per inch of viper slide movement.
     // Eventually I would like to be able to map the Viper Slide extension to a set number of revolutions of the encoder to inches travelled by the Viper Slide. We would need to measure this.
@@ -65,7 +65,7 @@ public interface Constants {
     double PAN_DOOR_STOP_POSITION = 0.5;
     int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 1500;
     int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 4000;
-    double PAN_TILT_ANGLE = 0.0025;
+    double PAN_TILT_ANGLE = 0.01;
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 0.55;
     double PAN_DEPLOYED_POSITION = 0.25;

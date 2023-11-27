@@ -348,14 +348,14 @@ public class Utility {
                 if (robot.getPanServo().getPosition() < Constants.PAN_HOME_POSITION) {
                     robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
                     // If this causes problems during run time we can remove this to avoid blocking the program for this period of time.
-                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+//                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
                 }
                 break;
             case DEPLOYED:
                 if (robot.getPanServo().getPosition() > Constants.PAN_DEPLOYED_POSITION) {
                     robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
                     // If this causes problems during run time we can remove this to avoid blocking the program for this period of time.
-                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+//                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
                 }
                 break;
             default:
