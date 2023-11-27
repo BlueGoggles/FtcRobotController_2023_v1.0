@@ -48,8 +48,18 @@ public class Utility {
         DEPLOYED
     }
 
+    public enum ViperSlideStates {
+        HOME,
+        MOVING,
+        STAGE_1,
+        STAGE_2,
+        STAGE_3
+    }
+
     // By default we want the position to be the HOME position.
     private static PanStates requestedPanState = PanStates.HOME;
+    private static ViperSlideStates currentViperSlideState = ViperSlideStates.HOME;
+    private static ViperSlideStates requestedViperSlideState = ViperSlideStates.HOME;
 
     public static void encoderDrive(RobotHardware robot, Utility.Direction direction, double speed, double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
 
@@ -255,61 +265,149 @@ public class Utility {
     public static void extendViperSlide(RobotHardware robot) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
 
-        int slidePosition = robot.getViperSlide().getCurrentPosition();
-        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+//        int slidePosition = robot.getViperSlide().getCurrentPosition();
+//        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+//
+//        // First, check to see if the current position is below the lower end of the first stage 1.
+//        if( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE ) ) {
+//            // In rest position. Go to stage 1.
+//            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
+//            // Next, check to see if the current position is between the upper and lower bounds of the first stage. If so, we are in the first stage, extend to the second.
+//        } else if ( ( slidePosition >= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) &&
+//                ( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) ) {
+//            // In stage 1. Go to stage 2.
+//            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
+//            // We reach this case when the current position is greater than the upper limit of stage 2. We assume that we are in the second stage. So we extend to the third stage.
+//        } else {
+//            // In stage 2. Go to final stage, full extension.
+//            stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
+//        }
 
-        // First, check to see if the current position is below the lower end of the first stage 1.
-        if( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE ) ) {
-            // In rest position. Go to stage 1.
-            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
-            // Next, check to see if the current position is between the upper and lower bounds of the first stage. If so, we are in the first stage, extend to the second.
-        } else if ( ( slidePosition >= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) &&
-                ( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) ) {
-            // In stage 1. Go to stage 2.
-            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
-            // We reach this case when the current position is greater than the upper limit of stage 2. We assume that we are in the second stage. So we extend to the third stage.
-        } else {
-            // In stage 2. Go to final stage, full extension.
-            stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
+        // Check to see what the current position of the Viper Slide is and determine what our next state should be.
+        switch( currentViperSlideState ) {
+            case HOME:
+                // We are in the home state. Move to stage 1.
+                requestedViperSlideState = ViperSlideStates.STAGE_1;
+                break;
+            case MOVING:
+                // We are currently moving between states. Don't do anything.
+                break;
+            case STAGE_1:
+                // We are in stage 1. Move to stage 2.
+                requestedViperSlideState = ViperSlideStates.STAGE_2;
+                break;
+            case STAGE_2:
+                // We are in stage 2. Move to stage 3.
+                requestedViperSlideState = ViperSlideStates.STAGE_3;
+                break;
+            case STAGE_3:
+                // We are in stage 3. Don't try to extend any further.
+                break;
+            default:
+                // This is an unhandled state. Don't do anything.
+                break;
         }
 
-        executeViperSlide( stagePosition, robot );
+        //executeViperSlide( stagePosition, robot );
+        executeViperSlide( robot );
     }
 
     public static void retractViperSlide(RobotHardware robot) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 
-        int slidePosition = robot.getViperSlide().getCurrentPosition();
-        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+//        int slidePosition = robot.getViperSlide().getCurrentPosition();
+//        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+//
+//        // First, check to see if the current position is less than the upper end of the last stage.
+//        if( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE ) ) {
+//            // We are in the final stage, full extension. Move to stage 2.
+//            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
+//            // Next, check to see if the current position is between the upper and lower bounds of the second stage. If so, we are in the second stage, retract to the first.
+//        } else if ( ( slidePosition >= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) &&
+//                ( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) ) {
+//            // In stage 2. Go to stage 1.
+//            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
+//            // We reach this case when the current position is less than the lower limit of stage 1. We assume that we are in the first stage. So we retract to the rest stage.
+//        } else {
+//            // In stage 1. Return to rest position.
+//            stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+//        }
 
-        // First, check to see if the current position is less than the upper end of the last stage.
-        if( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE ) ) {
-            // We are in the final stage, full extension. Move to stage 2.
-            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
-            // Next, check to see if the current position is between the upper and lower bounds of the second stage. If so, we are in the second stage, retract to the first.
-        } else if ( ( slidePosition >= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) &&
-                ( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) ) {
-            // In stage 2. Go to stage 1.
-            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
-            // We reach this case when the current position is less than the lower limit of stage 1. We assume that we are in the first stage. So we retract to the rest stage.
-        } else {
-            // In stage 1. Return to rest position.
-            stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+        // Check to see what the current position of the Viper Slide is and determine what our next state should be.
+        switch( currentViperSlideState ) {
+            case HOME:
+                // We are in the home state. Don't try to retract any further.
+                break;
+            case MOVING:
+                // We are currently moving between states. Don't do anything.
+                break;
+            case STAGE_1:
+                // We are in stage 1. Move to home.
+                requestedViperSlideState = ViperSlideStates.HOME;
+                break;
+            case STAGE_2:
+                // We are in stage 2. Move to stage 1.
+                requestedViperSlideState = ViperSlideStates.STAGE_1;
+                break;
+            case STAGE_3:
+                // We are in stage 3. Move to stage 2.
+                requestedViperSlideState = ViperSlideStates.STAGE_2;
+                break;
+            default:
+                // This is an unhandled state. Don't do anything.
+                break;
         }
 
-        executeViperSlide( stagePosition, robot );
+        //executeViperSlide( stagePosition, robot );
+        executeViperSlide( robot );
     }
 
     public static void resetViperSlide(RobotHardware robot) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 
+        // No matter what our current position we want to return to the home position.
+        requestedViperSlideState = ViperSlideStates.HOME;
+
         // Always go back to resting position.
-        executeViperSlide( Constants.VIPER_SLIDE_REST_COUNT, robot );
+        //executeViperSlide( Constants.VIPER_SLIDE_REST_COUNT, robot );
+        executeViperSlide( robot );
     }
 
-    public static void executeViperSlide( int stagePosition, RobotHardware robot ) {
+    public static void executeViperSlide( RobotHardware robot ) {
+        // By default we want the Viper Slide to start at the home position.
+        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+
+        // First, find out where we want the viper slide to go to.
+        switch( requestedViperSlideState ) {
+            case HOME:
+                // Go to the home position.
+                stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+                break;
+            case MOVING:
+                // We are currently moving between states. This is an invalid requestedViperSlideState. Don't do anything.
+                break;
+            case STAGE_1:
+                // Go to the stage 1 position.
+                stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
+                break;
+            case STAGE_2:
+                // Go to the stage 2 position.
+                stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
+                break;
+            case STAGE_3:
+                // Go to the stage 3 position.
+                stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
+                break;
+            default:
+                // This is an unhandled state. Don't do anything.
+                break;
+        }
+
         robot.getViperSlide().setTargetPosition(stagePosition);
         robot.getViperSlide().setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        // Indicate to the state machine that we are currently moving the viper slide and between stages.
+        currentViperSlideState = ViperSlideStates.MOVING;
 
         robot.getViperSlide().setPower(Constants.MAX_POWER);
     }
@@ -320,11 +418,17 @@ public class Utility {
             if (robot.getViperSlide().isBusy()) {
                 // Viper slide is moving! Don't do anything.
             } else {
+                // NOTE: To keep the viper motor energized we might be able to skip setting the power to zero and leaving the motor in RUN_TO_POSITION mode.
+                /*
                 // Stop all motion;
                 robot.getViperSlide().setPower(Constants.ZERO_POWER);
 
                 // Turn off RUN_TO_POSITION
                 robot.getViperSlide().setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                */
+
+                // Move the Viper Slide state machine to it's next state.
+                currentViperSlideState = requestedViperSlideState;
             }
 
             // Check to see if the lead screw is moving. If not, stop it.
@@ -342,20 +446,68 @@ public class Utility {
         }
     }
 
+    public static String getViperSlideCurrentState(){
+        String viperSlideState = "Default";
+        switch( currentViperSlideState ) {
+            case HOME:
+                viperSlideState = "Home";
+                break;
+            case MOVING:
+                viperSlideState = "Moving";
+                break;
+            case STAGE_1:
+                viperSlideState = "Stage 1";
+                break;
+            case STAGE_2:
+                viperSlideState = "Stage 2";
+                break;
+            case STAGE_3:
+                viperSlideState = "Stage 3";
+                break;
+            default:
+                viperSlideState = "Unknown!";
+                break;
+        }
+
+        return viperSlideState;
+    }
+
+    public static String getViperSlideRequestedState(){
+        String viperSlideState = "Default";
+        switch( requestedViperSlideState ) {
+            case HOME:
+                viperSlideState = "Home";
+                break;
+            case MOVING:
+                viperSlideState = "Moving";
+                break;
+            case STAGE_1:
+                viperSlideState = "Stage 1";
+                break;
+            case STAGE_2:
+                viperSlideState = "Stage 2";
+                break;
+            case STAGE_3:
+                viperSlideState = "Stage 3";
+                break;
+            default:
+                viperSlideState = "Unknown!";
+                break;
+        }
+
+        return viperSlideState;
+    }
+
     public static void checkPanPosition(RobotHardware robot ) {
         switch( requestedPanState ) {
             case HOME:
                 if (robot.getPanServo().getPosition() < Constants.PAN_HOME_POSITION) {
                     robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
-                    // If this causes problems during run time we can remove this to avoid blocking the program for this period of time.
-//                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
                 }
                 break;
             case DEPLOYED:
                 if (robot.getPanServo().getPosition() > Constants.PAN_DEPLOYED_POSITION) {
                     robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
-                    // If this causes problems during run time we can remove this to avoid blocking the program for this period of time.
-//                    robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
                 }
                 break;
             default:
@@ -365,18 +517,10 @@ public class Utility {
     }
     public static void panHome(RobotHardware robot) {
         requestedPanState = PanStates.HOME;
-//        while (robot.getPanServo().getPosition() < Constants.PAN_HOME_POSITION) {
-//            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
-//            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
-//        }
     }
 
     public static void panDelivery(RobotHardware robot) {
         requestedPanState = PanStates.DEPLOYED;
-//        while (robot.getPanServo().getPosition() > Constants.PAN_DEPLOYED_POSITION) {
-//            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
-//            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
-//        }
     }
 
     public static void scrollPanDoor(RobotHardware robot, int milliSeconds) {

@@ -218,7 +218,6 @@ public class MainTeleOp extends LinearOpMode {
 
                 if (gamepad2.y) {
                     Utility.retractViperSlide(robot);
-                    Utility.panDelivery(robot);
                 }
 
                 if (gamepad1.a) {
@@ -252,7 +251,9 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Intake Belt Power (gamepad2.rightTrigger[forward]/leftTrigger[backword])", robot.getIntakeBelt().getPower());
 
                 telemetry.addData("Lead Screw Position", robot.getLeadScrewPosition());
-                telemetry.addData("Viper Slide Position", robot.getViperSlidePosition());
+                telemetry.addData("Viper Slide Encoder Position", robot.getViperSlidePosition());
+                telemetry.addData("Viper Current Position", Utility.getViperSlideCurrentState());
+                telemetry.addData("Viper Requested Position", Utility.getViperSlideRequestedState());
                 telemetry.addData("Lead Screw Forward (gamepad1.left_bumper)", gamepad1.left_bumper);
                 telemetry.addData("Lead Screw Reverse (gamepad1.right_bumper)", gamepad1.right_bumper);
 
