@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -113,12 +114,14 @@ public class Utility {
     public static boolean moveToAprilTag(RobotHardware robot, int desiredTagId) {
 
         AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
+        ElapsedTime runtime = new ElapsedTime();
 
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
         double  drive           = 0;        // Desired forward power/speed (-1 to +1)
         double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
         double  turn            = 0;        // Desired turning power/speed (-1 to +1)
 
+        runtime.reset();
         while (robot.getMyOpMode().opModeIsActive()) {
             targetFound = false;
             desiredTag  = null;
@@ -167,6 +170,10 @@ public class Utility {
 
                 // Apply desired axes motions to the drivetrain.
                 moveRobot(robot, drive, strafe, turn);
+            } else {
+                if (runtime.milliseconds() > Constants.APRIL_TAG_DETECTION_WAIT_TIME) {
+                    break;
+                }
             }
         }
         return targetFound;

@@ -65,14 +65,17 @@ public interface Constants {
 
     double PAN_DOOR_START_POSITION = 0.0;
     double PAN_DOOR_STOP_POSITION = 0.5;
-    int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 500;
-    int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 1500;
+
+    int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 500; // MilliSeconds
+    int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 1500; // MilliSeconds
     double PAN_TILT_ANGLE = 0.01;
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 0.55;
     double PAN_DEPLOYED_POSITION = 0.25;
 
-    int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000;
+    int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000; // MilliSeconds
+
+    double APRIL_TAG_DETECTION_WAIT_TIME = 2000; // MilliSeconds
 
     // "10 / 8.5 = 1.1764".
     // Need to multiply by this ratio, because 10 inches of instructed strafe movement causes 8.5 inches of actual strafe movement.
