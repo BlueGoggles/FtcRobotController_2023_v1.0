@@ -95,39 +95,39 @@ public class BackstageBlue extends LinearOpMode {
 
     private void placeSecondPixel() {
         if (spikeMark == Utility.SpikeMark.LEFT) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  6.5);
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  6.5 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.extendViperSlide(robot);
-            Utility.panDelivery(robot);
+            Utility.extendViperSlide(robot,true);
+            Utility.panDeliveryAuton(robot);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.panHome(robot);
+            Utility.panHomeAuton(robot);
             Utility.resetViperSlide(robot);
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  6.5);
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.extendViperSlide(robot);
-            Utility.panDelivery(robot);
+            Utility.extendViperSlide(robot,true);
+            Utility.panDeliveryAuton(robot);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.panHome(robot);
+            Utility.panHomeAuton(robot);
             Utility.resetViperSlide(robot);
 
         } else if (spikeMark == Utility.SpikeMark.RIGHT) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  8.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  6.5);
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  5 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.extendViperSlide(robot);
-            Utility.panDelivery(robot);
+            Utility.extendViperSlide(robot,true);
+            Utility.panDeliveryAuton(robot);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
-            Utility.panHome(robot);
+            Utility.panHomeAuton(robot);
             Utility.resetViperSlide(robot);
         }    }
 
@@ -135,7 +135,7 @@ public class BackstageBlue extends LinearOpMode {
 
         if (spikeMark == Utility.SpikeMark.RIGHT) {
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  26);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  23.5);
             Utility.turnToPID(robot, -90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  12);
 
@@ -147,7 +147,7 @@ public class BackstageBlue extends LinearOpMode {
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  2 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  28);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  25.5);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
@@ -159,7 +159,7 @@ public class BackstageBlue extends LinearOpMode {
         } else if (spikeMark == Utility.SpikeMark.LEFT) {
 
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  22);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  19.5);
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);

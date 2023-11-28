@@ -53,7 +53,8 @@ public class Utility {
         MOVING,
         STAGE_1,
         STAGE_2,
-        STAGE_3
+        STAGE_3,
+        AUTON_STAGE
     }
 
     // By default we want the position to be the HOME position.
@@ -262,7 +263,7 @@ public class Utility {
         robot.getLeadScrew().setPower(Constants.MAX_POWER);
     }
 
-    public static void extendViperSlide(RobotHardware robot) {
+    public static void extendViperSlide(RobotHardware robot, boolean isAutonActive) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
 
 //        int slidePosition = robot.getViperSlide().getCurrentPosition();
@@ -286,11 +287,25 @@ public class Utility {
         // Check to see what the current position of the Viper Slide is and determine what our next state should be.
         switch( currentViperSlideState ) {
             case HOME:
-                // We are in the home state. Move to stage 1.
-                requestedViperSlideState = ViperSlideStates.STAGE_1;
+                if( isAutonActive == true ) {
+                    requestedViperSlideState = ViperSlideStates.AUTON_STAGE;
+                } else {
+                    // We are in the home state. Move to stage 1.
+                    requestedViperSlideState = ViperSlideStates.STAGE_1;
+                }
                 break;
             case MOVING:
-                // We are currently moving between states. Don't do anything.
+                // We are currently moving between states.
+                if( robot.getViperSlide().getCurrentPosition() < 0 ) {
+                    if( isAutonActive == true ) {
+                        requestedViperSlideState = ViperSlideStates.AUTON_STAGE;
+                    } else {
+                        // We overshot home. Go Home.
+                        requestedViperSlideState = ViperSlideStates.HOME;
+                    }
+                } else {
+                    // Continue moving.
+                }
                 break;
             case STAGE_1:
                 // We are in stage 1. Move to stage 2.
@@ -303,6 +318,7 @@ public class Utility {
             case STAGE_3:
                 // We are in stage 3. Don't try to extend any further.
                 break;
+            case AUTON_STAGE:
             default:
                 // This is an unhandled state. Don't do anything.
                 break;
@@ -340,6 +356,13 @@ public class Utility {
                 break;
             case MOVING:
                 // We are currently moving between states. Don't do anything.
+                // We are currently moving between states.
+                if( robot.getViperSlide().getCurrentPosition() < 0 ) {
+                    // We overshot home. Go Home.
+                    requestedViperSlideState = ViperSlideStates.HOME;
+                } else {
+                    // Continue moving.
+                }
                 break;
             case STAGE_1:
                 // We are in stage 1. Move to home.
@@ -352,6 +375,9 @@ public class Utility {
             case STAGE_3:
                 // We are in stage 3. Move to stage 2.
                 requestedViperSlideState = ViperSlideStates.STAGE_2;
+                break;
+            case AUTON_STAGE:
+                requestedViperSlideState = ViperSlideStates.HOME;
                 break;
             default:
                 // This is an unhandled state. Don't do anything.
@@ -384,7 +410,13 @@ public class Utility {
                 stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
                 break;
             case MOVING:
-                // We are currently moving between states. This is an invalid requestedViperSlideState. Don't do anything.
+                // We are currently moving between states. This is an invalid requestedViperSlideState. If, somehow, get in this state. Do some further checks.
+                if( robot.getViperSlide().getCurrentPosition() < 0 ) {
+                    // We overshot home. Go Home.
+                    stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+                } else {
+                    // Continue moving.
+                }
                 break;
             case STAGE_1:
                 // Go to the stage 1 position.
@@ -397,6 +429,9 @@ public class Utility {
             case STAGE_3:
                 // Go to the stage 3 position.
                 stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
+                break;
+            case AUTON_STAGE:
+                stagePosition = Constants.VIPER_SLIDE_AUTON_STAGE_COUNT;
                 break;
             default:
                 // This is an unhandled state. Don't do anything.
@@ -417,6 +452,13 @@ public class Utility {
             // Check to see if the viper slide is moving. If not, stop it.
             if (robot.getViperSlide().isBusy()) {
                 // Viper slide is moving! Don't do anything.
+                if( robot.getViperSlide().getCurrentPosition() < 0 ) {
+                    // We overshot home. Go Home.
+                    // NOTE: We may need reset the viper slide.
+                    currentViperSlideState = ViperSlideStates.HOME;
+                } else {
+                    // Continue moving.
+                }
             } else {
                 // NOTE: To keep the viper motor energized we might be able to skip setting the power to zero and leaving the motor in RUN_TO_POSITION mode.
                 /*
@@ -490,6 +532,9 @@ public class Utility {
             case STAGE_3:
                 viperSlideState = "Stage 3";
                 break;
+            case AUTON_STAGE:
+                viperSlideState = "Auton Stage";
+                break;
             default:
                 viperSlideState = "Unknown!";
                 break;
@@ -521,6 +566,22 @@ public class Utility {
 
     public static void panDelivery(RobotHardware robot) {
         requestedPanState = PanStates.DEPLOYED;
+    }
+
+    public static void panHomeAuton(RobotHardware robot) {
+        while (robot.getPanServo().getPosition() < Constants.PAN_HOME_POSITION) {
+            robot.getMyOpMode().sleep(10);
+            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
+            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+        }
+    }
+
+    public static void panDeliveryAuton(RobotHardware robot) {
+        while (robot.getPanServo().getPosition() > Constants.PAN_DEPLOYED_POSITION) {
+            robot.getMyOpMode().sleep(10);
+            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
+            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+        }
     }
 
     public static void scrollPanDoor(RobotHardware robot, int milliSeconds) {

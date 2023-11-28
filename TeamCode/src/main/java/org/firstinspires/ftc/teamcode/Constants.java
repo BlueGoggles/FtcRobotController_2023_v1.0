@@ -19,6 +19,7 @@ public interface Constants {
     double ZERO_POWER = 0.0;
     double MAX_POWER = 1.0;
     double AUTON_DRIVE_SPEED = 1.0;
+    double AUTON_FRONT_STAGE_DRIVE_SPEED = 0.6;
     double AUTON_TURN_SPEED = 0.3;
     double OBJECT_WIDTH_IN_INCHES = 3.0;  // The actual width of the object in real-world units
     int CAMERA_WIDTH = 640; // width  of wanted camera resolution
@@ -30,7 +31,7 @@ public interface Constants {
     double Kp = 0.01; // Proportional Gain
     double Ki = 0.0; // Integral Gain
     double Kd = 0.003; // Derivative Gain
-    double DESIRED_DISTANCE_FROM_APRILTAG = 12.0; //  this is how close the camera should get to the target (inches)
+    double DESIRED_DISTANCE_FROM_APRILTAG = 10.0; //  this is how close the camera should get to the target (inches)
 
     // Below are constants for moving Robot to the AprilTag.
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
@@ -52,9 +53,10 @@ public interface Constants {
     // TODO: Determine the number of encoder rotations per inch of viper slide movement.
     // Eventually I would like to be able to map the Viper Slide extension to a set number of revolutions of the encoder to inches travelled by the Viper Slide. We would need to measure this.
     int VIPER_SLIDE_COUNTS_PER_INCH = 1;
+    int VIPER_SLIDE_AUTON_STAGE_COUNT = ( 1400 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_1_COUNT = ( 1800 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_2_COUNT = ( 2300 * VIPER_SLIDE_COUNTS_PER_INCH );
-    int VIPER_SLIDE_STAGE_3_COUNT = ( 2800 * VIPER_SLIDE_COUNTS_PER_INCH );
+    int VIPER_SLIDE_STAGE_3_COUNT = ( 2500 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_REST_COUNT = 0;
     int VIPER_SLIDE_VARIANCE = 50;
 
@@ -63,8 +65,8 @@ public interface Constants {
 
     double PAN_DOOR_START_POSITION = 0.0;
     double PAN_DOOR_STOP_POSITION = 0.5;
-    int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 1500;
-    int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 4000;
+    int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 500;
+    int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 1500;
     double PAN_TILT_ANGLE = 0.01;
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 0.55;
