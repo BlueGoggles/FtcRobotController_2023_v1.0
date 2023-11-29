@@ -47,6 +47,9 @@ public class MainTeleOp extends LinearOpMode {
         boolean enableManualOverride;
         double teleOpSpeed;
 
+        // By default we don't want to allow the lead screw to run until it has been released.
+        boolean allowLeadScrew = false;
+
         RobotHardware robot = new RobotHardware(this);
         robot.initialize();
         robot.initializeIMU();
@@ -195,14 +198,17 @@ public class MainTeleOp extends LinearOpMode {
                     enableManualOverride = !enableManualOverride;
                 }
 
-                // Extend the lead screw.
-                if (gamepad1.left_bumper) {
-                    Utility.controlLeadScrew(robot, DcMotorEx.Direction.FORWARD);
-                }
+                // Check to see if we can allow the lead screw to go. It needs to be released before we can control it.
+                if( allowLeadScrew ) {
+                    // Extend the lead screw.
+                    if (gamepad1.left_bumper) {
+                        Utility.controlLeadScrew(robot, DcMotorEx.Direction.FORWARD);
+                    }
 
-                // Retract the lead screw.
-                if (gamepad1.right_bumper) {
-                    Utility.controlLeadScrew(robot, DcMotorEx.Direction.REVERSE);
+                    // Retract the lead screw.
+                    if (gamepad1.right_bumper) {
+                        Utility.controlLeadScrew(robot, DcMotorEx.Direction.REVERSE);
+                    }
                 }
 
                 // Control the viper slide.
@@ -222,6 +228,8 @@ public class MainTeleOp extends LinearOpMode {
 
                 if (gamepad1.a) {
                     robot.getLeadScrewSwitch().setPosition(0.4);
+                    // Tell the program that it's okay to control the lead screw.
+                    allowLeadScrew = true;
                 }
 
                 if (gamepad2.left_bumper) {
@@ -231,7 +239,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if (gamepad1.start) {
-                    robot.getDroneLauncher().setPosition(0.0);
+                    robot.getDroneLauncher().setPosition(0.5);
                 }
 
                 // Press this button to reset the yaw during Teleop.

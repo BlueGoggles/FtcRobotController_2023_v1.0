@@ -102,12 +102,15 @@ public class FrontstageBlueNonCorner extends LinearOpMode {
 
             Utility.extendViperSlide(robot,true);
             Utility.panDeliveryAuton(robot);
+            Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
 
+            sleep(Constants.PAN_DOOR_AUTON_WAIT);
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
             Utility.panHomeAuton(robot);
             Utility.resetViperSlide(robot);
+            Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  8.5);
@@ -115,12 +118,15 @@ public class FrontstageBlueNonCorner extends LinearOpMode {
 
             Utility.extendViperSlide(robot,true);
             Utility.panDeliveryAuton(robot);
+            Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
 
+            sleep(Constants.PAN_DOOR_AUTON_WAIT);
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
             Utility.panHomeAuton(robot);
             Utility.resetViperSlide(robot);
+            Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
 
         } else if (spikeMark == Utility.SpikeMark.LEFT) {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  8.5);
@@ -128,12 +134,15 @@ public class FrontstageBlueNonCorner extends LinearOpMode {
 
             Utility.extendViperSlide(robot,true);
             Utility.panDeliveryAuton(robot);
+            Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
 
+            sleep(Constants.PAN_DOOR_AUTON_WAIT);
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
             Utility.panHomeAuton(robot);
             Utility.resetViperSlide(robot);
+            Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
         }
     }
 

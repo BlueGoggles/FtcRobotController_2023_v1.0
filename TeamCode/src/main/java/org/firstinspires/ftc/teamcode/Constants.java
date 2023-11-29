@@ -68,6 +68,7 @@ public interface Constants {
 
     int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 500; // MilliSeconds
     int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 1500; // MilliSeconds
+    int PAN_DOOR_AUTON_WAIT = 500; // Milliseconds
     double PAN_TILT_ANGLE = 0.01;
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 0.55;
