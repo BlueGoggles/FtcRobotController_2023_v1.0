@@ -114,7 +114,7 @@ public class RobotHardware {
         droneLauncher = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_DRONE_LAUNCHER);
 
         getDroneLauncher().setDirection(Servo.Direction.FORWARD);
-        getDroneLauncher().setPosition(1.0);
+        getDroneLauncher().setPosition(0.6);
     }
 
     public void setMotorPowers(double leftFront, double rightFront, double leftBack, double rightBack) {

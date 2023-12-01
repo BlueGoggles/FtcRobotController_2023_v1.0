@@ -239,7 +239,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if (gamepad1.start) {
-                    robot.getDroneLauncher().setPosition(0.5);
+                    robot.getDroneLauncher().setPosition(0.4);
                 }
 
                 // Press this button to reset the yaw during Teleop.
