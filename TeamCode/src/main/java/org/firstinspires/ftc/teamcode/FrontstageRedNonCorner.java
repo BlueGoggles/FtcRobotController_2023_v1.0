@@ -13,6 +13,8 @@ public class FrontstageRedNonCorner extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        boolean targetFound = false;
+
         Utility.initializeRobot(robot, color);
 
         // Drive towards object
@@ -20,7 +22,22 @@ public class FrontstageRedNonCorner extends LinearOpMode {
 
         // Move to desired AprilTag
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        boolean targetFound = Utility.moveToAprilTag(robot, Utility.getAprilTagId());
+        for (int counter = 0; counter < 3; counter++) {
+
+            targetFound = Utility.moveToAprilTag(robot, Utility.getAprilTagId());
+
+            if (targetFound) {
+                break;
+            } else {
+                if (counter == 0) {
+                    Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, Constants.APRIL_TAG_NOT_FOUND_STRAFE_INCHES * Constants.STRAFE_MOVEMENT_RATIO);
+                } else if (counter == 1) {
+                    Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 2 * Constants.APRIL_TAG_NOT_FOUND_STRAFE_INCHES * Constants.STRAFE_MOVEMENT_RATIO);
+                } else {
+                    Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, Constants.APRIL_TAG_NOT_FOUND_STRAFE_INCHES * Constants.STRAFE_MOVEMENT_RATIO);
+                }
+            }
+        }
 
         if (targetFound) {
             FrontstageRed.placeSecondPixel(robot);

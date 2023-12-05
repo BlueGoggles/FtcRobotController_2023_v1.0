@@ -31,7 +31,7 @@ public interface Constants {
     double Kp = 0.01; // Proportional Gain
     double Ki = 0.0; // Integral Gain
     double Kd = 0.003; // Derivative Gain
-    double DESIRED_DISTANCE_FROM_APRILTAG = 10.0; //  this is how close the camera should get to the target (inches)
+    double DESIRED_DISTANCE_FROM_APRILTAG = 12.0; //  this is how close the camera should get to the target (inches)
 
     // Below are constants for moving Robot to the AprilTag.
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
@@ -68,7 +68,7 @@ public interface Constants {
 
     int PAN_DOOR_RUN_TIME_PURPLE_PIXEL = 500; // MilliSeconds
     int PAN_DOOR_RUN_TIME_YELLOW_PIXEL = 1500; // MilliSeconds
-    int PAN_DOOR_AUTON_WAIT = 500; // Milliseconds
+    int PAN_DOOR_AUTON_WAIT = 700; // Milliseconds
     double PAN_TILT_ANGLE = 0.01;
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 0.55;
@@ -76,10 +76,13 @@ public interface Constants {
 
     int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000; // MilliSeconds
 
-    double APRIL_TAG_DETECTION_WAIT_TIME = 3000; // MilliSeconds
+    double APRIL_TAG_DETECTION_WAIT_TIME = 1500; // MilliSeconds
 
-    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 21;
-
+    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 27;
+    double APRIL_TAG_NOT_FOUND_STRAFE_INCHES = 3;
+    double MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES = 5;
+    double GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT = 1;
+    double DISTANCE_BETWEEN_APRIL_TAG_INCHES = 6;
     // "10 / 8.5 = 1.1764".
     // Need to multiply by this ratio, because 10 inches of instructed strafe movement causes 8.5 inches of actual strafe movement.
     double STRAFE_MOVEMENT_RATIO = 1.1764;
