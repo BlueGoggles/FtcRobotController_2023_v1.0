@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -187,7 +188,8 @@ public class Utility {
         turnToPID(robot,(degrees + robot.getAbsoluteAngle()));
     }
 
-    public static boolean moveToAprilTag(RobotHardware robot, int desiredTagId) {
+    public static boolean moveToAprilTag(RobotHardware robot) {
+        Utility.setManualExposure(robot,Constants.APRIL_TAG_EXPOSURE_MS, Constants.APRIL_TAG_GAIN);  // Use low exposure time to reduce motion blur
 
         AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
         ElapsedTime runtime = new ElapsedTime();
@@ -208,7 +210,7 @@ public class Utility {
                 // Look to see if we have size info on this tag.
                 if (detection.metadata != null) {
                     //  Check to see if we want to track towards this tag.
-                    if (detection.id == desiredTagId) {
+                    if (detection.id == getAprilTagId()) {
                         // Yes, we want to use this tag.
                         targetFound = true;
                         desiredTag = detection;
@@ -327,6 +329,74 @@ public class Utility {
         }
     }
 
+    public static void placeSecondPixel( RobotHardware robot ) {
+        // Extend the viper slide and present the pan for pixel delivery
+        extendViperSlide(robot,true);
+        panDeliveryAuton(robot);
+        overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
+
+        // Move to the appropriate April Tag and get ready to place the pixel.
+        encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  Constants.DISTANCE_TO_PLACE_SECOND_PIXEL_AUTON);
+        encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  Constants.CAMERA_OFFSET_DISTANCE * Constants.STRAFE_MOVEMENT_RATIO);
+
+        // Run the pan door to release the pixel
+        robot.getMyOpMode().sleep(Constants.PAN_DOOR_AUTON_WAIT);
+        scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
+
+        // Move away from the board and retract the viper slide.
+        encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED, Constants.DISTANCE_TO_BACK_UP_FROM_BACKDROP);
+        panHomeAuton(robot);
+        resetViperSlide(robot);
+        overrideViperSlideState(Utility.ViperSlideStates.HOME);
+    }
+
+    public static void parkRobot(RobotHardware robot, Utility.Color color, double distanceToPark) {
+        int colorCorrectionMultipler = 1;
+        Utility.Direction cornerTuckDirection = Utility.Direction.LEFT;
+        if (color == Color.RED) {
+            colorCorrectionMultipler = -1;
+            cornerTuckDirection = Utility.Direction.RIGHT;
+        }
+
+        if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
+            // Don't change the distance to park.
+        } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
+            distanceToPark += (Constants.DISTANCE_BETWEEN_APRIL_TAGS * colorCorrectionMultipler);
+        } else if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
+            distanceToPark += ((2 * Constants.DISTANCE_BETWEEN_APRIL_TAGS) * colorCorrectionMultipler);
+        }
+
+        // Turn to our home position to prepare for teleop.
+        turnToPID(robot, Constants.HOME_DIRECTION);
+
+        // Move towards the edge of the field
+        encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  distanceToPark);
+
+        // Park in the corner
+        encoderDrive(robot, cornerTuckDirection, Constants.AUTON_DRIVE_SPEED, Constants.CORNER_PARK_DISTANCE * Constants.STRAFE_MOVEMENT_RATIO);
+    }
+
+    public static void parkRobotNonCorner(RobotHardware robot, Utility.Color color, double distanceToPark) {
+        int colorCorrectionMultipler = 1;
+        if (color == Color.BLUE) {
+            colorCorrectionMultipler = -1;
+        }
+
+        if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
+            // Don't change the distance to park.
+        } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
+            distanceToPark += (Constants.DISTANCE_BETWEEN_APRIL_TAGS * colorCorrectionMultipler);
+        } else if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
+            distanceToPark += ((2 * Constants.DISTANCE_BETWEEN_APRIL_TAGS) * colorCorrectionMultipler);
+        }
+
+        // Turn to our home position to prepare for teleop.
+        Utility.turnToPID(robot, Constants.HOME_DIRECTION);
+
+        // Park near center stage.
+        Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  distanceToPark);
+    }
+
     public static void controlLeadScrew(RobotHardware robot, DcMotorSimple.Direction direction) {
 
         // Determine what position we need to go to.
@@ -349,28 +419,10 @@ public class Utility {
     public static void extendViperSlide(RobotHardware robot, boolean isAutonActive) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
 
-//        int slidePosition = robot.getViperSlide().getCurrentPosition();
-//        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
-//
-//        // First, check to see if the current position is below the lower end of the first stage 1.
-//        if( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE ) ) {
-//            // In rest position. Go to stage 1.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
-//            // Next, check to see if the current position is between the upper and lower bounds of the first stage. If so, we are in the first stage, extend to the second.
-//        } else if ( ( slidePosition >= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) &&
-//                ( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) ) {
-//            // In stage 1. Go to stage 2.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
-//            // We reach this case when the current position is greater than the upper limit of stage 2. We assume that we are in the second stage. So we extend to the third stage.
-//        } else {
-//            // In stage 2. Go to final stage, full extension.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
-//        }
-
         // Check to see what the current position of the Viper Slide is and determine what our next state should be.
         switch( currentViperSlideState ) {
             case HOME:
-                if( isAutonActive == true ) {
+                if(isAutonActive) {
                     requestedViperSlideState = ViperSlideStates.AUTON_STAGE;
                 } else {
                     // We are in the home state. Move to stage 1.
@@ -397,30 +449,11 @@ public class Utility {
                 break;
         }
 
-        //executeViperSlide( stagePosition, robot );
         executeViperSlide( robot );
     }
 
     public static void retractViperSlide(RobotHardware robot) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
-
-//        int slidePosition = robot.getViperSlide().getCurrentPosition();
-//        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
-//
-//        // First, check to see if the current position is less than the upper end of the last stage.
-//        if( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE ) ) {
-//            // We are in the final stage, full extension. Move to stage 2.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
-//            // Next, check to see if the current position is between the upper and lower bounds of the second stage. If so, we are in the second stage, retract to the first.
-//        } else if ( ( slidePosition >= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) &&
-//                ( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) ) {
-//            // In stage 2. Go to stage 1.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
-//            // We reach this case when the current position is less than the lower limit of stage 1. We assume that we are in the first stage. So we retract to the rest stage.
-//        } else {
-//            // In stage 1. Return to rest position.
-//            stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
-//        }
 
         // Check to see what the current position of the Viper Slide is and determine what our next state should be.
         switch( currentViperSlideState ) {
@@ -448,7 +481,6 @@ public class Utility {
                 break;
         }
 
-        //executeViperSlide( stagePosition, robot );
         executeViperSlide( robot );
     }
 
@@ -459,7 +491,6 @@ public class Utility {
         requestedViperSlideState = ViperSlideStates.HOME;
 
         // Always go back to resting position.
-        //executeViperSlide( Constants.VIPER_SLIDE_REST_COUNT, robot );
         executeViperSlide( robot );
     }
 
@@ -628,17 +659,16 @@ public class Utility {
                 break;
         }
     }
-    public static void panHome(RobotHardware robot) {
+    public static void panHome() {
         requestedPanState = PanStates.HOME;
     }
 
-    public static void panDelivery(RobotHardware robot) {
+    public static void panDelivery() {
         requestedPanState = PanStates.DEPLOYED;
     }
 
     public static void panHomeAuton(RobotHardware robot) {
         while (robot.getPanServo().getPosition() < Constants.PAN_HOME_POSITION) {
-            //robot.getMyOpMode().sleep(10);
             robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
             robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
         }
@@ -646,7 +676,6 @@ public class Utility {
 
     public static void panDeliveryAuton(RobotHardware robot) {
         while (robot.getPanServo().getPosition() > Constants.PAN_DEPLOYED_POSITION) {
-            //robot.getMyOpMode().sleep(10);
             robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
             robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
         }

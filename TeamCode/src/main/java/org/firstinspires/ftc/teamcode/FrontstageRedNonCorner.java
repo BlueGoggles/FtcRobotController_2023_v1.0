@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous(name = "Frontstage Red - Non Corner", group = "FrontstageRedAuton")
 public class FrontstageRedNonCorner extends LinearOpMode {
@@ -12,56 +11,19 @@ public class FrontstageRedNonCorner extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         Utility.initializeRobot(robot, color);
 
         // Drive towards object
         FrontstageRed.moveToObject(robot);
 
         // Move to desired AprilTag
-        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        boolean targetFound = Utility.moveToAprilTag(robot, Utility.getAprilTagId());
+        boolean targetFound = Utility.moveToAprilTag(robot);
 
         if (targetFound) {
-            FrontstageRed.placeSecondPixel(robot);
-            parkRobot();
+            Utility.placeSecondPixel(robot);
+            Utility.parkRobotNonCorner(robot,color,14);
         } else {
-            targetNotFoundParkRobot();
-        }
-    }
-
-    private void targetNotFoundParkRobot() {
-        if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  13);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  24);
-
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  10);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  12);
-
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  12);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  10);
-        }
-    }
-
-    private void parkRobot() {
-        if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  1);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  14);
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  20);
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  26);
+            FrontstageRed.targetNotFoundParkRobot(robot);
         }
     }
 }

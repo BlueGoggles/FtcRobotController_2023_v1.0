@@ -28,10 +28,18 @@ public interface Constants {
     double DRIVE_GEAR_REDUCTION = 1.0 ;     // No External Gearing.
     double WHEEL_DIAMETER_INCHES = 3.78 ;     // For figuring out circumference
     double CAMERA_FOCAL_LENGTH = 793.33;
+    int APRIL_TAG_EXPOSURE_MS = 6;
+    int APRIL_TAG_GAIN = 250;
     double Kp = 0.01; // Proportional Gain
     double Ki = 0.0; // Integral Gain
     double Kd = 0.003; // Derivative Gain
     double DESIRED_DISTANCE_FROM_APRILTAG = 10.0; //  this is how close the camera should get to the target (inches)
+    double DISTANCE_TO_PLACE_SECOND_PIXEL_AUTON = 6.5; // This is how close the robot should be to place the second pixel on the backdrop during auton(inches).
+    double CAMERA_OFFSET_DISTANCE = 6.5; // This is how far the robot needs to strafe to place the pan in front of the april tag during auton to account for the camera being mounted off center. (inches)
+    double DISTANCE_TO_BACK_UP_FROM_BACKDROP = 2.0; // This is how far the robot should back away from the backdrop to safely make a turn without hitting the backdrop (inches).
+    double DISTANCE_BETWEEN_APRIL_TAGS = 6.0;
+    double CORNER_PARK_DISTANCE = 10.0; // This is the distance the robot should travel to tuck itself into the backstage corner. (inches)
+    int HOME_DIRECTION = 0; // This is the direction the robot should be facing to be facing up/forward for field centric control. (degrees)
 
     // Below are constants for moving Robot to the AprilTag.
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
@@ -59,6 +67,7 @@ public interface Constants {
     int VIPER_SLIDE_STAGE_3_COUNT = ( 2500 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_REST_COUNT = 0;
     int VIPER_SLIDE_VARIANCE = 50;
+    double DRONE_LAUNCHER_LOCKOUT_TIME = 120; // This is the time in which we don't want the drone to be able to be launched. In seconds.
 
     double TELEOP_DEFAULT_SPEED = 0.5;
     double TELEOP_MODIFIED_SPEED = 1.0;
