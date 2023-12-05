@@ -76,7 +76,9 @@ public interface Constants {
 
     int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000; // MilliSeconds
 
-    double APRIL_TAG_DETECTION_WAIT_TIME = 2000; // MilliSeconds
+    double APRIL_TAG_DETECTION_WAIT_TIME = 3000; // MilliSeconds
+
+    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 21;
 
     // "10 / 8.5 = 1.1764".
     // Need to multiply by this ratio, because 10 inches of instructed strafe movement causes 8.5 inches of actual strafe movement.

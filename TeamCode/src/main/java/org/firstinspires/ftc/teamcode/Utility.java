@@ -63,6 +63,82 @@ public class Utility {
     private static ViperSlideStates currentViperSlideState = ViperSlideStates.HOME;
     private static ViperSlideStates requestedViperSlideState = ViperSlideStates.HOME;
 
+    private static Utility.SpikeMark spikeMark;
+    private static int aprilTagId;
+
+    public static SpikeMark getSpikeMark() {
+        return spikeMark;
+    }
+
+    public static int getAprilTagId() {
+        return aprilTagId;
+    }
+
+    public static void initializeRobot(RobotHardware robot, Utility.Color color) {
+        // Initialize Robot with Encoder
+        robot.initialize();
+        robot.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        robot.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        // Initialize Gyro sensor
+        robot.initializeIMU();
+
+        // Initialize OpenCV
+        FindRegionPipeline findRegionPipeline = new FindRegionPipeline(color);
+        robot.initializeOpenCV(findRegionPipeline);
+        robot.getMyOpMode().sleep(5000);
+
+        while (robot.getMyOpMode().opModeInInit()) {
+            spikeMark = getSpikeMark(findRegionPipeline);
+            aprilTagId = getAprilTagId(spikeMark, color);
+
+            robot.getMyOpMode().telemetry.addData("Left Average Final : ", findRegionPipeline.getLeftAvgFinal());
+            robot.getMyOpMode().telemetry.addData("Right Average Final : ", findRegionPipeline.getRightAvgFinal());
+            robot.getMyOpMode().telemetry.addData("Spike Mark : ", spikeMark);
+            robot.getMyOpMode().telemetry.addData("April Tag Id : ", aprilTagId);
+            robot.getMyOpMode().telemetry.update();
+        }
+
+        // Release camera resources for OpenCV
+        robot.releaseResourcesForOpenCV();
+
+        // Initialize the Apriltag Detection process
+        robot.initializeAprilTag();
+    }
+
+    public static int getAprilTagId(Utility.SpikeMark spikeMark, Utility.Color color) {
+        if (color == Color.RED) {
+            switch (spikeMark) {
+                case LEFT:
+                    return 4;
+                case CENTER:
+                    return 5;
+                case RIGHT:
+                    return 6;
+            }
+        } else {
+            switch (spikeMark) {
+                case LEFT:
+                    return 1;
+                case CENTER:
+                    return 2;
+                case RIGHT:
+                    return 3;
+            }
+        }
+        return 0;
+    }
+
+    public static Utility.SpikeMark getSpikeMark(FindRegionPipeline findRegionPipeline) {
+
+        if ((findRegionPipeline.getLeftAvgFinal() - findRegionPipeline.getRightAvgFinal()) > Constants.REGION_AVG_FINAL_DIFFERENCE_THRESHOLD) {
+            return Utility.SpikeMark.LEFT;
+        } else if ((findRegionPipeline.getRightAvgFinal() - findRegionPipeline.getLeftAvgFinal()) > Constants.REGION_AVG_FINAL_DIFFERENCE_THRESHOLD) {
+            return Utility.SpikeMark.CENTER;
+        } else {
+            return Utility.SpikeMark.RIGHT;
+        }
+    }
     public static void encoderDrive(RobotHardware robot, Utility.Direction direction, double speed, double leftFrontInches, double rightFrontInches, double leftBackInches, double rightBackInches) {
 
         // Ensure that the OpMode is still active

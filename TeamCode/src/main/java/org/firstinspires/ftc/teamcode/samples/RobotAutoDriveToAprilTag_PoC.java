@@ -19,13 +19,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="Robot: Auto Drive To AprilTag PoC", group = "Samples")
-@Disabled
 public class RobotAutoDriveToAprilTag_PoC extends LinearOpMode
 {
     RobotHardware robot = new RobotHardware(this);
 
     // Adjust these numbers to suit your robot.
-    final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
+    final double DESIRED_DISTANCE = 5.0; //  this is how close the camera should get to the target (inches)
 
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
@@ -37,12 +36,14 @@ public class RobotAutoDriveToAprilTag_PoC extends LinearOpMode
     final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
-    private static final int DESIRED_TAG_ID = 5;     // Choose the tag you want to approach.
+    private static final int DESIRED_TAG_ID = 4;     // Choose the tag you want to approach.
 
 
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
     @Override public void runOpMode() {
+
+        robot.initialize();
 
         // Initialize the Apriltag Detection process
         robot.initializeAprilTag();

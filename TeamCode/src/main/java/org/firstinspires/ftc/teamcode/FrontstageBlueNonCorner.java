@@ -160,7 +160,7 @@ public class FrontstageBlueNonCorner extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  28);
             Utility.turnToPID(robot, 90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  70);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  9 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  7 * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (spikeMark == Utility.SpikeMark.CENTER) {
 
@@ -174,7 +174,7 @@ public class FrontstageBlueNonCorner extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  25);
             Utility.turnToPID(robot, 90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  90);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  18 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (spikeMark == Utility.SpikeMark.LEFT) {
 
@@ -188,7 +188,7 @@ public class FrontstageBlueNonCorner extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  5);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  25 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  73);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  24 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  19 * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }
 
