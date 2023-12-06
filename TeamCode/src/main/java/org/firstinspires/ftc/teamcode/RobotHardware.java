@@ -202,6 +202,7 @@ public class RobotHardware {
 
         imu = myOpMode.hardwareMap.get(IMU.class, Constants.EXPANSION_IMU);
         imu.initialize(parameters);
+        imu.resetYaw();
     }
 
     public double getCurrentHeading() {

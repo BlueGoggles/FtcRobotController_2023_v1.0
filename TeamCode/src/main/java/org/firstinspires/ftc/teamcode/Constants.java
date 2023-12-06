@@ -78,7 +78,7 @@ public interface Constants {
 
     double APRIL_TAG_DETECTION_WAIT_TIME = 1500; // MilliSeconds
 
-    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 27;
+    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 31;
     double APRIL_TAG_NOT_FOUND_STRAFE_INCHES = 3;
     double MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES = 5;
     double GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT = 1;
@@ -86,4 +86,8 @@ public interface Constants {
     // "10 / 8.5 = 1.1764".
     // Need to multiply by this ratio, because 10 inches of instructed strafe movement causes 8.5 inches of actual strafe movement.
     double STRAFE_MOVEMENT_RATIO = 1.1764;
+
+
+    int RED_APRIL_TAG_ID = 5;
+    int BLUE_APRIL_TAG_ID = 2;
 }

@@ -24,7 +24,7 @@ public class FrontstageRedNonCorner extends LinearOpMode {
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
         for (int counter = 0; counter < 3; counter++) {
 
-            targetFound = Utility.moveToAprilTag(robot, Utility.getAprilTagId());
+            targetFound = Utility.moveToAprilTag(robot, Constants.RED_APRIL_TAG_ID);
 
             if (targetFound) {
                 break;
