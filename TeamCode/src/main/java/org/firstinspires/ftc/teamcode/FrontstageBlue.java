@@ -13,6 +13,8 @@ public class FrontstageBlue extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        boolean targetFound = false;
+
         Utility.initializeRobot(robot, color);
 
         // Drive towards object
@@ -20,7 +22,22 @@ public class FrontstageBlue extends LinearOpMode {
 
         // Move to desired AprilTag
         Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
-        boolean targetFound = Utility.moveToAprilTag(robot, Utility.getAprilTagId());
+        for (int counter = 0; counter < 3; counter++) {
+
+            targetFound = Utility.moveToAprilTag(robot, Constants.BLUE_APRIL_TAG_ID);
+
+            if (targetFound) {
+                break;
+            } else {
+                if (counter == 0) {
+                    Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, Constants.APRIL_TAG_NOT_FOUND_STRAFE_INCHES * Constants.STRAFE_MOVEMENT_RATIO);
+                } else if (counter == 1) {
+                    Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 2 * Constants.APRIL_TAG_NOT_FOUND_STRAFE_INCHES * Constants.STRAFE_MOVEMENT_RATIO);
+                } else {
+                    Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, Constants.APRIL_TAG_NOT_FOUND_STRAFE_INCHES * Constants.STRAFE_MOVEMENT_RATIO);
+                }
+            }
+        }
 
         if (targetFound) {
             placeSecondPixel(robot);
@@ -31,123 +48,98 @@ public class FrontstageBlue extends LinearOpMode {
     }
 
     private void targetNotFoundParkRobot() {
-        if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
 
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  10);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  20);
-
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  5);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  26);
-
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
-
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  9);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  35);
-        }
+        Utility.turnToPID(robot, 0);
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  17);
+        Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  21 * Constants.STRAFE_MOVEMENT_RATIO);
     }
 
     private void parkRobot() {
-        if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 1);
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 28);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 10 * Constants.STRAFE_MOVEMENT_RATIO);
+
+        double inches;
+
+        if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
+            inches = 19;
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 25);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 10 * Constants.STRAFE_MOVEMENT_RATIO);
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
-            Utility.turnToPID(robot, 0);
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 18);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, 10 * Constants.STRAFE_MOVEMENT_RATIO);
+            inches = 15 + Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES;
+        } else {
+            inches = 15 + (2 * Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES);
         }
+
+        Utility.turnToPID(robot, 0);
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  inches);
+        Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
     }
 
     public static void placeSecondPixel(RobotHardware robot) {
-        if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  6.5);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  5 * Constants.STRAFE_MOVEMENT_RATIO);
 
-            Utility.extendViperSlide(robot,true);
-            Utility.panDeliveryAuton(robot);
-            Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
+        Utility.Direction direction;
+        double inches;
 
-            robot.getMyOpMode().sleep(Constants.PAN_DOOR_AUTON_WAIT);
-            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
+        if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
 
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
-            Utility.panHomeAuton(robot);
-            Utility.resetViperSlide(robot);
-            Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
+            direction = Utility.Direction.LEFT;
+            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES + Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT) * Constants.STRAFE_MOVEMENT_RATIO;
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  6.5);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  5 * Constants.STRAFE_MOVEMENT_RATIO);
 
-            Utility.extendViperSlide(robot,true);
-            Utility.panDeliveryAuton(robot);
-            Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
+            direction = Utility.Direction.LEFT;
+            inches = Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES * Constants.STRAFE_MOVEMENT_RATIO;
 
-            robot.getMyOpMode().sleep(Constants.PAN_DOOR_AUTON_WAIT);
-            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
+        } else {
 
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
-            Utility.panHomeAuton(robot);
-            Utility.resetViperSlide(robot);
-            Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
+            direction = Utility.Direction.RIGHT;
+            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES - Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT) * Constants.STRAFE_MOVEMENT_RATIO;
 
-        } else if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  6.5);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  6.5 * Constants.STRAFE_MOVEMENT_RATIO);
-
-            Utility.extendViperSlide(robot,true);
-            Utility.panDeliveryAuton(robot);
-            Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
-
-            robot.getMyOpMode().sleep(Constants.PAN_DOOR_AUTON_WAIT);
-            Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
-
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
-            Utility.panHomeAuton(robot);
-            Utility.resetViperSlide(robot);
-            Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
         }
+
+        Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  8);
+        Utility.encoderDrive(robot, direction, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, inches);
+
+        Utility.extendViperSlide(robot,true);
+        Utility.panDeliveryAuton(robot);
+        Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
+
+        robot.getMyOpMode().sleep(Constants.PAN_DOOR_AUTON_WAIT);
+        Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
+
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  3);
+        Utility.panHomeAuton(robot);
+        Utility.resetViperSlide(robot);
+        Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
     }
 
     public static void moveToObject(RobotHardware robot) {
 
         robot.getMyOpMode().sleep(Constants.INITIAL_WAIT_TIME_FOR_FRONT_STAGE);
+
         if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
+
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  23);
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  10.5 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  11 * Constants.STRAFE_MOVEMENT_RATIO);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  28);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  11.5 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  27);
             Utility.turnToPID(robot, 90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  70);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  7 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  73);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  Constants.BLUE_LEFT_STRAFING_FOR_APRIL_TAG * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
 
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  3 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  26.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  26);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  2);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  25);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  23);
             Utility.turnToPID(robot, 90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  90);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  Constants.BLUE_LEFT_STRAFING_FOR_APRIL_TAG * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
 
@@ -159,9 +151,9 @@ public class FrontstageBlue extends LinearOpMode {
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  5);
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  25 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  23 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  73);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  19 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  Constants.BLUE_LEFT_STRAFING_FOR_APRIL_TAG * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }
 }

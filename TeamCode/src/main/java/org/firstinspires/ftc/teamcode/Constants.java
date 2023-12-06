@@ -53,7 +53,7 @@ public interface Constants {
     // TODO: Determine the number of encoder rotations per inch of viper slide movement.
     // Eventually I would like to be able to map the Viper Slide extension to a set number of revolutions of the encoder to inches travelled by the Viper Slide. We would need to measure this.
     int VIPER_SLIDE_COUNTS_PER_INCH = 1;
-    int VIPER_SLIDE_AUTON_STAGE_COUNT = ( 1400 * VIPER_SLIDE_COUNTS_PER_INCH );
+    int VIPER_SLIDE_AUTON_STAGE_COUNT = ( 1600 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_1_COUNT = ( 1800 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_2_COUNT = ( 2300 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_3_COUNT = ( 2500 * VIPER_SLIDE_COUNTS_PER_INCH );
@@ -71,14 +71,15 @@ public interface Constants {
     int PAN_DOOR_AUTON_WAIT = 700; // Milliseconds
     double PAN_TILT_ANGLE = 0.01;
     long PAN_TILT_TIME_MS = 10;
-    double PAN_HOME_POSITION = 0.55;
-    double PAN_DEPLOYED_POSITION = 0.25;
+    double PAN_HOME_POSITION = 1.0;
+    double PAN_DEPLOYED_POSITION = 0.63;
 
     int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000; // MilliSeconds
 
     double APRIL_TAG_DETECTION_WAIT_TIME = 1500; // MilliSeconds
 
-    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 31;
+    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 29;
+    double BLUE_LEFT_STRAFING_FOR_APRIL_TAG = 17;
     double APRIL_TAG_NOT_FOUND_STRAFE_INCHES = 3;
     double MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES = 5;
     double GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT = 1;

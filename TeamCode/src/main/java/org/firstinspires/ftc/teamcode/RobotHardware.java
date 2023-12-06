@@ -80,7 +80,7 @@ public class RobotHardware {
         leadScrewSwitch = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_LEAD_SCREW_SWITCH);
 
         getPanServo().setDirection(Servo.Direction.FORWARD);
-        getPanServo().setPosition(0.55);
+        getPanServo().setPosition(Constants.PAN_HOME_POSITION);
 
         getPanDoor().setDirection(Servo.Direction.FORWARD);
         getPanDoor().setPosition(Constants.MID_SERVO);
