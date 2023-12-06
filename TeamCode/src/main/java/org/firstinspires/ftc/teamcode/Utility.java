@@ -38,6 +38,11 @@ public class Utility {
         }
     }
 
+    public enum ViperSlideDirection {
+        UP,
+        DOWN
+    }
+
     public enum SpikeMark {
         LEFT,
         CENTER,
@@ -55,13 +60,16 @@ public class Utility {
         STAGE_1,
         STAGE_2,
         STAGE_3,
-        AUTON_STAGE
+        AUTON_STAGE,
+        NUDGE_UP,
+        NUDGE_DOWN
     }
 
     // By default we want the position to be the HOME position.
     private static PanStates requestedPanState = PanStates.HOME;
     private static ViperSlideStates currentViperSlideState = ViperSlideStates.HOME;
     private static ViperSlideStates requestedViperSlideState = ViperSlideStates.HOME;
+    private static ViperSlideStates lastViperSlideStageState = ViperSlideStates.HOME;
 
     private static Utility.SpikeMark spikeMark;
     private static int aprilTagId;
@@ -104,6 +112,8 @@ public class Utility {
 
         // Initialize the Apriltag Detection process
         robot.initializeAprilTag();
+
+        Utility.setManualExposure(robot,Constants.CAMERA_EXPOSURE_MS, Constants.CAMERA_GAIN);  // Use low exposure time to reduce motion blur
     }
 
     public static int getAprilTagId(Utility.SpikeMark spikeMark, Utility.Color color) {
@@ -349,23 +359,9 @@ public class Utility {
     public static void extendViperSlide(RobotHardware robot, boolean isAutonActive) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
 
-//        int slidePosition = robot.getViperSlide().getCurrentPosition();
-//        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
-//
-//        // First, check to see if the current position is below the lower end of the first stage 1.
-//        if( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE ) ) {
-//            // In rest position. Go to stage 1.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
-//            // Next, check to see if the current position is between the upper and lower bounds of the first stage. If so, we are in the first stage, extend to the second.
-//        } else if ( ( slidePosition >= ( Constants.VIPER_SLIDE_STAGE_1_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) &&
-//                ( slidePosition <= ( Constants.VIPER_SLIDE_STAGE_1_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) ) {
-//            // In stage 1. Go to stage 2.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
-//            // We reach this case when the current position is greater than the upper limit of stage 2. We assume that we are in the second stage. So we extend to the third stage.
-//        } else {
-//            // In stage 2. Go to final stage, full extension.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
-//        }
+        if( ( currentViperSlideState == ViperSlideStates.NUDGE_UP ) || ( currentViperSlideState == ViperSlideStates.NUDGE_DOWN ) ) {
+            currentViperSlideState = lastViperSlideStageState;
+        }
 
         // Check to see what the current position of the Viper Slide is and determine what our next state should be.
         switch( currentViperSlideState ) {
@@ -392,35 +388,22 @@ public class Utility {
                 // We are in stage 3. Don't try to extend any further.
                 break;
             case AUTON_STAGE:
+            case NUDGE_UP:
+            case NUDGE_DOWN:
             default:
                 // This is an unhandled state. Don't do anything.
                 break;
         }
 
-        //executeViperSlide( stagePosition, robot );
         executeViperSlide( robot );
     }
 
     public static void retractViperSlide(RobotHardware robot) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
 
-//        int slidePosition = robot.getViperSlide().getCurrentPosition();
-//        int stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
-//
-//        // First, check to see if the current position is less than the upper end of the last stage.
-//        if( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE ) ) {
-//            // We are in the final stage, full extension. Move to stage 2.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
-//            // Next, check to see if the current position is between the upper and lower bounds of the second stage. If so, we are in the second stage, retract to the first.
-//        } else if ( ( slidePosition >= -( Constants.VIPER_SLIDE_STAGE_2_COUNT + Constants.VIPER_SLIDE_VARIANCE) ) &&
-//                ( slidePosition <= -( Constants.VIPER_SLIDE_STAGE_2_COUNT - Constants.VIPER_SLIDE_VARIANCE) ) ) {
-//            // In stage 2. Go to stage 1.
-//            stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
-//            // We reach this case when the current position is less than the lower limit of stage 1. We assume that we are in the first stage. So we retract to the rest stage.
-//        } else {
-//            // In stage 1. Return to rest position.
-//            stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
-//        }
+        if( ( currentViperSlideState == ViperSlideStates.NUDGE_UP ) || ( currentViperSlideState == ViperSlideStates.NUDGE_DOWN ) ) {
+            currentViperSlideState = lastViperSlideStageState;
+        }
 
         // Check to see what the current position of the Viper Slide is and determine what our next state should be.
         switch( currentViperSlideState ) {
@@ -443,12 +426,13 @@ public class Utility {
                 // We are in stage 3. Move to stage 2.
                 requestedViperSlideState = ViperSlideStates.STAGE_2;
                 break;
+            case NUDGE_UP:
+            case NUDGE_DOWN:
             default:
                 // This is an unhandled state. Don't do anything.
                 break;
         }
 
-        //executeViperSlide( stagePosition, robot );
         executeViperSlide( robot );
     }
 
@@ -459,7 +443,6 @@ public class Utility {
         requestedViperSlideState = ViperSlideStates.HOME;
 
         // Always go back to resting position.
-        //executeViperSlide( Constants.VIPER_SLIDE_REST_COUNT, robot );
         executeViperSlide( robot );
     }
 
@@ -472,6 +455,7 @@ public class Utility {
             case HOME:
                 // Go to the home position.
                 stagePosition = Constants.VIPER_SLIDE_REST_COUNT;
+                lastViperSlideStageState = requestedViperSlideState;
                 break;
             case MOVING:
                 // We are currently moving between states. This is an invalid requestedViperSlideState. Don't do anything.
@@ -479,18 +463,30 @@ public class Utility {
             case STAGE_1:
                 // Go to the stage 1 position.
                 stagePosition = Constants.VIPER_SLIDE_STAGE_1_COUNT;
+                lastViperSlideStageState = requestedViperSlideState;
                 break;
             case STAGE_2:
                 // Go to the stage 2 position.
                 stagePosition = Constants.VIPER_SLIDE_STAGE_2_COUNT;
+                lastViperSlideStageState = requestedViperSlideState;
                 break;
             case STAGE_3:
                 // Go to the stage 3 position.
                 stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
+                lastViperSlideStageState = requestedViperSlideState;
                 break;
             case AUTON_STAGE:
                 // Go to the auton stage to place the pixel.
                 stagePosition = Constants.VIPER_SLIDE_AUTON_STAGE_COUNT;
+                lastViperSlideStageState = requestedViperSlideState;
+                break;
+            case NUDGE_UP:
+                // Nudge the Viper slide up slightly.
+                stagePosition = robot.getViperSlidePosition() + Constants.VIPER_SLIDE_NUDGE_COUNT;
+                break;
+            case NUDGE_DOWN:
+                // Nudge the Viper slide down slightly.
+                stagePosition = robot.getViperSlidePosition() - Constants.VIPER_SLIDE_NUDGE_COUNT;
                 break;
             default:
                 // This is an unhandled state. Don't do anything.
@@ -504,6 +500,20 @@ public class Utility {
         currentViperSlideState = ViperSlideStates.MOVING;
 
         robot.getViperSlide().setPower(Constants.MAX_POWER);
+    }
+
+    public static void nudgeViperSlide(RobotHardware robot, ViperSlideDirection requestedDirection) {
+        if( robot.getViperSlidePosition() < Constants.VIPER_SLIDE_STAGE_3_COUNT ) {
+            if (requestedDirection == ViperSlideDirection.UP) {
+                robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+                requestedViperSlideState = ViperSlideStates.NUDGE_UP;
+            } else {
+                robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+                requestedViperSlideState = ViperSlideStates.NUDGE_DOWN;
+            }
+
+            executeViperSlide(robot);
+        }
     }
 
     public static void checkSlideAndScrewMotors(RobotHardware robot) {
@@ -574,6 +584,12 @@ public class Utility {
             case AUTON_STAGE:
                 viperSlideState = "Auton Stage";
                 break;
+            case NUDGE_UP:
+                viperSlideState = "Nudge Up";
+                break;
+            case NUDGE_DOWN:
+                viperSlideState = "Nudge Down";
+                break;
             default:
                 viperSlideState = "Unknown!";
                 break;
@@ -602,6 +618,12 @@ public class Utility {
                 break;
             case AUTON_STAGE:
                 viperSlideState = "Auton Stage";
+                break;
+            case NUDGE_UP:
+                viperSlideState = "Nudge Up";
+                break;
+            case NUDGE_DOWN:
+                viperSlideState = "Nudge Down";
                 break;
             default:
                 viperSlideState = "Unknown!";

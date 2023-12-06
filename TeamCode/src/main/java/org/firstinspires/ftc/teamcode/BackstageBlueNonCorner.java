@@ -15,41 +15,12 @@ public class BackstageBlueNonCorner extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        // Initialize Robot with Encoder
-        robot.initialize();
-        robot.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-        // Initialize Gyro sensor
-        robot.initializeIMU();
-
-        // Initialize OpenCV
-        FindRegionPipeline findRegionPipeline = new FindRegionPipeline(color);
-        robot.initializeOpenCV(findRegionPipeline);
-        sleep(5000);
-
-        while (opModeInInit()) {
-            spikeMark = getSpikeMark(findRegionPipeline);
-            aprilTagId = getAprilTagId(spikeMark);
-
-            telemetry.addData("Left Average Final : ", findRegionPipeline.getLeftAvgFinal());
-            telemetry.addData("Right Average Final : ", findRegionPipeline.getRightAvgFinal());
-            telemetry.addData("Spike Mark : ", spikeMark);
-            telemetry.addData("April Tag Id : ", aprilTagId);
-            telemetry.update();
-        }
-
-        // Release camera resources for OpenCV
-        robot.releaseResourcesForOpenCV();
-
-        // Initialize the Apriltag Detection process
-        robot.initializeAprilTag();
+        Utility.initializeRobot(robot, color);
 
         // Drive towards object
         moveToObject();
 
         // Move to desired AprilTag
-        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
         boolean targetFound = Utility.moveToAprilTag(robot, aprilTagId);
 
         if (targetFound) {
