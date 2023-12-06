@@ -28,6 +28,9 @@ public interface Constants {
     double DRIVE_GEAR_REDUCTION = 1.0 ;     // No External Gearing.
     double WHEEL_DIAMETER_INCHES = 3.78 ;     // For figuring out circumference
     double CAMERA_FOCAL_LENGTH = 793.33;
+
+    int CAMERA_EXPOSURE_MS = 6;
+    int CAMERA_GAIN = 250;
     double Kp = 0.01; // Proportional Gain
     double Ki = 0.0; // Integral Gain
     double Kd = 0.003; // Derivative Gain
@@ -43,7 +46,7 @@ public interface Constants {
     double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
     double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
-
+    double END_GAME_LOCKOUT_TIME = 90; // This is how long we would wait to unlock end game features like the drone launcher and the lead screw.
     double REGION_AVG_FINAL_DIFFERENCE_THRESHOLD = 8.0;
 
     double MID_SERVO   =  0.5 ;
@@ -59,6 +62,7 @@ public interface Constants {
     int VIPER_SLIDE_STAGE_3_COUNT = ( 2500 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_REST_COUNT = 0;
     int VIPER_SLIDE_VARIANCE = 50;
+    int VIPER_SLIDE_NUDGE_COUNT = 75;
 
     double TELEOP_DEFAULT_SPEED = 0.5;
     double TELEOP_MODIFIED_SPEED = 1.0;

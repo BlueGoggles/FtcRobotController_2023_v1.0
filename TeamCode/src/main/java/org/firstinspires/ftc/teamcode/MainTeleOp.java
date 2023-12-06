@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.JavaUtil;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -49,6 +50,11 @@ public class MainTeleOp extends LinearOpMode {
 
         // By default we don't want to allow the lead screw to run until it has been released.
         boolean allowLeadScrew = false;
+        // By default we don't want to allow the drone to be launched until the timer has elapsed.
+        boolean allowDroneLauncher = false;
+
+        // Create the timer to lock out the drone launcher.
+        //ElapsedTime droneLauncherWaitTimer = new ElapsedTime();
 
         RobotHardware robot = new RobotHardware(this);
         robot.initialize();
@@ -79,6 +85,9 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
+            // Reset the timer to start after "Start" is pressed.
+            //droneLauncherWaitTimer.reset();
+
             while (opModeIsActive()) {
                 Joystick_X = -1 * gamepad1.right_stick_x;
                 Joystick_Y = -1 * gamepad1.right_stick_y;
@@ -192,6 +201,12 @@ public class MainTeleOp extends LinearOpMode {
                 Utility.checkSlideAndScrewMotors(robot);
                 // Use this function to ensure that pan is moved to the correct position without a blocking while loop.
                 Utility.checkPanPosition(robot);
+                // We're not using this right now.
+                /*
+                if( droneLauncherWaitTimer.time() > Constants.END_GAME_LOCKOUT_TIME ) {
+                    allowDroneLauncher = true;
+                }
+                */
 
                 // This variable controls whether we are manually steering or auto steering.
                 if( gamepad1.back ) {
@@ -226,7 +241,16 @@ public class MainTeleOp extends LinearOpMode {
                     Utility.retractViperSlide(robot);
                 }
 
-                if (gamepad1.a) {
+                if( gamepad2.left_trigger > 0.5 ) {
+                    Utility.nudgeViperSlide(robot, Utility.ViperSlideDirection.DOWN);
+                }
+
+                if( gamepad2.right_trigger > 0.5 ) {
+                    Utility.nudgeViperSlide(robot, Utility.ViperSlideDirection.UP);
+                }
+
+                // Left trigger and A to release the lead screw.
+                if ( ( gamepad1.a && ( gamepad1.left_trigger > 0.5 ))) {
                     robot.getLeadScrewSwitch().setPosition(0.4);
                     // Tell the program that it's okay to control the lead screw.
                     allowLeadScrew = true;
@@ -238,12 +262,13 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);
                 }
 
-                if (gamepad1.start) {
+                // Start and X to launch drone. Acts a lock.
+                if ( gamepad1.start && gamepad1.x ) {
                     robot.getDroneLauncher().setPosition(0.4);
                 }
 
-                // Press this button to reset the yaw during Teleop.
-                if (gamepad1.y) {
+                // Press this button to reset the yaw during Teleop. Only allow this to happen if we are in manual mode.
+                if (gamepad1.y && enableManualOverride) {
                     robot.getImu().resetYaw();
                 }
 

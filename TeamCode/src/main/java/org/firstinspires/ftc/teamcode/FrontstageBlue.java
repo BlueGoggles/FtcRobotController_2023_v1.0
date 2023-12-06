@@ -21,7 +21,6 @@ public class FrontstageBlue extends LinearOpMode {
         moveToObject(robot);
 
         // Move to desired AprilTag
-        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
         for (int counter = 0; counter < 3; counter++) {
 
             targetFound = Utility.moveToAprilTag(robot, Constants.BLUE_APRIL_TAG_ID);

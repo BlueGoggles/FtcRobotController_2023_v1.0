@@ -21,7 +21,6 @@ public class FrontstageRed extends LinearOpMode {
         moveToObject(robot);
 
         // Move to desired AprilTag
-        Utility.setManualExposure(robot,6, 250);  // Use low exposure time to reduce motion blur
         for (int counter = 0; counter < 3; counter++) {
 
             targetFound = Utility.moveToAprilTag(robot, Constants.RED_APRIL_TAG_ID);
@@ -114,6 +113,7 @@ public class FrontstageRed extends LinearOpMode {
         robot.getMyOpMode().sleep(Constants.INITIAL_WAIT_TIME_FOR_FRONT_STAGE);
 
         if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
+
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  23);
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  11 * Constants.STRAFE_MOVEMENT_RATIO);
 
