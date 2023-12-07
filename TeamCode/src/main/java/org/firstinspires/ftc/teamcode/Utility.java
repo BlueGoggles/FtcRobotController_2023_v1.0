@@ -110,10 +110,7 @@ public class Utility {
         // Release camera resources for OpenCV
         robot.releaseResourcesForOpenCV();
 
-        // Initialize the Apriltag Detection process
-        robot.initializeAprilTag();
 
-        Utility.setManualExposure(robot,Constants.CAMERA_EXPOSURE_MS, Constants.CAMERA_GAIN);  // Use low exposure time to reduce motion blur
     }
 
     public static int getAprilTagId(Utility.SpikeMark spikeMark, Utility.Color color) {
