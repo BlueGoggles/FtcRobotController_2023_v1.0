@@ -20,6 +20,7 @@ public interface Constants {
     double MAX_POWER = 1.0;
     double AUTON_DRIVE_SPEED = 1.0;
     double AUTON_FRONT_STAGE_DRIVE_SPEED = 0.6;
+    double AUTON_NEAR_BOARD_SPEED = 0.5;
     double AUTON_TURN_SPEED = 0.3;
     double OBJECT_WIDTH_IN_INCHES = 3.0;  // The actual width of the object in real-world units
     int CAMERA_WIDTH = 640; // width  of wanted camera resolution

@@ -94,17 +94,19 @@ public class FrontstageRed extends LinearOpMode {
 
         }
 
-        Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  8);
         Utility.encoderDrive(robot, direction, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, inches);
 
         Utility.extendViperSlide(robot,true, Utility.StageLocations.FRONT);
         Utility.panDeliveryAuton(robot);
         Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_FRONT_STAGE);
+        robot.getMyOpMode().sleep(300);
+
+        Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_NEAR_BOARD_SPEED,  8);
 
         robot.getMyOpMode().sleep(Constants.PAN_DOOR_AUTON_WAIT);
         Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_YELLOW_PIXEL);
 
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  3);
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_NEAR_BOARD_SPEED,  3);
         Utility.panHomeAuton(robot);
         Utility.resetViperSlide(robot);
         Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
