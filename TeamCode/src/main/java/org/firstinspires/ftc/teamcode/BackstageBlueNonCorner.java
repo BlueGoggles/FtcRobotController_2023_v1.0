@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous(name = "Backstage Blue - Non Corner", group = "BackstageBlueAuton")
 public class BackstageBlueNonCorner extends BackstageBlue {

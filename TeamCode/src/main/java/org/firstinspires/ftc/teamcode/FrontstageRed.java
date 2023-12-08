@@ -2,18 +2,16 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Autonomous(name = "Frontstage Red - Corner", group = "FrontstageRedAuton")
 public class FrontstageRed extends LinearOpMode {
 
-    private RobotHardware robot = new RobotHardware(this);
-    private Utility.Color color = Utility.Color.RED;
+    protected RobotHardware robot = new RobotHardware(this);
+    protected Utility.Color color = Utility.Color.RED;
+    protected boolean targetFound = false;
 
     @Override
     public void runOpMode() {
-
-        boolean targetFound = false;
 
         Utility.initializeRobot(robot, color);
 
@@ -40,22 +38,15 @@ public class FrontstageRed extends LinearOpMode {
             }
         }
 
-        if (targetFound) {
-            placeSecondPixel(robot);
-            parkRobot();
-        } else {
-            targetNotFoundParkRobot();
+        if ( ! targetFound) {
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  2);
         }
+
+        placeSecondPixel(robot);
+        parkRobot();
     }
 
-    private void targetNotFoundParkRobot() {
-
-        Utility.turnToPID(robot, 0);
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  17);
-        Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  21 * Constants.STRAFE_MOVEMENT_RATIO);
-    }
-
-    private void parkRobot() {
+    protected void parkRobot() {
 
         double inches;
 
@@ -72,7 +63,7 @@ public class FrontstageRed extends LinearOpMode {
         Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
     }
 
-    public static void placeSecondPixel(RobotHardware robot) {
+    protected void placeSecondPixel(RobotHardware robot) {
 
         Utility.Direction direction;
         double inches;
@@ -80,7 +71,7 @@ public class FrontstageRed extends LinearOpMode {
         if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
 
             direction = Utility.Direction.LEFT;
-            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES + Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT) * Constants.STRAFE_MOVEMENT_RATIO;
+            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES + Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + ( targetFound ? Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT : 0 )) * Constants.STRAFE_MOVEMENT_RATIO;
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
 
@@ -90,7 +81,7 @@ public class FrontstageRed extends LinearOpMode {
         } else {
 
             direction = Utility.Direction.RIGHT;
-            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES - Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT) * Constants.STRAFE_MOVEMENT_RATIO;
+            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES - Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + ( targetFound ? Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT : 0 )) * Constants.STRAFE_MOVEMENT_RATIO;
 
         }
 
@@ -112,7 +103,7 @@ public class FrontstageRed extends LinearOpMode {
         Utility.overrideViperSlideState(Utility.ViperSlideStates.HOME);
     }
 
-    public static void moveToObject(RobotHardware robot) {
+    protected void moveToObject(RobotHardware robot) {
 
         robot.getMyOpMode().sleep(Constants.INITIAL_WAIT_TIME_FOR_FRONT_STAGE);
 
@@ -127,7 +118,7 @@ public class FrontstageRed extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  11.5 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  27);
             Utility.turnToPID(robot, -90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  73);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  76.5);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  Constants.RED_RIGHT_STRAFING_FOR_APRIL_TAG * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
@@ -141,7 +132,7 @@ public class FrontstageRed extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  23);
             Utility.turnToPID(robot, -90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  90);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  94.5);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  Constants.RED_RIGHT_STRAFING_FOR_APRIL_TAG * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
@@ -155,7 +146,7 @@ public class FrontstageRed extends LinearOpMode {
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  5);
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  22 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  73);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  78.5);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  Constants.RED_RIGHT_STRAFING_FOR_APRIL_TAG * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }

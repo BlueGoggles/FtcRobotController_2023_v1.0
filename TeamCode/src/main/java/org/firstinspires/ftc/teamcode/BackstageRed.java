@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "Backstage Red - Corner", group = "BackstageRedAuton")
@@ -11,7 +10,7 @@ public class BackstageRed extends LinearOpMode {
     protected RobotHardware robot = new RobotHardware(this);
     protected Utility.Color color = Utility.Color.RED;
     protected ElapsedTime playtime = new ElapsedTime();
-    boolean targetFound = false;
+    protected boolean targetFound = false;
 
     @Override
     public void runOpMode() {
@@ -55,6 +54,7 @@ public class BackstageRed extends LinearOpMode {
     protected void parkRobot() {
 
         double inches;
+        double parkingStrafeDistance = 10;
 
         if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
             inches = 16;
@@ -75,10 +75,10 @@ public class BackstageRed extends LinearOpMode {
                 // Engage the control until wait time is over for backstage parking.
             }
 
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  25 * Constants.STRAFE_MOVEMENT_RATIO);
+            parkingStrafeDistance = parkingStrafeDistance + 25;
         }
 
-        Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
+        Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  parkingStrafeDistance * Constants.STRAFE_MOVEMENT_RATIO);
     }
 
     protected void placeSecondPixel(RobotHardware robot) {
