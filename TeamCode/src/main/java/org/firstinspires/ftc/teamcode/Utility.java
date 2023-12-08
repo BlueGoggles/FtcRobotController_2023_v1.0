@@ -481,7 +481,7 @@ public class Utility {
                 break;
             case NUDGE_DOWN:
                 // Nudge the Viper slide down slightly.
-                stagePosition = robot.getViperSlidePosition() - Constants.VIPER_SLIDE_NUDGE_COUNT;
+                stagePosition = robot.getViperSlidePosition() + Constants.VIPER_SLIDE_NUDGE_COUNT;
                 break;
             default:
                 // This is an unhandled state. Don't do anything.
