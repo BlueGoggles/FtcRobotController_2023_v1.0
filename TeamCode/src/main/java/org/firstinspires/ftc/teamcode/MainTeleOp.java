@@ -249,8 +249,7 @@ public class MainTeleOp extends LinearOpMode {
                     Utility.nudgeViperSlide(robot, Utility.ViperSlideDirection.UP);
                 }
 
-                // Left trigger and A to release the lead screw.
-                if ( ( gamepad1.a && ( gamepad1.left_trigger > 0.5 ))) {
+                if ( gamepad1.a ) {
                     robot.getLeadScrewSwitch().setPosition(0.4);
                     // Tell the program that it's okay to control the lead screw.
                     allowLeadScrew = true;
@@ -262,8 +261,7 @@ public class MainTeleOp extends LinearOpMode {
                     robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);
                 }
 
-                // Start and X to launch drone. Acts a lock.
-                if ( gamepad1.start && gamepad1.x ) {
+                if ( gamepad1.start ) {
                     robot.getDroneLauncher().setPosition(0.4);
                 }
 
