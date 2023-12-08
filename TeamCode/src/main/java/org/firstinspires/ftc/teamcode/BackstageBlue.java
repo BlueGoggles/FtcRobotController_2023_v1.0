@@ -105,9 +105,9 @@ public class BackstageBlue extends LinearOpMode {
 
         Utility.encoderDrive(robot, direction, Constants.AUTON_DRIVE_SPEED, inches);
 
-        Utility.extendViperSlide(robot,true);
+        Utility.extendViperSlide(robot,true, Utility.StageLocations.BACK);
         Utility.panDeliveryAuton(robot);
-        Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
+        Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_BACK_STAGE);
         robot.getMyOpMode().sleep(300);
 
         Utility.encoderDrive(robot, Utility.Direction.FORWARD, 0.5,  8.5);

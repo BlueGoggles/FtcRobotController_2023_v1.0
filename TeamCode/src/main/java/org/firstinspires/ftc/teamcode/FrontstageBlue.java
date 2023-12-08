@@ -96,9 +96,9 @@ public class FrontstageBlue extends LinearOpMode {
 
         Utility.encoderDrive(robot, direction, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED, inches);
 
-        Utility.extendViperSlide(robot,true);
+        Utility.extendViperSlide(robot,true, Utility.StageLocations.FRONT);
         Utility.panDeliveryAuton(robot);
-        Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_STAGE);
+        Utility.overrideViperSlideState(Utility.ViperSlideStates.AUTON_FRONT_STAGE);
 
         Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  8.25);
 

@@ -38,6 +38,11 @@ public class Utility {
         }
     }
 
+    public enum StageLocations {
+        FRONT,
+        BACK
+    }
+
     public enum ViperSlideDirection {
         UP,
         DOWN
@@ -60,7 +65,8 @@ public class Utility {
         STAGE_1,
         STAGE_2,
         STAGE_3,
-        AUTON_STAGE,
+        AUTON_FRONT_STAGE,
+        AUTON_BACK_STAGE,
         NUDGE_UP,
         NUDGE_DOWN
     }
@@ -351,7 +357,7 @@ public class Utility {
         robot.getLeadScrew().setPower(Constants.MAX_POWER);
     }
 
-    public static void extendViperSlide(RobotHardware robot, boolean isAutonActive) {
+    public static void extendViperSlide(RobotHardware robot, boolean isAutonActive, StageLocations autonStage) {
         robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
 
         if( ( currentViperSlideState == ViperSlideStates.NUDGE_UP ) || ( currentViperSlideState == ViperSlideStates.NUDGE_DOWN ) ) {
@@ -362,7 +368,11 @@ public class Utility {
         switch( currentViperSlideState ) {
             case HOME:
                 if( isAutonActive == true ) {
-                    requestedViperSlideState = ViperSlideStates.AUTON_STAGE;
+                    if ( autonStage == StageLocations.FRONT) {
+                        requestedViperSlideState = ViperSlideStates.AUTON_FRONT_STAGE;
+                    } else if(autonStage == StageLocations.BACK) {
+                        requestedViperSlideState = ViperSlideStates.AUTON_BACK_STAGE;
+                    }
                 } else {
                     // We are in the home state. Move to stage 1.
                     requestedViperSlideState = ViperSlideStates.STAGE_1;
@@ -382,7 +392,8 @@ public class Utility {
             case STAGE_3:
                 // We are in stage 3. Don't try to extend any further.
                 break;
-            case AUTON_STAGE:
+            case AUTON_FRONT_STAGE:
+            case AUTON_BACK_STAGE:
             case NUDGE_UP:
             case NUDGE_DOWN:
             default:
@@ -409,7 +420,8 @@ public class Utility {
                 // We are currently moving between states. Don't do anything.
                 break;
             case STAGE_1:
-            case AUTON_STAGE:
+            case AUTON_FRONT_STAGE:
+            case AUTON_BACK_STAGE:
                 // We are in stage 1, or Auton stage. Move to home.
                 requestedViperSlideState = ViperSlideStates.HOME;
                 break;
@@ -470,9 +482,14 @@ public class Utility {
                 stagePosition = Constants.VIPER_SLIDE_STAGE_3_COUNT;
                 lastViperSlideStageState = requestedViperSlideState;
                 break;
-            case AUTON_STAGE:
-                // Go to the auton stage to place the pixel.
-                stagePosition = Constants.VIPER_SLIDE_AUTON_STAGE_COUNT;
+            case AUTON_FRONT_STAGE:
+                // Go to the auton front stage to place the pixel.
+                stagePosition = Constants.VIPER_SLIDE_AUTON_FRONT_STAGE_COUNT;
+                lastViperSlideStageState = requestedViperSlideState;
+                break;
+            case AUTON_BACK_STAGE:
+                // Go to the auton back stage to place the pixel.
+                stagePosition = Constants.VIPER_SLIDE_AUTON_BACK_STAGE_COUNT;
                 lastViperSlideStageState = requestedViperSlideState;
                 break;
             case NUDGE_UP:
@@ -576,8 +593,11 @@ public class Utility {
             case STAGE_3:
                 viperSlideState = "Stage 3";
                 break;
-            case AUTON_STAGE:
-                viperSlideState = "Auton Stage";
+            case AUTON_FRONT_STAGE:
+                viperSlideState = "Auton Front Stage";
+                break;
+            case AUTON_BACK_STAGE:
+                viperSlideState = "Auton Back Stage";
                 break;
             case NUDGE_UP:
                 viperSlideState = "Nudge Up";
@@ -611,8 +631,11 @@ public class Utility {
             case STAGE_3:
                 viperSlideState = "Stage 3";
                 break;
-            case AUTON_STAGE:
-                viperSlideState = "Auton Stage";
+            case AUTON_FRONT_STAGE:
+                viperSlideState = "Auton Front Stage";
+                break;
+            case AUTON_BACK_STAGE:
+                viperSlideState = "Auton Back Stage";
                 break;
             case NUDGE_UP:
                 viperSlideState = "Nudge Up";

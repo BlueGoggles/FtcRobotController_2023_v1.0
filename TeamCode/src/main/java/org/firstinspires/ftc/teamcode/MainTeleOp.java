@@ -233,7 +233,7 @@ public class MainTeleOp extends LinearOpMode {
                 }
 
                 if (gamepad2.b) {
-                    Utility.extendViperSlide(robot,false);
+                    Utility.extendViperSlide(robot,false, Utility.StageLocations.BACK);
                     Utility.panDelivery(robot);
                 }
 
