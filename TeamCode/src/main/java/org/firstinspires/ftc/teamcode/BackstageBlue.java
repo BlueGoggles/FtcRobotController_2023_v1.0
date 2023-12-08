@@ -11,11 +11,10 @@ public class BackstageBlue extends LinearOpMode {
     protected RobotHardware robot = new RobotHardware(this);
     protected Utility.Color color = Utility.Color.BLUE;
     protected ElapsedTime playtime = new ElapsedTime();
+    boolean targetFound = false;
 
     @Override
     public void runOpMode() {
-
-        boolean targetFound = false;
 
         Utility.initializeRobot(robot, color);
         playtime.reset();
@@ -58,11 +57,11 @@ public class BackstageBlue extends LinearOpMode {
         double inches;
 
         if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
-            inches = 19;
+            inches = 16;
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
             inches = 17 + Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES;
         } else {
-            inches = 18 + (2 * Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES);
+            inches = 16 + (2 * Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES);
         }
 
         Utility.turnToPID(robot, 0);
@@ -79,7 +78,7 @@ public class BackstageBlue extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  25 * Constants.STRAFE_MOVEMENT_RATIO);
         }
 
-        Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  13 * Constants.STRAFE_MOVEMENT_RATIO);
+        Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
     }
 
     protected void placeSecondPixel(RobotHardware robot) {
@@ -90,7 +89,7 @@ public class BackstageBlue extends LinearOpMode {
         if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
 
             direction = Utility.Direction.LEFT;
-            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES + Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT) * Constants.STRAFE_MOVEMENT_RATIO;
+            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES + Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + ( targetFound ? Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT : 0 )) * Constants.STRAFE_MOVEMENT_RATIO;
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
 
@@ -100,7 +99,7 @@ public class BackstageBlue extends LinearOpMode {
         } else {
 
             direction = Utility.Direction.RIGHT;
-            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES - Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT) * Constants.STRAFE_MOVEMENT_RATIO;
+            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES - Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + ( targetFound ? Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT : 0 )) * Constants.STRAFE_MOVEMENT_RATIO;
         }
 
         Utility.encoderDrive(robot, direction, Constants.AUTON_DRIVE_SPEED, inches);

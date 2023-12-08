@@ -12,11 +12,11 @@ public class BackstageBlueNonCorner extends BackstageBlue {
         double inches = 0;
 
         if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
-            inches = 14 + (2 * Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES);
+            inches = 8 + (2 * Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES);
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
-            inches = 14 + Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES;
+            inches = 8 + Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES;
         } else {
-            inches = 14;
+            inches = 8;
         }
 
         Utility.turnToPID(robot, 0);
