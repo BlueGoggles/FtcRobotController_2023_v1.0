@@ -77,12 +77,12 @@ public class Utility {
     public static SpikeMark getSpikeMark() {
         return spikeMark;
     }
-
     public static int getAprilTagId() {
         return aprilTagId;
     }
 
     public static void initializeRobot(RobotHardware robot, Utility.Color color) {
+
         // Initialize Robot with Encoder
         robot.initialize();
         robot.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -97,8 +97,8 @@ public class Utility {
         robot.getMyOpMode().sleep(5000);
 
         while (robot.getMyOpMode().opModeInInit()) {
-            spikeMark = getSpikeMark(findRegionPipeline);
-            aprilTagId = getAprilTagId(spikeMark, color);
+            spikeMark = findSpikeMark(findRegionPipeline);
+            aprilTagId = findAprilTagId(spikeMark, color);
 
             robot.getMyOpMode().telemetry.addData("Left Average Final : ", findRegionPipeline.getLeftAvgFinal());
             robot.getMyOpMode().telemetry.addData("Right Average Final : ", findRegionPipeline.getRightAvgFinal());
@@ -109,11 +109,9 @@ public class Utility {
 
         // Release camera resources for OpenCV
         robot.releaseResourcesForOpenCV();
-
-
     }
 
-    public static int getAprilTagId(Utility.SpikeMark spikeMark, Utility.Color color) {
+    public static int findAprilTagId(Utility.SpikeMark spikeMark, Utility.Color color) {
         if (color == Color.RED) {
             switch (spikeMark) {
                 case LEFT:
@@ -136,7 +134,7 @@ public class Utility {
         return 0;
     }
 
-    public static Utility.SpikeMark getSpikeMark(FindRegionPipeline findRegionPipeline) {
+    public static Utility.SpikeMark findSpikeMark(FindRegionPipeline findRegionPipeline) {
 
         if ((findRegionPipeline.getLeftAvgFinal() - findRegionPipeline.getRightAvgFinal()) > Constants.REGION_AVG_FINAL_DIFFERENCE_THRESHOLD) {
             return Utility.SpikeMark.LEFT;

@@ -92,6 +92,8 @@ public interface Constants {
     // Need to multiply by this ratio, because 10 inches of instructed strafe movement causes 8.5 inches of actual strafe movement.
     double STRAFE_MOVEMENT_RATIO = 1.1764;
 
+    double AUTON_PLAY_TIME = 30000;
+    double WAIT_TIME_FOR_BACKSTAGE_PARKING_BEFORE_AUTON_ENDS = 3000;
 
     int RED_APRIL_TAG_ID = 5;
     int BLUE_APRIL_TAG_ID = 2;
