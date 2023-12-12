@@ -64,8 +64,9 @@ public class BackstageBlue extends LinearOpMode {
             inches = 16 + (2 * Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES);
         }
 
+        Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED, (inches - 4) * Constants.STRAFE_MOVEMENT_RATIO);
         Utility.turnToPID(robot, 0);
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  inches);
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
 
         if (Constants.WAIT_TIME_FOR_BACKSTAGE_PARKING_BEFORE_AUTON_ENDS > 0) {
 
@@ -127,7 +128,7 @@ public class BackstageBlue extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  23.0);
             Utility.turnToPID(robot, -90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  10.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  12.5);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 

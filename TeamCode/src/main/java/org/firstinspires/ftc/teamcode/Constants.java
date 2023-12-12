@@ -57,7 +57,7 @@ public interface Constants {
     // TODO: Determine the number of encoder rotations per inch of viper slide movement.
     // Eventually I would like to be able to map the Viper Slide extension to a set number of revolutions of the encoder to inches travelled by the Viper Slide. We would need to measure this.
     int VIPER_SLIDE_COUNTS_PER_INCH = 1;
-    int VIPER_SLIDE_AUTON_FRONT_STAGE_COUNT = ( 1600 * VIPER_SLIDE_COUNTS_PER_INCH );
+    int VIPER_SLIDE_AUTON_FRONT_STAGE_COUNT = ( 1600 * VIPER_SLIDE_COUNTS_PER_INCH ); // Make this again 1600 (original value)
     int VIPER_SLIDE_AUTON_BACK_STAGE_COUNT = ( 1400 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_1_COUNT = ( 1800 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_2_COUNT = ( 2300 * VIPER_SLIDE_COUNTS_PER_INCH );
@@ -80,7 +80,7 @@ public interface Constants {
     double PAN_HOME_POSITION = 1.0;
     double PAN_DEPLOYED_POSITION = 0.63;
 
-    int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 5000; // MilliSeconds
+    int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 7000; // MilliSeconds
 
     double APRIL_TAG_DETECTION_WAIT_TIME = 1500; // MilliSeconds
 
@@ -95,7 +95,7 @@ public interface Constants {
     double STRAFE_MOVEMENT_RATIO = 1.1764;
 
     double AUTON_PLAY_TIME = 30000;
-    double WAIT_TIME_FOR_BACKSTAGE_PARKING_BEFORE_AUTON_ENDS = 3000;
+    double WAIT_TIME_FOR_BACKSTAGE_PARKING_BEFORE_AUTON_ENDS = 0;
 
     int RED_APRIL_TAG_ID = 5;
     int BLUE_APRIL_TAG_ID = 2;

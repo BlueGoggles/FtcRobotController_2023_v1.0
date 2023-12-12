@@ -64,8 +64,9 @@ public class BackstageRed extends LinearOpMode {
             inches = 16 + (2 * Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES);
         }
 
+        Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED, (inches - 4) * Constants.STRAFE_MOVEMENT_RATIO);
         Utility.turnToPID(robot, 0);
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  inches);
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
 
         if (Constants.WAIT_TIME_FOR_BACKSTAGE_PARKING_BEFORE_AUTON_ENDS > 0) {
 

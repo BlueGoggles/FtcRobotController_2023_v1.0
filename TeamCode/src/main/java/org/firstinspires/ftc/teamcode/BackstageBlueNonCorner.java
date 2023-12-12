@@ -17,7 +17,7 @@ public class BackstageBlueNonCorner extends BackstageBlue {
             inches = 8;
         }
 
+        Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED, inches * Constants.STRAFE_MOVEMENT_RATIO);
         Utility.turnToPID(robot, 0);
-        Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  inches);
     }
 }
