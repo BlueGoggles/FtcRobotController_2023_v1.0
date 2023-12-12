@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-@TeleOp(name = "MecanumTeleop (Blocks to Java)")
+@TeleOp(name = "MecanumTeleop Testing")
 @Disabled
 public class MecanumTeleop extends LinearOpMode {
 
@@ -77,13 +77,13 @@ public class MecanumTeleop extends LinearOpMode {
         // Initializes the IMU with non-default settings. To use this block,
         // plug one of the "new IMU.Parameters" blocks into the parameters socket.
         // Creates a Parameters object for use with an IMU in a REV Robotics Control Hub or Expansion Hub, specifying the hub's orientation on the robot via the direction that the REV Robotics logo is facing and the direction that the USB ports are facing.
-        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD)));
+        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD)));
         sleep(100);
         imu.resetYaw();
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                Joystick_X = -1 * gamepad1.right_stick_x;
+                Joystick_X = 1 * gamepad1.right_stick_x;
                 Joystick_Y = -1 * gamepad1.right_stick_y;
                 Joystick_Z = gamepad1.left_stick_x;
                 M = 1 / (1 - DB);
@@ -129,9 +129,9 @@ public class MecanumTeleop extends LinearOpMode {
                 if (Math.abs(Z_) > Z__Max) {
                     Z_ = (int) (Z__Max * (Z_ / Math.abs(Z_)));
                 }
-                Joystick_Z = -Z_;
-                Joystick_X = (float) (Math.sin(ThetaT / 180 * Math.PI) * Dr);
-                Joystick_Y = (float) (Math.cos(ThetaT / 180 * Math.PI) * Dr);
+//                Joystick_Z = -Z_;
+//                Joystick_X = (float) (Math.sin(ThetaT / 180 * Math.PI) * Dr);
+//                Joystick_Y = (float) (Math.cos(ThetaT / 180 * Math.PI) * Dr);
                 FL_Power = (int) (-Gain_X * Joystick_X - (Gain_Y * Joystick_Y + Gain_Z * Joystick_Z));
                 FR_Power = (int) (-Gain_X * Joystick_X + (Gain_Y * Joystick_Y - Gain_Z * Joystick_Z));
                 BL_Power = (int) (Gain_X * Joystick_X - (Gain_Y * Joystick_Y + Gain_Z * Joystick_Z));
