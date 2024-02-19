@@ -47,9 +47,9 @@ public class MainTeleOp extends LinearOpMode {
         double teleOpSpeed;
 
         // By default we don't want to allow the lead screw to run until it has been released.
-        boolean allowLeadScrew = false;
+      //  boolean allowLeadScrew = false;
         // By default we don't want to allow the drone to be launched until the timer has elapsed.
-        boolean allowDroneLauncher = false;
+      //  boolean allowDroneLauncher = false;
 
         // Create the timer to lock out the drone launcher.
         //ElapsedTime droneLauncherWaitTimer = new ElapsedTime();
@@ -57,7 +57,7 @@ public class MainTeleOp extends LinearOpMode {
         RobotHardware robot = new RobotHardware(this);
         robot.initialize();
         robot.initializeIMU();
-        robot.initializeDroneLauncher();
+     //   robot.initializeDroneLauncher();
         sleep(100);
 
         FL_Power = 0;
@@ -182,7 +182,7 @@ public class MainTeleOp extends LinearOpMode {
 
                 robot.setMotorPowers(-FL_Power, FR_Power, -BL_Power, BR_Power);
 
-                int intakePower = 0;
+ /*               int intakePower = 0;
                 if( gamepad2.x ) {
                     intakePower = 1;
                 } else if(gamepad2.back) {
@@ -211,7 +211,7 @@ public class MainTeleOp extends LinearOpMode {
                     enableManualOverride = !enableManualOverride;
                 }
 
-                // Check to see if we can allow the lead screw to go. It needs to be released before we can control it.
+ /*               // Check to see if we can allow the lead screw to go. It needs to be released before we can control it.
                 if( allowLeadScrew ) {
                     // Extend the lead screw.
                     if (gamepad1.left_bumper) {
@@ -267,7 +267,7 @@ public class MainTeleOp extends LinearOpMode {
                 if (gamepad1.y && enableManualOverride) {
                     robot.getImu().resetYaw();
                 }
-
+*/
                 telemetry.addData("Z Prime", Z_);
                 telemetry.addData("Yaw", JavaUtil.formatNumber(Orientation2.getYaw(AngleUnit.DEGREES), 2));
                 telemetry.addData("Velocity", Theta_Velocity.zRotationRate);
@@ -275,7 +275,7 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Front Right Pow", robot.getRightFront().getPower());
                 telemetry.addData("Back Left Pow", robot.getLeftBack().getPower());
                 telemetry.addData("Back Right Pow", robot.getRightBack().getPower());
-
+/*
                 telemetry.addData("Intake Wheel Power (gamepad2.rightTrigger[forward]/leftTrigger[backword])", robot.getIntakeWheel().getPower());
                 telemetry.addData("Intake Belt Power (gamepad2.rightTrigger[forward]/leftTrigger[backword])", robot.getIntakeBelt().getPower());
 
@@ -295,7 +295,7 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("Pan Door start/stop (gamepad2.left_bumper)", gamepad2.left_bumper);
 
                 telemetry.addData("Drone Launcher Position", robot.getDroneLauncher().getPosition());
-
+*/
                 telemetry.addData("Joystick Z (gamepage1.left_stick_x", Joystick_Z);
 
                 telemetry.update();
