@@ -10,6 +10,9 @@ public interface Constants {
     String DEVICE_VIPER_SLIDE = "viperSlide";
     String DEVICE_LEAD_SCREW = "leadScrew";
     String DEVICE_PAN_SERVO = "panServo";
+
+    String DEVICE_PIXEL_ARM = "pixelArm";
+
     String DEVICE_PAN_DOOR = "panDoor";
     String DEVICE_LEAD_SCREW_SWITCH = "leadScrewSwitch";
     String DEVICE_DRONE_LAUNCHER = "droneLauncher";
@@ -79,6 +82,8 @@ public interface Constants {
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 1.0;
     double PAN_DEPLOYED_POSITION = 0.63;
+    double PIXEL_ARM_HOME_POSITION = 1.0;
+    double PIXEL_ARM_DEPLOYED_POSITION = 0.63;
 
     int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 7000; // MilliSeconds
 
