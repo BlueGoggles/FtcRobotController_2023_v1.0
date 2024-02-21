@@ -192,7 +192,7 @@ public class RobotHardware {
 
         IMU.Parameters parameters = new IMU.Parameters(orientationOnRobot);
 
-        imu = myOpMode.hardwareMap.get(IMU.class, Constants.EXPANSION_IMU);
+        imu = myOpMode.hardwareMap.get(IMU.class, Constants.DEVICE_IMU);
         imu.initialize(parameters);
         imu.resetYaw();
     }
@@ -203,7 +203,7 @@ public class RobotHardware {
     }
 
     public double getAbsoluteAngle() {
-        return getImu().getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.DEGREES).firstAngle;
+        return getImu().getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public void initializeOpenCV(OpenCvPipeline pipeline) {
