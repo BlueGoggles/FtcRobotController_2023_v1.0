@@ -693,17 +693,17 @@ public class Utility {
     }
 
     public static void deployPixelArm(RobotHardware robot) {
-        while (robot.getPanServo().getPosition() > Constants.PIXEL_ARM_DEPLOYED_POSITION) {
+        while (robot.getPixelArmServo().getPosition() > Constants.PIXEL_ARM_DEPLOYED_POSITION) {
             //robot.getMyOpMode().sleep(10);
-            robot.getPanServo().setPosition(robot.getPanServo().getPosition() - Constants.PAN_TILT_ANGLE);
+            robot.getPixelArmServo().setPosition(robot.getPixelArmServo().getPosition() - Constants.PAN_TILT_ANGLE);
             robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
         }
     }
 
     public static void resetPixel_Arm(RobotHardware robot) {
-        while (robot.getPanServo().getPosition() < Constants.PIXEL_ARM_HOME_POSITION) {
+        while (robot.getPixelArmServo().getPosition() < Constants.PIXEL_ARM_HOME_POSITION) {
             //robot.getMyOpMode().sleep(10);
-            robot.getPanServo().setPosition(robot.getPanServo().getPosition() + Constants.PAN_TILT_ANGLE);
+            robot.getPixelArmServo().setPosition(robot.getPixelArmServo().getPosition() + Constants.PAN_TILT_ANGLE);
             robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
         }
     }

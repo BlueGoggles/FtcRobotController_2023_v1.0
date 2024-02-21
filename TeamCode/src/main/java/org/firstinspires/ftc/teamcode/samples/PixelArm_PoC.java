@@ -23,25 +23,30 @@ public class PixelArm_PoC extends LinearOpMode  {
         // Initialize Gyro sensor
         robot.initializeIMU();
 
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  12);
+        waitForStart();
 
-        Utility.deployPixelArm(robot);
+        if(opModeIsActive()) {
 
-        Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  3.5);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_PIXEL_ARM_MAIN_SPEED, 8);
 
-        Utility.resetPixel_Arm(robot);
+            Utility.deployPixelArm(robot);
 
-        robot.getIntakeWheel().setPower(1);
-        robot.getIntakeBelt().setPower(1);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_PIXEL_ARM_PICKUP_SPEED, 3.5);
 
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  3.5);
+            Utility.resetPixel_Arm(robot);
 
-        robot.getMyOpMode().sleep(500);
+            robot.getIntakeWheel().setPower(1);
+            robot.getIntakeBelt().setPower(1);
 
-        Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_FRONT_STAGE_DRIVE_SPEED,  12);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_PIXEL_ARM_PICKUP_SPEED, 3.5);
 
-        robot.getIntakeWheel().setPower(0);
-        robot.getIntakeBelt().setPower(0);
+            robot.getMyOpMode().sleep(500);
 
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_PIXEL_ARM_MAIN_SPEED, 8);
+
+            robot.getIntakeWheel().setPower(0);
+            robot.getIntakeBelt().setPower(0);
+
+        }
     }
 }
