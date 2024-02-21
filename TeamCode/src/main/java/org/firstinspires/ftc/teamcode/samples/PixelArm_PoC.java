@@ -31,16 +31,16 @@ public class PixelArm_PoC extends LinearOpMode  {
 
             Utility.deployPixelArm(robot);
 
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_PIXEL_ARM_PICKUP_SPEED, 3.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_PIXEL_ARM_BACKUP_SPEED, 4.5);
 
             Utility.resetPixel_Arm(robot);
 
             robot.getIntakeWheel().setPower(1);
             robot.getIntakeBelt().setPower(1);
 
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_PIXEL_ARM_PICKUP_SPEED, 3.5);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_PIXEL_ARM_PICKUP_SPEED, 4.5);
 
-            robot.getMyOpMode().sleep(500);
+            robot.getMyOpMode().sleep(750);
 
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_PIXEL_ARM_MAIN_SPEED, 8);
 
