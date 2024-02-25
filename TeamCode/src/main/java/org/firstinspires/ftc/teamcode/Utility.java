@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.teamcode.samples.PixelArm_PoC;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -714,4 +715,11 @@ public class Utility {
         robot.getMyOpMode().sleep(milliSeconds);
         robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);
     }
+public static void GetWhitePixel() {
+    PixelArm_PoC PixelArmProgram = new PixelArm_PoC();
+    PixelArmProgram.runOpMode();
+}
+
+
+
 }
