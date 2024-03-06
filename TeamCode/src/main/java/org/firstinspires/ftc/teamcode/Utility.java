@@ -715,9 +715,9 @@ public class Utility {
         robot.getMyOpMode().sleep(milliSeconds);
         robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);
     }
-public static void GetWhitePixel() {
+public static void GetWhitePixel(RobotHardware robot) {
     PixelArm_PoC PixelArmProgram = new PixelArm_PoC();
-    PixelArmProgram.runOpMode();
+    PixelArmProgram.pixelArmProgram(robot);
 }
 
 

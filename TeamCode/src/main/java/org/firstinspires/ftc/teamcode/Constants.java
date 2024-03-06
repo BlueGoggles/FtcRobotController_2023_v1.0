@@ -86,8 +86,8 @@ public interface Constants {
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 1.0;
     double PAN_DEPLOYED_POSITION = 0.63;
-    double PIXEL_ARM_HOME_POSITION = 1.0;
-    double PIXEL_ARM_DEPLOYED_POSITION = 0.7;
+    double PIXEL_ARM_HOME_POSITION = 0.5;
+    double PIXEL_ARM_DEPLOYED_POSITION = 0.07;
 
     int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 7000; // MilliSeconds
 
