@@ -76,7 +76,7 @@ public class MainTeleOp extends LinearOpMode {
         Kp = 0.024;
         Target_Angle = 0;
         Z__Max = 0.75;
-        enableManualOverride = false;
+        enableManualOverride = true;
         teleOpSpeed = 0.0;
         robot.getImu().resetYaw();
 
