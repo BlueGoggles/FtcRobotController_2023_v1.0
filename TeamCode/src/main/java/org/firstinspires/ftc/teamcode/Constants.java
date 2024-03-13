@@ -68,7 +68,7 @@ public interface Constants {
     int VIPER_SLIDE_VARIANCE = 50;
     int VIPER_SLIDE_NUDGE_COUNT = 75;
 
-    double TELEOP_DEFAULT_SPEED = 0.5;
+    double TELEOP_DEFAULT_SPEED = 0.8;
     double TELEOP_MODIFIED_SPEED = 1.0;
 
     double PAN_DOOR_START_POSITION = 0.0;
