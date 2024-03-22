@@ -18,7 +18,7 @@ public interface Constants {
     String DEVICE_CAMERA = "Camera1";
     double ZERO_POWER = 0.0;
     double MAX_POWER = 1.0;
-    double AUTON_DRIVE_SPEED = 1.0;
+    double AUTON_DRIVE_SPEED = 0.9;
     double AUTON_FRONT_STAGE_DRIVE_SPEED = 0.6;
     double AUTON_NEAR_BOARD_SPEED = 0.5;
     double AUTON_TURN_SPEED = 0.3;

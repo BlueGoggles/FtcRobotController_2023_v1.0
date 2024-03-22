@@ -66,7 +66,7 @@ public class BackstageBlue extends LinearOpMode {
 
         Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED, (inches - 4) * Constants.STRAFE_MOVEMENT_RATIO);
         Utility.turnToPID(robot, 0);
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  6);
 
         if (Constants.WAIT_TIME_FOR_BACKSTAGE_PARKING_BEFORE_AUTON_ENDS > 0) {
 
@@ -158,8 +158,8 @@ public class BackstageBlue extends LinearOpMode {
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
             Utility.turnToPID(robot, 90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  16);
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  20 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  10);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  28 * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }
 }
