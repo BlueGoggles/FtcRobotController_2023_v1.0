@@ -54,7 +54,7 @@ public class BackstageBlue extends LinearOpMode {
     protected void parkRobot() {
 
         double inches;
-        double parkingStrafeDistance = 10;
+        double parkingStrafeDistance = 11;
 
         if (Utility.getSpikeMark() == Utility.SpikeMark.LEFT) {
             inches = 16;
@@ -66,7 +66,7 @@ public class BackstageBlue extends LinearOpMode {
 
         Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED, (inches - 4) * Constants.STRAFE_MOVEMENT_RATIO);
         Utility.turnToPID(robot, 0);
-        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
+        Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  6);
 
         if (Constants.WAIT_TIME_FOR_BACKSTAGE_PARKING_BEFORE_AUTON_ENDS > 0) {
 
@@ -100,7 +100,7 @@ public class BackstageBlue extends LinearOpMode {
         } else {
 
             direction = Utility.Direction.RIGHT;
-            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES - Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + ( targetFound ? Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT : 0 )) * Constants.STRAFE_MOVEMENT_RATIO;
+            inches = (Constants.DISTANCE_BETWEEN_APRIL_TAG_INCHES - Constants.MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES + ( targetFound ? Constants.GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT : -1 )) * Constants.STRAFE_MOVEMENT_RATIO;
         }
 
         Utility.encoderDrive(robot, direction, Constants.AUTON_DRIVE_SPEED, inches);
@@ -128,18 +128,18 @@ public class BackstageBlue extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  10 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  23.0);
             Utility.turnToPID(robot, -90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  12.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  10.5);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
-            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  26.5);
+            Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  17.5);
             Utility.turnToPID(robot, 90);
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  6 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  1 * Constants.STRAFE_MOVEMENT_RATIO);
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.CENTER) {
 
             Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  2 * Constants.STRAFE_MOVEMENT_RATIO);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  25.5);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  23.5);
 
             Utility.scrollPanDoor(robot, Constants.PAN_DOOR_RUN_TIME_PURPLE_PIXEL);
 
@@ -158,7 +158,7 @@ public class BackstageBlue extends LinearOpMode {
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
             Utility.turnToPID(robot, 90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  16);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  13);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  20 * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }
