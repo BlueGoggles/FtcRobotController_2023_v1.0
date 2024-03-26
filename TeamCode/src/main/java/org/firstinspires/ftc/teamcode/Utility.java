@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.teamcode.samples.PixelArm_PoC;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -734,9 +735,33 @@ public class Utility {
         }
     }
 
+    public static void deployPixelArm(RobotHardware robot) {
+        while (robot.getPixelArmServo().getPosition() > Constants.PIXEL_ARM_DEPLOYED_POSITION) {
+            //robot.getMyOpMode().sleep(10);
+            robot.getPixelArmServo().setPosition(robot.getPixelArmServo().getPosition() - Constants.PAN_TILT_ANGLE);
+            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+        }
+    }
+
+    public static void resetPixel_Arm(RobotHardware robot) {
+        while (robot.getPixelArmServo().getPosition() < Constants.PIXEL_ARM_HOME_POSITION) {
+            //robot.getMyOpMode().sleep(10);
+            robot.getPixelArmServo().setPosition(robot.getPixelArmServo().getPosition() + Constants.PAN_TILT_ANGLE);
+            robot.getMyOpMode().sleep(Constants.PAN_TILT_TIME_MS);
+        }
+    }
+
+
     public static void scrollPanDoor(RobotHardware robot, int milliSeconds) {
         robot.getPanDoor().setPosition(Constants.PAN_DOOR_START_POSITION);
         robot.getMyOpMode().sleep(milliSeconds);
         robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);
     }
+public static void GetWhitePixel(RobotHardware robot) {
+    PixelArm_PoC PixelArmProgram = new PixelArm_PoC();
+    PixelArmProgram.pixelArmProgram(robot);
+}
+
+
+
 }
