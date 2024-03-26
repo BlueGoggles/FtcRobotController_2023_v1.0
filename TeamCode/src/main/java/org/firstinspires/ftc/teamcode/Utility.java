@@ -528,6 +528,48 @@ public class Utility {
             executeViperSlide(robot);
         }
     }
+    public static void raiseViperSlideCont(RobotHardware robot, int viperSlidePower) {
+        if( robot.getViperSlidePosition() < Constants.VIPER_SLIDE_MAX_COUNT ) {
+            //robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+
+            robot.getViperSlide().setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+            robot.getViperSlide().setPower(viperSlidePower);
+        }
+    }
+    public static void lowerViperSlideCont(RobotHardware robot, int viperSlidePower) {
+        if( robot.getViperSlidePosition() > Constants.VIPER_SLIDE_REST_COUNT ) {
+            //robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+
+            robot.getViperSlide().setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+            robot.getViperSlide().setPower(viperSlidePower);
+        }
+    }
+
+    public static void controlViperSlideCont(RobotHardware robot, int viperSlidePower) {
+        boolean allowToMove = false;
+        if( viperSlidePower == 1 ) {
+            if( robot.getViperSlidePosition() < Constants.VIPER_SLIDE_MAX_COUNT ) {
+                //robot.getViperSlide().setDirection(DcMotorEx.Direction.REVERSE);
+                allowToMove = true;
+            }
+        } else if ( viperSlidePower == -1 ) {
+            if( robot.getViperSlidePosition() > Constants.VIPER_SLIDE_REST_COUNT ) {
+                //robot.getViperSlide().setDirection(DcMotorEx.Direction.FORWARD);
+                allowToMove = true;
+            }
+        }
+
+        if( allowToMove ) {
+            robot.getViperSlide().setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+            robot.getViperSlide().setPower(viperSlidePower);
+        } else {
+            // Do not allow the motor to move.
+            robot.getViperSlide().setPower(0);
+        }
+    }
 
     public static void checkSlideAndScrewMotors(RobotHardware robot) {
         if( robot.getMyOpMode().opModeIsActive() ) {

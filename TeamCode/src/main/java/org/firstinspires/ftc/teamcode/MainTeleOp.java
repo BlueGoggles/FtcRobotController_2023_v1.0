@@ -78,7 +78,7 @@ public class MainTeleOp extends LinearOpMode {
         Kp = 0.024;
         Target_Angle = 0;
         Z__Max = 0.75;
-        enableManualOverride = false;
+        enableManualOverride = true;
         teleOpSpeed = 0.0;
         robot.getImu().resetYaw();
 
@@ -237,6 +237,7 @@ public class MainTeleOp extends LinearOpMode {
                     Utility.panDelivery(robot);
                 }
 
+                /*
                 if (gamepad2.y) {
                     Utility.retractViperSlide(robot);
                 }
@@ -248,6 +249,22 @@ public class MainTeleOp extends LinearOpMode {
                 if( gamepad2.right_trigger > 0.5 ) {
                     Utility.nudgeViperSlide(robot, Utility.ViperSlideDirection.UP);
                 }
+                */
+                int viperSlidePower = 0;
+
+                if( gamepad2.left_bumper) {
+                    viperSlidePower = 1;
+                    //Utility.raiseViperSlideCont(robot, viperSlidePower);
+                }
+
+                if( gamepad2.right_bumper ) {
+                    //Utility.panDelivery(robot);
+                    // lower viper slide
+                    viperSlidePower = -1;
+                    //Utility.lowerViperSlideCont(robot , viperSlidePower);
+                }
+
+                Utility.controlViperSlideCont(robot, viperSlidePower);
 
                 if ( gamepad1.a ) {
                     robot.getLeadScrewSwitch().setPosition(0.4);
@@ -255,7 +272,7 @@ public class MainTeleOp extends LinearOpMode {
                     allowLeadScrew = true;
                 }
 
-                if (gamepad2.left_bumper) {
+                if (gamepad2.right_trigger > 0.5) {
                     robot.getPanDoor().setPosition(Constants.PAN_DOOR_START_POSITION);
                 } else {
                     robot.getPanDoor().setPosition(Constants.PAN_DOOR_STOP_POSITION);

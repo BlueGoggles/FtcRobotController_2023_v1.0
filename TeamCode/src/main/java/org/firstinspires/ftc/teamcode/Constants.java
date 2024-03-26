@@ -21,7 +21,7 @@ public interface Constants {
     String DEVICE_CAMERA = "Camera1";
     double ZERO_POWER = 0.0;
     double MAX_POWER = 1.0;
-    double AUTON_DRIVE_SPEED = 1.0;
+    double AUTON_DRIVE_SPEED = 0.9;
     double AUTON_FRONT_STAGE_DRIVE_SPEED = 0.6;
     double AUTON_NEAR_BOARD_SPEED = 0.5;
     double AUTON_TURN_SPEED = 0.3;
@@ -32,7 +32,7 @@ public interface Constants {
     double OBJECT_WIDTH_IN_INCHES = 3.0;  // The actual width of the object in real-world units
     int CAMERA_WIDTH = 640; // width  of wanted camera resolution
     int CAMERA_HEIGHT = 360; // height of wanted camera resolution
-    double COUNTS_PER_MOTOR_REV = 537.7 ;    // eg: GoBILDA 312 RPM Yellow Jacket
+    double COUNTS_PER_MOTOR_REV = 384.5 ;    // eg: GoBILDA 312 RPM Yellow Jacket
     double DRIVE_GEAR_REDUCTION = 1.0 ;     // No External Gearing.
     double WHEEL_DIAMETER_INCHES = 3.78 ;     // For figuring out circumference
     double CAMERA_FOCAL_LENGTH = 793.33;
@@ -70,10 +70,12 @@ public interface Constants {
     int VIPER_SLIDE_STAGE_2_COUNT = ( 2300 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_STAGE_3_COUNT = ( 2500 * VIPER_SLIDE_COUNTS_PER_INCH );
     int VIPER_SLIDE_REST_COUNT = 0;
+
+    int VIPER_SLIDE_MAX_COUNT = 2500;
     int VIPER_SLIDE_VARIANCE = 50;
     int VIPER_SLIDE_NUDGE_COUNT = 75;
 
-    double TELEOP_DEFAULT_SPEED = 0.5;
+    double TELEOP_DEFAULT_SPEED = 0.8;
     double TELEOP_MODIFIED_SPEED = 1.0;
 
     double PAN_DOOR_START_POSITION = 0.0;
@@ -93,8 +95,8 @@ public interface Constants {
 
     double APRIL_TAG_DETECTION_WAIT_TIME = 1500; // MilliSeconds
 
-    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 29;
-    double BLUE_LEFT_STRAFING_FOR_APRIL_TAG = 17;
+    double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 26.5;
+    double BLUE_LEFT_STRAFING_FOR_APRIL_TAG = 16.5;
     double APRIL_TAG_NOT_FOUND_STRAFE_INCHES = 3;
     double MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES = 5;
     double GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT = 1;
