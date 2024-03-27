@@ -150,7 +150,7 @@ public class BackstageRed extends LinearOpMode {
 
         } else if (Utility.getSpikeMark() == Utility.SpikeMark.RIGHT) {
 
-            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  11.5 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  9.5 * Constants.STRAFE_MOVEMENT_RATIO);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  19.5);
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  2);
 
@@ -159,7 +159,7 @@ public class BackstageRed extends LinearOpMode {
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
             Utility.turnToPID(robot, -90);
             Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  16);
-            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  8 * Constants.STRAFE_MOVEMENT_RATIO);
+            Utility.encoderDrive(robot, Utility.Direction.LEFT, Constants.AUTON_DRIVE_SPEED,  16 * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }
 }
