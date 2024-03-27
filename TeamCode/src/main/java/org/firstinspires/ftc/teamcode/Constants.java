@@ -10,6 +10,9 @@ public interface Constants {
     String DEVICE_VIPER_SLIDE = "viperSlide";
     String DEVICE_LEAD_SCREW = "leadScrew";
     String DEVICE_PAN_SERVO = "panServo";
+
+    String DEVICE_PIXEL_ARM = "pixelArm";
+
     String DEVICE_PAN_DOOR = "panDoor";
     String DEVICE_LEAD_SCREW_SWITCH = "leadScrewSwitch";
     String DEVICE_DRONE_LAUNCHER = "droneLauncher";
@@ -22,6 +25,10 @@ public interface Constants {
     double AUTON_FRONT_STAGE_DRIVE_SPEED = 0.6;
     double AUTON_NEAR_BOARD_SPEED = 0.5;
     double AUTON_TURN_SPEED = 0.3;
+    double AUTON_PIXEL_ARM_MAIN_SPEED = 0.6;
+    double AUTON_PIXEL_ARM_PICKUP_SPEED = 0.2;
+    double AUTON_PIXEL_ARM_BACKUP_SPEED = 0.4;
+
     double OBJECT_WIDTH_IN_INCHES = 3.0;  // The actual width of the object in real-world units
     int CAMERA_WIDTH = 640; // width  of wanted camera resolution
     int CAMERA_HEIGHT = 360; // height of wanted camera resolution
@@ -81,13 +88,15 @@ public interface Constants {
     long PAN_TILT_TIME_MS = 10;
     double PAN_HOME_POSITION = 1.0;
     double PAN_DEPLOYED_POSITION = 0.63;
+    double PIXEL_ARM_HOME_POSITION = 0.5;
+    double PIXEL_ARM_DEPLOYED_POSITION = 0.07;
 
     int INITIAL_WAIT_TIME_FOR_FRONT_STAGE = 7000; // MilliSeconds
 
     double APRIL_TAG_DETECTION_WAIT_TIME = 1500; // MilliSeconds
 
     double RED_RIGHT_STRAFING_FOR_APRIL_TAG = 26.5;
-    double BLUE_LEFT_STRAFING_FOR_APRIL_TAG = 15;
+    double BLUE_LEFT_STRAFING_FOR_APRIL_TAG = 16.5;
     double APRIL_TAG_NOT_FOUND_STRAFE_INCHES = 3;
     double MOVE_PAN_LEFT_IN_FRONT_OF_APRIL_TAG_INCHES = 5;
     double GRACE_INCHES_FOR_SECOND_PIXEL_PLACEMENT = 1;

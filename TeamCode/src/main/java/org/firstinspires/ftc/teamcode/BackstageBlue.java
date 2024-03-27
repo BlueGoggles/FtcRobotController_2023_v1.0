@@ -158,7 +158,7 @@ public class BackstageBlue extends LinearOpMode {
 
             Utility.encoderDrive(robot, Utility.Direction.BACKWARD, Constants.AUTON_DRIVE_SPEED,  8);
             Utility.turnToPID(robot, 90);
-            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  13);
+            Utility.encoderDrive(robot, Utility.Direction.FORWARD, Constants.AUTON_DRIVE_SPEED,  16);
             Utility.encoderDrive(robot, Utility.Direction.RIGHT, Constants.AUTON_DRIVE_SPEED,  20 * Constants.STRAFE_MOVEMENT_RATIO);
         }
     }

@@ -33,6 +33,8 @@ public class RobotHardware {
     private DcMotorEx leadScrew = null;
     private Servo panServo = null;
     private Servo panDoor = null;
+
+    private Servo PixelArmServo = null;
     private Servo leadScrewSwitch = null;
     private Servo droneLauncher = null;
 
@@ -76,11 +78,15 @@ public class RobotHardware {
         leadScrew = myOpMode.hardwareMap.get(DcMotorEx.class, Constants.DEVICE_LEAD_SCREW);
         // Servos
         panServo = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_SERVO);
+        PixelArmServo = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PIXEL_ARM);
         panDoor  = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_PAN_DOOR);
         leadScrewSwitch = myOpMode.hardwareMap.get(Servo.class, Constants.DEVICE_LEAD_SCREW_SWITCH);
 
         getPanServo().setDirection(Servo.Direction.FORWARD);
         getPanServo().setPosition(Constants.PAN_HOME_POSITION);
+
+        getPixelArmServo().setDirection(Servo.Direction.FORWARD);
+        getPixelArmServo().setPosition(Constants.PIXEL_ARM_HOME_POSITION);
 
         getPanDoor().setDirection(Servo.Direction.FORWARD);
         getPanDoor().setPosition(Constants.MID_SERVO);
@@ -304,6 +310,10 @@ public class RobotHardware {
 
     public Servo getPanServo() {
         return this.panServo;
+    }
+
+    public Servo getPixelArmServo() {
+        return this.PixelArmServo;
     }
 
     public Servo getLeadScrewSwitch() {

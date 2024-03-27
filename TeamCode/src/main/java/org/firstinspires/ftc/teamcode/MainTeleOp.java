@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit.MILLIAMPS;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -315,7 +317,25 @@ public class MainTeleOp extends LinearOpMode {
 
                 telemetry.addData("Joystick Z (gamepage1.left_stick_x", Joystick_Z);
 
+
+
+                telemetry.addData("Front left drive motor current ", robot.getLeftFront().getCurrent(MILLIAMPS));
+
+                telemetry.addData("front Right Drive motor Current", robot.getRightFront().getCurrent(MILLIAMPS));
+
+                telemetry.addData("Back Left drive Motor Current ", robot.getLeftBack().getCurrent(MILLIAMPS));
+
+                telemetry.addData("Right Back drive Motor Current",robot.getRightBack().getCurrent(MILLIAMPS));
+
+                telemetry.addData("lead screw motor ",robot.getLeadScrew().getCurrent(MILLIAMPS));
+
+                telemetry.addData("Viper Slide motor ",robot.getViperSlide().getCurrent(MILLIAMPS));
+
+                telemetry.addData("Intake motor Right and Left ",robot.getIntakeWheel().getCurrent(MILLIAMPS));
+
                 telemetry.update();
+
+
             }
         }
     }
